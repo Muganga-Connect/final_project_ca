@@ -1,16 +1,18 @@
 package com.example.mugangaconnect;
 
 import android.os.Bundle;
-import android.os.Build;
-import android.graphics.RenderEffect;
-import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import eightbitlab.com.blurview.BlurTarget;
+import eightbitlab.com.blurview.BlurView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,9 +27,18 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        CardView bottomBar = findViewById(R.id.bottomBar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && bottomBar != null) {
-            bottomBar.setRenderEffect(RenderEffect.createBlurEffect(40f, 40f, Shader.TileMode.CLAMP));
+        BlurView bottomBar = findViewById(R.id.bottomBar);
+        BlurTarget blurTarget = findViewById(R.id.blurTarget);
+        if (bottomBar != null && blurTarget != null) {
+            View decorView = getWindow().getDecorView();
+            Drawable windowBackground = decorView.getBackground();
+
+            bottomBar.setupWith(blurTarget)
+                    .setFrameClearDrawable(windowBackground)
+                    .setBlurRadius(18f);
+
+            bottomBar.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+            bottomBar.setClipToOutline(true);
         }
     }
 }
