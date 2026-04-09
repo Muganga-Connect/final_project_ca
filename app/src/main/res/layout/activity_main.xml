@@ -62,7 +62,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AGE"
+                        android:text="Weight"
                         android:textAllCaps="true"
                         android:textColor="#99A2AD"
                         android:textSize="9sp" />
@@ -519,8 +519,7 @@
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:src="@android:drawable/ic_dialog_dialer"
-                        app:tint="#FFFFFF" />
+                        android:src="@drawable/home" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -542,8 +541,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@android:drawable/ic_menu_my_calendar"
-                    app:tint="#607784" />
+                    android:src="@drawable/schedule" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -564,8 +562,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@android:drawable/ic_menu_info_details"
-                    app:tint="#607784" />
+                    android:src="@drawable/ai" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -586,8 +583,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    app:tint="#607784" />
+                    android:src="@drawable/user" />
 
                 <TextView
                     android:layout_width="wrap_content"
