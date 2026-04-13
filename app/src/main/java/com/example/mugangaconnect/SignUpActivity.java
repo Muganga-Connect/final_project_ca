@@ -103,11 +103,13 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         // Biometrics
-        btnBio.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Biometric registration coming soon",
-                        Toast.LENGTH_SHORT).show()
-        );
+        if (btnBio != null) {
+            btnBio.setOnClickListener(v ->
+                    Toast.makeText(this,
+                            "Biometric registration coming soon",
+                            Toast.LENGTH_SHORT).show()
+            );
+        }
 
         // Back to Login both tab and link
         tvLoginLink.setOnClickListener(v -> goToLogin());
