@@ -1,0 +1,294 @@
+<svg width="100%" viewBox="0 0 1000 1500" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>MugangaConnect+ Login Use Case</title>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <!-- drop shadow -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.10)"/>
+    </filter>
+  </defs>
+
+  <!-- ── Page background ── -->
+  <rect x="0" y="0" width="1000" height="1500" fill="rgb(245,244,240)"/>
+
+  <!-- ════════════════════════════════════════════
+       PAGE TITLE
+  ════════════════════════════════════════════ -->
+  <text x="500" y="48" text-anchor="middle"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:28px;font-weight:800;">
+    UC-01: Login
+  </text>
+  <text x="500" y="74" text-anchor="middle"
+    style="fill:rgb(100,99,96);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    MugangaConnect+ — Authentication Module
+  </text>
+  <!-- divider -->
+  <line x1="60" y1="88" x2="940" y2="88" stroke="rgb(83,74,183)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ════════════════════════════════════════════
+       SECTION 1 — UML DIAGRAM CARD
+  ════════════════════════════════════════════ -->
+  <rect x="40" y="104" width="920" height="520" rx="14"
+    fill="white" filter="url(#shadow)"/>
+
+  <!-- section label -->
+  <rect x="40" y="104" width="920" height="48" rx="14"
+    fill="rgb(83,74,183)"/>
+  <rect x="40" y="130" width="920" height="22" fill="rgb(83,74,183)"/>
+  <text x="68" y="135" dominant-baseline="central"
+    style="fill:white;font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    UML Use Case Diagram
+  </text>
+
+  <!-- ── System boundary ── -->
+  <rect x="280" y="168" width="560" height="430" rx="16"
+    fill="rgb(250,249,255)" stroke="rgb(83,74,183)" stroke-width="1.6" stroke-dasharray="8 5"/>
+  <text x="560" y="162" text-anchor="middle"
+    style="fill:rgb(83,74,183);font-family:'Segoe UI',sans-serif;font-size:14px;font-weight:600;">
+    MugangaConnect+ System
+  </text>
+
+  <!-- ── Actor: Patient ── -->
+  <circle cx="120" cy="310" r="26" fill="none" stroke="rgb(61,61,58)" stroke-width="2.2"/>
+  <line x1="120" y1="336" x2="120" y2="400" stroke="rgb(61,61,58)" stroke-width="2.2"/>
+  <line x1="80"  y1="366" x2="160" y2="366" stroke="rgb(61,61,58)" stroke-width="2.2"/>
+  <line x1="120" y1="400" x2="92"  y2="440" stroke="rgb(61,61,58)" stroke-width="2.2"/>
+  <line x1="120" y1="400" x2="148" y2="440" stroke="rgb(61,61,58)" stroke-width="2.2"/>
+  <text x="120" y="466" text-anchor="middle"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Patient
+  </text>
+
+  <!-- ── External system: Firebase Auth ── -->
+  <rect x="836" y="280" width="110" height="60" rx="10"
+    fill="rgb(250,249,255)" stroke="rgba(31,30,29,0.3)" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="891" y="306" text-anchor="middle"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:14px;">Firebase</text>
+  <text x="891" y="326" text-anchor="middle"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:14px;">Auth</text>
+
+  <!-- ── Use case ovals ── -->
+  <!-- Login -->
+  <ellipse cx="500" cy="260" rx="130" ry="36"
+    fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1.6"/>
+  <text x="500" y="265" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:16px;font-weight:700;">
+    Login
+  </text>
+
+  <!-- Reset Password -->
+  <ellipse cx="460" cy="380" rx="130" ry="36"
+    fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1.6"/>
+  <text x="460" y="385" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:16px;font-weight:700;">
+    Reset Password
+  </text>
+
+  <!-- Biometric Login -->
+  <ellipse cx="560" cy="490" rx="130" ry="36"
+    fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1.6"/>
+  <text x="560" y="495" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:16px;font-weight:700;">
+    Biometric Login
+  </text>
+
+  <!-- ── Association: Patient → Login ── -->
+  <line x1="146" y1="330" x2="368" y2="268"
+    stroke="rgb(61,61,58)" stroke-width="1.6"/>
+
+  <!-- ── «include»: Login → Reset Password ── -->
+  <line x1="430" y1="292" x2="440" y2="344"
+    stroke="rgb(83,74,183)" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <rect x="310" y="308" width="110" height="26" rx="4" fill="white"/>
+  <text x="365" y="325" text-anchor="middle"
+    style="fill:rgb(83,74,183);font-family:'Segoe UI',sans-serif;font-size:13px;">
+    «include»
+  </text>
+
+  <!-- ── «extend»: Login → Biometric Login ── -->
+  <line x1="540" y1="294" x2="548" y2="454"
+    stroke="rgb(83,74,183)" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+  <rect x="552" y="360" width="104" height="26" rx="4" fill="white"/>
+  <text x="604" y="377" text-anchor="middle"
+    style="fill:rgb(83,74,183);font-family:'Segoe UI',sans-serif;font-size:13px;">
+    «extend»
+  </text>
+
+  <!-- ── uses: Login → Firebase Auth ── -->
+  <line x1="630" y1="260" x2="834" y2="300"
+    stroke="rgba(31,30,29,0.4)" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <rect x="690" y="262" width="80" height="24" rx="4" fill="white"/>
+  <text x="730" y="278" text-anchor="middle"
+    style="fill:rgb(100,99,96);font-family:'Segoe UI',sans-serif;font-size:12px;">
+    «uses»
+  </text>
+
+  <!-- ── UML Legend ── -->
+  <line x1="300" y1="572" x2="336" y2="572" stroke="rgb(61,61,58)" stroke-width="1.4"/>
+  <text x="344" y="577" dominant-baseline="central"
+    style="fill:rgb(100,99,96);font-family:'Segoe UI',sans-serif;font-size:13px;">Association</text>
+  <line x1="460" y1="572" x2="496" y2="572" stroke="rgb(83,74,183)" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="504" y="577" dominant-baseline="central"
+    style="fill:rgb(100,99,96);font-family:'Segoe UI',sans-serif;font-size:13px;">«include» / «extend»</text>
+  <rect x="680" y="564" width="14" height="14" rx="3"
+    fill="none" stroke="rgba(31,30,29,0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+  <text x="700" y="577" dominant-baseline="central"
+    style="fill:rgb(100,99,96);font-family:'Segoe UI',sans-serif;font-size:13px;">External system</text>
+
+  <!-- ════════════════════════════════════════════
+       SECTION 2 — STRUCTURED USE CASE CARD
+  ════════════════════════════════════════════ -->
+  <rect x="40" y="648" width="920" height="820" rx="14"
+    fill="white" filter="url(#shadow)"/>
+
+  <!-- card header -->
+  <rect x="40" y="648" width="920" height="48" rx="14"
+    fill="rgb(83,74,183)"/>
+  <rect x="40" y="674" width="920" height="22" fill="rgb(83,74,183)"/>
+  <text x="68" y="679" dominant-baseline="central"
+    style="fill:white;font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Use Case Description
+  </text>
+
+  <!-- ── helper: row macro
+       Each row = colored left bar + label + white content area
+       Row structure: y_start, height, label, content lines
+  ── -->
+
+  <!-- ROW: Actor  y=696 h=56 -->
+  <rect x="40"  y="696" width="6"   height="56" fill="rgb(83,74,183)"/>
+  <rect x="46"  y="696" width="214" height="56" fill="rgb(245,244,255)"/>
+  <text x="153" y="724" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Actor
+  </text>
+  <rect x="260" y="696" width="700" height="56" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="724" dominant-baseline="central"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:17px;">
+    Patient
+  </text>
+
+  <!-- ROW: Description  y=752 h=80 -->
+  <rect x="40"  y="752" width="6"   height="80" fill="rgb(83,74,183)"/>
+  <rect x="46"  y="752" width="214" height="80" fill="rgb(245,244,255)"/>
+  <text x="153" y="792" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Description
+  </text>
+  <rect x="260" y="752" width="700" height="80" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="780" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    Patient authenticates into the app using password
+  </text>
+  <text x="284" y="810" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    or biometric credentials.
+  </text>
+
+  <!-- ROW: Preconditions  y=832 h=80 -->
+  <rect x="40"  y="832" width="6"   height="80" fill="rgb(15,110,86)"/>
+  <rect x="46"  y="832" width="214" height="80" fill="rgb(236,250,244)"/>
+  <text x="153" y="872" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Preconditions
+  </text>
+  <rect x="260" y="832" width="700" height="80" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="860" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    1.  Patient has a registered account.
+  </text>
+  <text x="284" y="892" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    2.  App is installed and internet is available.
+  </text>
+
+  <!-- ROW: Main Flow  y=912 h=280 -->
+  <rect x="40"  y="912" width="6"   height="280" fill="rgb(15,110,86)"/>
+  <rect x="46"  y="912" width="214" height="280" fill="rgb(236,250,244)"/>
+  <text x="153" y="1052" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Main Flow
+  </text>
+  <rect x="260" y="912" width="700" height="280" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="944" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    1.  Patient opens the MugangaConnect+ app.
+  </text>
+  <text x="284" y="980" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    2.  System displays the login screen.
+  </text>
+  <text x="284" y="1016" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    3.  Patient enters email / phone and password.
+  </text>
+  <text x="284" y="1052" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    4.  Patient taps the "Login" button.
+  </text>
+  <text x="284" y="1088" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    5.  System sends credentials to Firebase Auth.
+  </text>
+  <text x="284" y="1124" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    6.  Firebase Auth validates and returns a token.
+  </text>
+  <text x="284" y="1160" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    7.  System grants access and shows dashboard.
+  </text>
+
+  <!-- ROW: Alternative Flows  y=1192 h=200 -->
+  <rect x="40"  y="1192" width="6"   height="200" fill="rgb(133,79,11)"/>
+  <rect x="46"  y="1192" width="214" height="200" fill="rgb(254,246,232)"/>
+  <text x="153" y="1278" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Alternative
+  </text>
+  <text x="153" y="1302" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Flows
+  </text>
+  <rect x="260" y="1192" width="700" height="200" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="1222" dominant-baseline="auto"
+    style="fill:rgb(133,79,11);font-family:'Segoe UI',sans-serif;font-size:16px;font-weight:700;">
+    A1 — Wrong credentials:
+  </text>
+  <text x="284" y="1252" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    Firebase returns error → system shows "Invalid credentials".
+  </text>
+  <text x="284" y="1292" dominant-baseline="auto"
+    style="fill:rgb(133,79,11);font-family:'Segoe UI',sans-serif;font-size:16px;font-weight:700;">
+    A2 — Biometric login (if enabled):
+  </text>
+  <text x="284" y="1322" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    Patient uses fingerprint / face → device verifies → access granted.
+  </text>
+
+  <!-- ROW: Postconditions  y=1392 h=80 -->
+  <rect x="40"  y="1392" width="6"   height="80" fill="rgb(83,74,183)"/>
+  <rect x="46"  y="1392" width="214" height="80" fill="rgb(245,244,255)"/>
+  <text x="153" y="1432" text-anchor="middle" dominant-baseline="central"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:17px;font-weight:700;">
+    Postconditions
+  </text>
+  <rect x="260" y="1392" width="700" height="80" fill="white" stroke="rgba(31,30,29,0.08)" stroke-width="0.8"/>
+  <text x="284" y="1420" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    1.  Patient is authenticated and session is active.
+  </text>
+  <text x="284" y="1452" dominant-baseline="auto"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:16px;">
+    2.  Dashboard is displayed with appointments.
+  </text>
+
+  <!-- card bottom border -->
+  <rect x="40" y="1460" width="920" height="8" rx="8" fill="rgb(83,74,183)" opacity="0.15"/>
+
+</svg>

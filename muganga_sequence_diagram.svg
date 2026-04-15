@@ -1,0 +1,291 @@
+<svg width="100%" viewBox="0 0 1100 1300" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>MugangaConnect+ Sequence Diagram</title>
+  <desc>Sequence diagram showing interactions between Patient, Mobile App, Firebase Auth, Firestore, AI Engine, and FCM.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1100" height="1300" fill="rgb(252,252,250)"/>
+
+  <!-- ══════════════════════════════════════
+       TITLE
+  ══════════════════════════════════════ -->
+  <text x="550" y="38" text-anchor="middle"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:22px;font-weight:700;">
+    MugangaConnect+ — Sequence Diagram
+  </text>
+  <text x="550" y="62" text-anchor="middle"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:15px;">
+    Book Appointment with AI Prediction &amp; Reminder
+  </text>
+
+  <!-- ══════════════════════════════════════
+       LIFELINE HEADERS
+       x centres: Patient=90, App=270, Auth=450, Firestore=630, AI=810, FCM=990
+  ══════════════════════════════════════ -->
+
+  <!-- Patient -->
+  <rect x="30"  y="80" width="120" height="46" rx="8" fill="rgb(245,244,237)" stroke="rgb(61,61,58)"   stroke-width="1.2"/>
+  <text x="90"  y="109" text-anchor="middle"
+    style="fill:rgb(20,20,19);font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:700;">Patient</text>
+
+  <!-- Mobile App -->
+  <rect x="210" y="80" width="120" height="46" rx="8" fill="rgb(238,237,254)" stroke="rgb(83,74,183)"  stroke-width="1.2"/>
+  <text x="270" y="109" text-anchor="middle"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:700;">Mobile App</text>
+
+  <!-- Firebase Auth -->
+  <rect x="390" y="80" width="120" height="46" rx="8" fill="rgb(238,237,254)" stroke="rgb(83,74,183)"  stroke-width="1.2"/>
+  <text x="450" y="101" text-anchor="middle"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;font-weight:700;">Firebase</text>
+  <text x="450" y="119" text-anchor="middle"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;font-weight:700;">Auth</text>
+
+  <!-- Firestore -->
+  <rect x="570" y="80" width="120" height="46" rx="8" fill="rgb(225,245,238)" stroke="rgb(15,110,86)"  stroke-width="1.2"/>
+  <text x="630" y="109" text-anchor="middle"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:700;">Firestore</text>
+
+  <!-- AI Engine -->
+  <rect x="750" y="80" width="120" height="46" rx="8" fill="rgb(250,238,218)" stroke="rgb(133,79,11)" stroke-width="1.2"/>
+  <text x="810" y="109" text-anchor="middle"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:700;">AI Engine</text>
+
+  <!-- FCM -->
+  <rect x="930" y="80" width="120" height="46" rx="8" fill="rgb(250,238,218)" stroke="rgb(133,79,11)" stroke-width="1.2"/>
+  <text x="990" y="109" text-anchor="middle"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:15px;font-weight:700;">FCM</text>
+
+  <!-- ══════════════════════════════════════
+       LIFELINES
+  ══════════════════════════════════════ -->
+  <line x1="90"  y1="126" x2="90"  y2="1240" stroke="rgb(61,61,58)"   stroke-width="1" stroke-dasharray="6 5"/>
+  <line x1="270" y1="126" x2="270" y2="1240" stroke="rgb(83,74,183)"  stroke-width="1" stroke-dasharray="6 5"/>
+  <line x1="450" y1="126" x2="450" y2="1240" stroke="rgb(83,74,183)"  stroke-width="1" stroke-dasharray="6 5"/>
+  <line x1="630" y1="126" x2="630" y2="1240" stroke="rgb(15,110,86)"  stroke-width="1" stroke-dasharray="6 5"/>
+  <line x1="810" y1="126" x2="810" y2="1240" stroke="rgb(133,79,11)"  stroke-width="1" stroke-dasharray="6 5"/>
+  <line x1="990" y1="126" x2="990" y2="1240" stroke="rgb(133,79,11)"  stroke-width="1" stroke-dasharray="6 5"/>
+
+  <!-- ══════════════════════════════════════
+       ACTIVATION BOXES
+  ══════════════════════════════════════ -->
+  <rect x="85"  y="170" width="10" height="900" rx="2" fill="rgb(245,244,237)" stroke="rgb(61,61,58)"  stroke-width="1"/>
+  <rect x="265" y="170" width="10" height="900" rx="2" fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1"/>
+  <rect x="445" y="200" width="10" height="120" rx="2" fill="rgb(238,237,254)" stroke="rgb(83,74,183)" stroke-width="1"/>
+  <rect x="625" y="400" width="10" height="520" rx="2" fill="rgb(225,245,238)" stroke="rgb(15,110,86)" stroke-width="1"/>
+  <rect x="805" y="580" width="10" height="140" rx="2" fill="rgb(250,238,218)" stroke="rgb(133,79,11)" stroke-width="1"/>
+  <rect x="985" y="780" width="10" height="110" rx="2" fill="rgb(250,238,218)" stroke="rgb(133,79,11)" stroke-width="1"/>
+
+  <!-- ══════════════════════════════════════
+       SECTION BANDS
+  ══════════════════════════════════════ -->
+  <!-- Authentication -->
+  <rect x="10" y="158" width="1080" height="24" rx="4" fill="rgb(238,237,254)" opacity="0.5"/>
+  <text x="18" y="175"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:13px;font-weight:700;">
+    Authentication
+  </text>
+
+  <!-- Appointment Booking -->
+  <rect x="10" y="378" width="1080" height="24" rx="4" fill="rgb(225,245,238)" opacity="0.5"/>
+  <text x="18" y="395"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:13px;font-weight:700;">
+    Appointment Booking
+  </text>
+
+  <!-- AI Prediction -->
+  <rect x="10" y="558" width="1080" height="24" rx="4" fill="rgb(250,238,218)" opacity="0.5"/>
+  <text x="18" y="575"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:13px;font-weight:700;">
+    AI Prediction
+  </text>
+
+  <!-- Reminder Notification -->
+  <rect x="10" y="758" width="1080" height="24" rx="4" fill="rgb(250,238,218)" opacity="0.5"/>
+  <text x="18" y="775"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:13px;font-weight:700;">
+    Reminder Notification
+  </text>
+
+  <!-- History Update -->
+  <rect x="10" y="938" width="1080" height="24" rx="4" fill="rgb(241,239,232)" opacity="0.6"/>
+  <text x="18" y="955"
+    style="fill:rgb(68,68,65);font-family:'Segoe UI',sans-serif;font-size:13px;font-weight:700;">
+    History Update
+  </text>
+
+  <!-- ══════════════════════════════════════
+       MESSAGES  (step = 60px apart)
+       Label sits 18px above each arrow line
+  ══════════════════════════════════════ -->
+
+  <!-- 1. Patient → App : login(credentials) -->
+  <text x="100" y="202"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    1.  login(credentials)
+  </text>
+  <line x1="95" y1="212" x2="262" y2="212"
+    stroke="rgb(83,74,183)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 2. App → Firebase Auth : verifyCredentials() -->
+  <text x="282" y="252"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    2.  verifyCredentials()
+  </text>
+  <line x1="278" y1="262" x2="442" y2="262"
+    stroke="rgb(83,74,183)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 3. Firebase Auth → App : authToken  (return) -->
+  <text x="282" y="302"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    3.  authToken
+  </text>
+  <line x1="442" y1="312" x2="278" y2="312"
+    stroke="rgb(83,74,183)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 4. App → Patient : showDashboard()  (return) -->
+  <text x="100" y="352"
+    style="fill:rgb(60,52,137);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    4.  showDashboard()
+  </text>
+  <line x1="262" y1="362" x2="98" y2="362"
+    stroke="rgb(83,74,183)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 5. Patient → App : selectAppointment(date, time) -->
+  <text x="100" y="412"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    5.  selectAppointment(date, time)
+  </text>
+  <line x1="95" y1="422" x2="262" y2="422"
+    stroke="rgb(15,110,86)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 6. App → Firestore : saveAppointment(data) -->
+  <text x="282" y="462"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    6.  saveAppointment(data)
+  </text>
+  <line x1="278" y1="472" x2="622" y2="472"
+    stroke="rgb(15,110,86)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 7. Firestore → App : appointmentId  (return) -->
+  <text x="282" y="512"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    7.  appointmentId
+  </text>
+  <line x1="622" y1="522" x2="278" y2="522"
+    stroke="rgb(15,110,86)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 8. App → Firestore : getHistory(patientId) -->
+  <text x="282" y="562"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    8.  getHistory(patientId)
+  </text>
+  <line x1="278" y1="572" x2="622" y2="572"
+    stroke="rgb(15,110,86)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 9. App → AI Engine : predictNoShow(historyData) -->
+  <text x="282" y="612"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    9.  predictNoShow(historyData)
+  </text>
+  <line x1="278" y1="622" x2="802" y2="622"
+    stroke="rgb(133,79,11)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 10. Firestore → App : historyData  (return) -->
+  <text x="282" y="662"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    10.  historyData
+  </text>
+  <line x1="622" y1="672" x2="278" y2="672"
+    stroke="rgb(15,110,86)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 11. AI Engine → App : riskScore  (return) -->
+  <text x="282" y="712"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    11.  riskScore
+  </text>
+  <line x1="802" y1="722" x2="278" y2="722"
+    stroke="rgb(133,79,11)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 12. App → Firestore : updateReminderSchedule(riskScore) -->
+  <text x="282" y="762"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    12.  updateReminderSchedule(riskScore)
+  </text>
+  <line x1="278" y1="772" x2="622" y2="772"
+    stroke="rgb(133,79,11)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 13. App → Patient : bookingConfirmed()  (return) -->
+  <text x="100" y="812"
+    style="fill:rgb(8,80,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    13.  bookingConfirmed()
+  </text>
+  <line x1="262" y1="822" x2="98" y2="822"
+    stroke="rgb(15,110,86)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 14. App → FCM : sendReminder(token, appointmentId) -->
+  <text x="282" y="862"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    14.  sendReminder(token, appointmentId)
+  </text>
+  <line x1="278" y1="872" x2="982" y2="872"
+    stroke="rgb(133,79,11)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 15. FCM → Patient : pushNotification  (return) -->
+  <text x="282" y="912"
+    style="fill:rgb(99,56,6);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    15.  pushNotification("Appointment Reminder")
+  </text>
+  <line x1="982" y1="922" x2="98" y2="922"
+    stroke="rgb(133,79,11)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- 16. Patient → App : markAttended() / markMissed() -->
+  <text x="100" y="972"
+    style="fill:rgb(68,68,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    16.  markAttended()  /  markMissed()
+  </text>
+  <line x1="95" y1="982" x2="262" y2="982"
+    stroke="rgb(61,61,58)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 17. App → Firestore : updateHistory(status) -->
+  <text x="282" y="1022"
+    style="fill:rgb(68,68,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    17.  updateHistory(status)
+  </text>
+  <line x1="278" y1="1032" x2="622" y2="1032"
+    stroke="rgb(61,61,58)" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 18. Firestore → App : updated  (return) -->
+  <text x="282" y="1072"
+    style="fill:rgb(68,68,65);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    18.  updated
+  </text>
+  <line x1="622" y1="1082" x2="278" y2="1082"
+    stroke="rgb(61,61,58)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+
+  <!-- ══════════════════════════════════════
+       LEGEND
+  ══════════════════════════════════════ -->
+  <line x1="30"  y1="1160" x2="80"  y2="1160" stroke="rgb(61,61,58)" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="90" y="1165" dominant-baseline="central"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    Synchronous call
+  </text>
+
+  <line x1="280" y1="1160" x2="330" y2="1160" stroke="rgb(61,61,58)" stroke-width="1.6" stroke-dasharray="7 4" marker-end="url(#arrow)"/>
+  <text x="340" y="1165" dominant-baseline="central"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:14px;">
+    Return / async response
+  </text>
+
+  <!-- Footer -->
+  <text x="550" y="1240" text-anchor="middle"
+    style="fill:rgb(61,61,58);font-family:'Segoe UI',sans-serif;font-size:13px;">
+    Sequence Diagram — MugangaConnect+
+  </text>
+
+</svg>
