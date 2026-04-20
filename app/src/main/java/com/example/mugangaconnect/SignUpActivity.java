@@ -2,12 +2,16 @@ package com.example.mugangaconnect;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +24,6 @@ import androidx.core.view.WindowInsetsCompat;
 public class SignUpActivity extends AppCompatActivity {
 
     private boolean isPasswordVisible = false;
-    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,32 +43,51 @@ public class SignUpActivity extends AppCompatActivity {
         EditText etFullName = findViewById(R.id.etFullName);
         EditText etEmail = findViewById(R.id.etSignUpEmail);
         EditText etPassword = findViewById(R.id.etSignUpPassword);
-        EditText etConfirmPwd = findViewById(R.id.etConfirmPassword);
         ImageView ivPwdToggle = findViewById(R.id.ivPasswordToggle);
-        ImageView ivConfirmToggle = findViewById(R.id.ivConfirmPasswordToggle);
         Button btnSignUp = findViewById(R.id.btnSignUp);
         LinearLayout btnBio = findViewById(R.id.btnBiometric);
         TextView tvLoginLink = findViewById(R.id.tvLoginLink);
         LinearLayout tabLogin = findViewById(R.id.tabLogin);
+        
+        LinearLayout layoutStrength = findViewById(R.id.layoutPasswordStrength);
+        ProgressBar pbStrength = findViewById(R.id.pbStrength);
+        TextView tvStrengthLabel = findViewById(R.id.tvStrengthLabel);
 
-        // Password toggle
+        // Password visibility toggle
         ivPwdToggle.setOnClickListener(v -> {
             isPasswordVisible = !isPasswordVisible;
             etPassword.setTransformationMethod(isPasswordVisible
                     ? HideReturnsTransformationMethod.getInstance()
                     : PasswordTransformationMethod.getInstance());
-            ivPwdToggle.setAlpha(isPasswordVisible ? 1.0f : 0.5f);
+            ivPwdToggle.setImageResource(isPasswordVisible ? R.drawable.ic_eye : R.drawable.ic_eye); // Assuming same icon or change if needed
             etPassword.setSelection(etPassword.getText().length());
         });
 
-        // Confirm password toggle
-        ivConfirmToggle.setOnClickListener(v -> {
-            isConfirmPasswordVisible = !isConfirmPasswordVisible;
-            etConfirmPwd.setTransformationMethod(isConfirmPasswordVisible
-                    ? HideReturnsTransformationMethod.getInstance()
-                    : PasswordTransformationMethod.getInstance());
-            ivConfirmToggle.setAlpha(isConfirmPasswordVisible ? 1.0f : 0.5f);
-            etConfirmPwd.setSelection(etConfirmPwd.getText().length());
+        // Password Strength Logic
+        etPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && etPassword.getText().length() > 0) {
+                layoutStrength.setVisibility(View.VISIBLE);
+            } else {
+                layoutStrength.setVisibility(View.GONE);
+            }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    layoutStrength.setVisibility(View.VISIBLE);
+                    updateStrengthIndicator(s.toString(), pbStrength, tvStrengthLabel);
+                } else {
+                    layoutStrength.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         // Sign Up button
@@ -73,7 +95,6 @@ public class SignUpActivity extends AppCompatActivity {
             String fullName = etFullName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-            String confirmPwd = etConfirmPwd.getText().toString().trim();
 
             if (fullName.isEmpty()) {
                 etFullName.setError("Enter your full name");
@@ -84,34 +105,40 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
             if (password.length() < 6) {
-                etPassword.setError("Password must be at least 6 characters");
-                return;
-            }
-            if (!password.equals(confirmPwd)) {
-                etConfirmPwd.setError("Passwords do not match");
+                etPassword.setError("Password too weak");
                 return;
             }
 
-            Toast.makeText(this,
-                    "Account created for " + fullName,
-                    Toast.LENGTH_SHORT).show();
-
-            // Go to Dashboard after signup
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, "Account created for " + fullName, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         });
 
         // Biometrics
-        btnBio.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Biometric registration coming soon",
-                        Toast.LENGTH_SHORT).show()
-        );
+        if (btnBio != null) {
+            btnBio.setOnClickListener(v ->
+                    Toast.makeText(this, "Biometric registration coming soon", Toast.LENGTH_SHORT).show()
+            );
+        }
 
-        // Back to Login both tab and link
         tvLoginLink.setOnClickListener(v -> goToLogin());
         tabLogin.setOnClickListener(v -> goToLogin());
+    }
+
+    private void updateStrengthIndicator(String password, ProgressBar pb, TextView label) {
+        if (password.length() < 6) {
+            pb.setProgress(30);
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFF4444)); // Red
+            label.setText("WEAK");
+        } else if (password.length() < 10) {
+            pb.setProgress(60);
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFFA500)); // Orange
+            label.setText("MEDIUM");
+        } else {
+            pb.setProgress(100);
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50)); // Green
+            label.setText("STRONG");
+        }
     }
 
     private void goToLogin() {
