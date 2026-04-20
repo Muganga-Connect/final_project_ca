@@ -1,0 +1,75 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Outer top arcs -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M6,5 C9,3.5 15,3.5 18,5"/>
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M5,7 C8.5,4.5 15.5,4.5 19,7"/>
+
+    <!-- Middle fingerprint rings -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M4.5,9 C7.5,6.5 16.5,6.5 19.5,9 C20.5,10 20.5,12 19.5,13"/>
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M4,11 C7,8 17,8 20,11 C21,12.5 20.5,15 18.5,16"/>
+
+    <!-- Inner swirl -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M9,12 C9,10.5 10.5,9.5 12,10 C13.5,10.5 14,12 13,13.2 C12.2,14.2 10.8,14.2 10,13.2"/>
+
+    <!-- Lower curves -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M6,15 C7.5,18 10,19.5 12,19.5 C14,19.5 16.5,18 18,15"/>
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M7,17 C8.5,19.5 11,21 12,21 C13,21 15.5,19.5 17,17"/>
+
+    <!-- Broken side strokes -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M3.5,13 L3.8,14.5"/>
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#2F2F2F"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M20.5,13 L20.2,14.5"/>
+
+</vector>
