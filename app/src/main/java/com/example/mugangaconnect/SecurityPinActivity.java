@@ -181,6 +181,12 @@ public class SecurityPinActivity extends AppCompatActivity {
             return false;
         }
 
+        // Check for weak PINs (sequential or repeated digits)
+        if (isWeakPin(newPin)) {
+            etNewPin.setError("PIN is too weak. Choose a different PIN");
+            return false;
+        }
+
         return true;
     }
 
@@ -254,5 +260,36 @@ public class SecurityPinActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    /**
+     * Check if PIN is weak (repeated or sequential digits)
+     * @param pin PIN to check
+     * @return true if weak, false otherwise
+     */
+    private boolean isWeakPin(String pin) {
+        if (pin == null || pin.length() != 4) {
+            return false;
+        }
+
+        // Check for repeated digits (e.g., 1111, 2222)
+        if (pin.charAt(0) == pin.charAt(1) && 
+            pin.charAt(1) == pin.charAt(2) && 
+            pin.charAt(2) == pin.charAt(3)) {
+            return true;
+        }
+
+        // Check for sequential digits (e.g., 1234, 4321)
+        boolean ascending = true;
+        boolean descending = true;
+        for (int i = 0; i < pin.length() - 1; i++) {
+            if (pin.charAt(i + 1) - pin.charAt(i) != 1) {
+                ascending = false;
+            }
+            if (pin.charAt(i) - pin.charAt(i + 1) != 1) {
+                descending = false;
+            }
+        }
+        return ascending || descending;
     }
 }
