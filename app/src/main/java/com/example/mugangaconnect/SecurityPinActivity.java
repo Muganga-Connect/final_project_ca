@@ -163,6 +163,12 @@ public class SecurityPinActivity extends AppCompatActivity {
             return false;
         }
 
+        // Check if new PIN is same as current PIN
+        if (newPin.equals(etCurrentPin.getText().toString().trim())) {
+            etNewPin.setError("New PIN must be different from current PIN");
+            return false;
+        }
+
         return true;
     }
 
