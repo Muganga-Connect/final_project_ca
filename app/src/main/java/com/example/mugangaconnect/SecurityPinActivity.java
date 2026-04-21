@@ -43,6 +43,12 @@ public class SecurityPinActivity extends AppCompatActivity {
         etNewPin = findViewById(R.id.etNewPin);
         etConfirmPin = findViewById(R.id.etConfirmPin);
         btnChangePin = findViewById(R.id.btnChangePin);
+
+        // Set PIN input filters
+        InputFilter[] pinFilter = new InputFilter[]{new InputFilter.LengthFilter(4)};
+        etCurrentPin.setFilters(pinFilter);
+        etNewPin.setFilters(pinFilter);
+        etConfirmPin.setFilters(pinFilter);
     }
 
     /**
