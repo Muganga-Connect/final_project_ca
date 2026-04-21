@@ -65,7 +65,7 @@ public class SecurityPinActivity extends AppCompatActivity {
         String newPin = etNewPin.getText().toString().trim();
         String confirmPin = etConfirmPin.getText().toString().trim();
 
-        // Basic validations
+        // Validate current PIN
         if (TextUtils.isEmpty(currentPin)) {
             etCurrentPin.setError("Enter current PIN");
             return;
@@ -76,6 +76,7 @@ public class SecurityPinActivity extends AppCompatActivity {
             return;
         }
 
+        // Validate new PIN
         if (TextUtils.isEmpty(newPin)) {
             etNewPin.setError("Enter new PIN");
             return;
@@ -86,6 +87,7 @@ public class SecurityPinActivity extends AppCompatActivity {
             return;
         }
 
+        // Validate confirmation PIN
         if (TextUtils.isEmpty(confirmPin)) {
             etConfirmPin.setError("Please confirm your new PIN");
             return;
