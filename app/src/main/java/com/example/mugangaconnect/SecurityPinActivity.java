@@ -99,11 +99,11 @@ public class SecurityPinActivity extends AppCompatActivity {
             return;
         }
 
-        // Simulating success
+        // Process PIN change
         // In a real application, you would verify the current PIN and save the new PIN securely
         Toast.makeText(this, "PIN successfully updated!", Toast.LENGTH_SHORT).show();
         
-        // Clear fields after success
+        // Clear input fields after successful update
         etCurrentPin.setText("");
         etNewPin.setText("");
         etConfirmPin.setText("");
