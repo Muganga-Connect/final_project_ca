@@ -1,19 +1,28 @@
-@Override
+package com.example.mugangaconnect;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SplashActivity extends AppCompatActivity {
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Connects to your activity_splash.xml layout
         setContentView(R.layout.activity_splash);
 
-        // TEMPORARILY DISABLED TO FIND THE BUG
-        // ImageView logo = findViewById(R.id.splash_logo);
-        // Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.splash_fade_in);
-        // logo.startAnimation(fadeIn);
-
-        new Handler().postDelayed(new Runnable() {
+        // 3-second delay timer
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish();
+                finish(); // Destroys the splash screen so the user can't hit "Back" to it
             }
         }, 3000);
     }
+}
