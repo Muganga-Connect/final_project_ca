@@ -162,6 +162,7 @@
 
                     <!-- Form Fields -->
                     <TextView
+                        android:id="@+id/tvCurrentPinLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
@@ -186,6 +187,7 @@
                         android:textColorHint="#AAAAAA" />
 
                     <TextView
+                        android:id="@+id/tvNewPinLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
