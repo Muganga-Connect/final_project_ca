@@ -14,7 +14,6 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hintTextColor="@color/text_hint"
             android:textColorHint="@color/text_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>
