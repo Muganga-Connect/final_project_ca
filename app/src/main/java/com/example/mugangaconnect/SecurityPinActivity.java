@@ -192,11 +192,18 @@ public class SecurityPinActivity extends AppCompatActivity {
         Toast.makeText(this, "PIN successfully updated!", Toast.LENGTH_SHORT).show();
         
         // Clear input fields after successful update
-        etCurrentPin.setText("");
-        etNewPin.setText("");
-        etConfirmPin.setText("");
+        clearPinFields();
         
         // Optionally close activity or return to previous screen
         // finish();
+    }
+
+    /**
+     * Clear all PIN input fields
+     */
+    private void clearPinFields() {
+        etCurrentPin.setText("");
+        etNewPin.setText("");
+        etConfirmPin.setText("");
     }
 }
