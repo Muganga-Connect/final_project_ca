@@ -73,40 +73,80 @@ public class SecurityPinActivity extends AppCompatActivity {
         String confirmPin = etConfirmPin.getText().toString().trim();
 
         // Validate current PIN
-        if (TextUtils.isEmpty(currentPin)) {
-            etCurrentPin.setError("Enter current PIN");
-            return;
-        }
-
-        if (currentPin.length() < 4) {
-            etCurrentPin.setError("PIN must be 4 digits");
+        if (!validateCurrentPin(currentPin)) {
             return;
         }
 
         // Validate new PIN
-        if (TextUtils.isEmpty(newPin)) {
-            etNewPin.setError("Enter new PIN");
-            return;
-        }
-
-        if (newPin.length() < 4) {
-            etNewPin.setError("PIN must be 4 digits");
+        if (!validateNewPin(newPin)) {
             return;
         }
 
         // Validate confirmation PIN
+        if (!validateConfirmPin(newPin, confirmPin)) {
+            return;
+        }
+
+        // Process PIN change
+        processPinChange();
+    }
+
+    /**
+     * Validate current PIN input
+     */
+    private boolean validateCurrentPin(String currentPin) {
+        if (TextUtils.isEmpty(currentPin)) {
+            etCurrentPin.setError("Enter current PIN");
+            return false;
+        }
+
+        if (currentPin.length() < 4) {
+            etCurrentPin.setError("PIN must be 4 digits");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate new PIN input
+     */
+    private boolean validateNewPin(String newPin) {
+        if (TextUtils.isEmpty(newPin)) {
+            etNewPin.setError("Enter new PIN");
+            return false;
+        }
+
+        if (newPin.length() < 4) {
+            etNewPin.setError("PIN must be 4 digits");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate confirmation PIN matches new PIN
+     */
+    private boolean validateConfirmPin(String newPin, String confirmPin) {
         if (TextUtils.isEmpty(confirmPin)) {
             etConfirmPin.setError("Please confirm your new PIN");
-            return;
+            return false;
         }
 
         if (!newPin.equals(confirmPin)) {
             etConfirmPin.setError("PINs do not match");
             Toast.makeText(this, "New PIN and Confirmation PIN do not match", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
-        // Process PIN change
+        return true;
+    }
+
+    /**
+     * Process the PIN change operation
+     */
+    private void processPinChange() {
         // In a real application, you would verify the current PIN and save the new PIN securely
         Toast.makeText(this, "PIN successfully updated!", Toast.LENGTH_SHORT).show();
         
