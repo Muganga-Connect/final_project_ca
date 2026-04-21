@@ -65,7 +65,7 @@ public class SecurityPinActivity extends AppCompatActivity {
         });
 
         // Add text change listeners to clear errors
-        etCurrentPin.addTextChangedListener(new android.text.TextWatcher() {
+        etCurrentPin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -78,7 +78,7 @@ public class SecurityPinActivity extends AppCompatActivity {
             public void afterTextChanged(android.text.Editable s) {}
         });
 
-        etNewPin.addTextChangedListener(new android.text.TextWatcher() {
+        etNewPin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -91,7 +91,7 @@ public class SecurityPinActivity extends AppCompatActivity {
             public void afterTextChanged(android.text.Editable s) {}
         });
 
-        etConfirmPin.addTextChangedListener(new android.text.TextWatcher() {
+        etConfirmPin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
