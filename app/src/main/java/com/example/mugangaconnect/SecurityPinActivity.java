@@ -153,6 +153,11 @@ public class SecurityPinActivity extends AppCompatActivity {
             return false;
         }
 
+        if (!isNumeric(currentPin)) {
+            etCurrentPin.setError("PIN must contain only numbers");
+            return false;
+        }
+
         return true;
     }
 
@@ -232,5 +237,22 @@ public class SecurityPinActivity extends AppCompatActivity {
         etCurrentPin.setText("");
         etNewPin.setText("");
         etConfirmPin.setText("");
+    }
+
+    /**
+     * Check if string contains only numeric characters
+     * @param str String to check
+     * @return true if numeric, false otherwise
+     */
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
