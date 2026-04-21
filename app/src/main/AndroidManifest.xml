@@ -41,6 +41,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- AI ASSISTANT screen -->
+        <activity
+            android:name=".AIAssistantActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>
