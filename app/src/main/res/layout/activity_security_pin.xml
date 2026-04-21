@@ -259,6 +259,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:contentDescription="Change PIN button"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
