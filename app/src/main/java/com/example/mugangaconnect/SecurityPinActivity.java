@@ -194,14 +194,28 @@ public class SecurityPinActivity extends AppCompatActivity {
      * Process the PIN change operation
      */
     private void processPinChange() {
-        // In a real application, you would verify the current PIN and save the new PIN securely
-        Toast.makeText(this, "PIN successfully updated!", Toast.LENGTH_SHORT).show();
+        // TODO: In a real application, implement the following:
+        // 1. Verify current PIN against stored PIN
+        // 2. Hash the new PIN using secure encryption
+        // 3. Save the new PIN to SharedPreferences or secure storage
+        // 4. Clear any cached PIN data
+        
+        // Show success message
+        showToast("PIN successfully updated!");
         
         // Clear input fields after successful update
         clearPinFields();
         
         // Optionally close activity or return to previous screen
         // finish();
+    }
+
+    /**
+     * Show toast message
+     * @param message Message to display
+     */
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     /**
