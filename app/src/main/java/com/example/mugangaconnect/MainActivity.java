@@ -1,7 +1,10 @@
 package com.example.mugangaconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +34,55 @@ public class MainActivity extends AppCompatActivity {
             }
             return insets;
         });
+
+        // Initialize dashboard navigation
+        initDashboardNavigation();
+    }
+
+    private void initDashboardNavigation() {
+        // Bottom navigation handling
+        LinearLayout dashboardNav = findNavigationItem("dashboard");
+        LinearLayout scheduleNav = findNavigationItem("schedule");
+        LinearLayout aiAssistantNav = findNavigationItem("ai_assistant");
+        LinearLayout profileNav = findNavigationItem("profile");
+
+        if (dashboardNav != null) {
+            dashboardNav.setOnClickListener(v -> {
+                // Already on dashboard - no action needed
+            });
+        }
+
+        if (scheduleNav != null) {
+            scheduleNav.setOnClickListener(v -> {
+                Toast.makeText(this, "Schedule feature coming soon", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (aiAssistantNav != null) {
+            aiAssistantNav.setOnClickListener(v -> {
+                startActivity(new Intent(this, AIAssistantActivity.class));
+            });
+        }
+
+        if (profileNav != null) {
+            profileNav.setOnClickListener(v -> {
+                Toast.makeText(this, "Profile feature coming soon", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    private LinearLayout findNavigationItem(String tag) {
+        View bottomBar = findViewById(R.id.bottomBar);
+        if (bottomBar instanceof LinearLayout) {
+            LinearLayout navContainer = (LinearLayout) bottomBar;
+            for (int i = 0; i < navContainer.getChildCount(); i++) {
+                View child = navContainer.getChildAt(i);
+                if (tag.equals(child.getTag())) {
+                    return (LinearLayout) child;
+                }
+            }
+        }
+        return null;
     }
 
     private int dp(int value) {

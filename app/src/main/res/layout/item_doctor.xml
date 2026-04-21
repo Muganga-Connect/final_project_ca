@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_doctor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp"
+    app:strokeColor="@color/blue_primary">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Doctor Profile Image with Selection Indicator -->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/img_doctor"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_card"
+                android:padding="4dp"
+                android:scaleType="centerCrop" />
+
+            <!-- Selection Indicator -->
+            <ImageView
+                android:id="@+id/img_selected"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignEnd="@id/img_doctor"
+                android:layout_alignBottom="@id/img_doctor"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginBottom="-4dp"
+                android:background="@drawable/bg_button_primary"
+                android:padding="2dp"
+                android:src="@android:drawable/ic_menu_save"
+                android:tint="@color/white"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <!-- Doctor Information -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/img_doctor"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <!-- Doctor Name -->
+            <TextView
+                android:id="@+id/txt_doctor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dr. Sarah Johnson"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Specialty -->
+            <TextView
+                android:id="@+id/txt_doctor_specialty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Cardiology"
+                android:textColor="@color/text_hint"
+                android:textSize="14sp" />
+
+            <!-- Availability -->
+            <TextView
+                android:id="@+id/txt_doctor_availability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Available Today"
+                android:textColor="@color/blue_primary"
+                android:textSize="12sp"
+                android:background="@drawable/bg_button_primary"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

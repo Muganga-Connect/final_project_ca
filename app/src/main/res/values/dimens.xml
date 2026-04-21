@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Corner Radii -->
+    <dimen name="button_radius">12dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
+    
+    <!-- Standard Margins -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+</resources>

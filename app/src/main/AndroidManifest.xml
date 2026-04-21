@@ -12,15 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MugangaConnect">
 
-        <!-- LOGIN launcher screen it's first screen -->
+        <!-- SPLASH screen -->
         <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- LOGIN Screen -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize">
         </activity>
 
         <!-- SIGNUP screen -->
@@ -32,6 +38,12 @@
         <!-- DASHBOARD screen -->
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- AI ASSISTANT screen -->
+        <activity
+            android:name=".AIAssistantActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
