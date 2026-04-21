@@ -10,6 +10,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * SecurityPinActivity - Handles PIN change functionality
+ * Allows users to change their 4-digit security PIN
+ */
 public class SecurityPinActivity extends AppCompatActivity {
 
     private ImageView btnBack;
