@@ -11,7 +11,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#D1E9FF"
+        android:background="#F4FAFF"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
                         android:background="@drawable/bg_edittext"
-                        android:backgroundTint="#F2F2F2"
+                        android:backgroundTint="#F4FAFF"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="16dp">
@@ -130,8 +130,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_lock"
-                            app:tint="#0D3F99" />
+                            android:src="@drawable/ic_lock_filled" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -172,7 +171,7 @@
                         android:layout_height="52dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_edittext"
-                        android:backgroundTint="#F2F2F2"
+                        android:backgroundTint="#F4FAFF"
                         android:gravity="center"
                         android:hint="Enter current PIN"
                         android:inputType="numberPassword"
@@ -196,7 +195,7 @@
                         android:layout_height="52dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_edittext"
-                        android:backgroundTint="#F2F2F2"
+                        android:backgroundTint="#F4FAFF"
                         android:gravity="center"
                         android:hint="Enter new PIN"
                         android:inputType="numberPassword"
@@ -220,7 +219,7 @@
                         android:layout_height="52dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_edittext"
-                        android:backgroundTint="#F2F2F2"
+                        android:backgroundTint="#F4FAFF"
                         android:gravity="center"
                         android:hint="Re-enter new PIN"
                         android:inputType="numberPassword"
