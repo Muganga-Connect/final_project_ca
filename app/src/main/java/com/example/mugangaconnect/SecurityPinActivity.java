@@ -3,6 +3,7 @@ package com.example.mugangaconnect;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
