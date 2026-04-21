@@ -4,24 +4,35 @@
     android:layout_height="match_parent"
     android:background="@color/splash_background">
 
-    <!-- MugangaConnect Logo - centered on screen -->
-    <ImageView
-        android:id="@+id/splash_logo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/loading_container"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/ic_muganga_connect_logo"
-        android:scaleType="fitCenter" />
+    <!-- Logo Container - centered on screen -->
+    <LinearLayout
+        android:id="@+id/logo_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="60dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- MugangaConnect Logo Image -->
+        <ImageView
+            android:id="@+id/splash_logo"
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_muganga_connect_logo"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
 
     <!-- Loading Animation Container -->
     <LinearLayout
         android:id="@+id/loading_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="60dp"
+        android:layout_below="@+id/logo_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -53,8 +64,8 @@
         android:id="@+id/loading_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/loading_container"
+        android:layout_centerHorizontal="true"
         android:text="Loading..."
         android:textColor="@color/text_hint"
         android:textSize="14sp"
