@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class SecurityPinActivity extends AppCompatActivity {
 
+    // UI Components
     private ImageView btnBack;
     private EditText etCurrentPin, etNewPin, etConfirmPin;
     private Button btnChangePin;
