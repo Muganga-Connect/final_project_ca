@@ -57,6 +57,9 @@ public class SecurityPinActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validate PIN inputs and process PIN change
+     */
     private void validateAndChangePin() {
         String currentPin = etCurrentPin.getText().toString().trim();
         String newPin = etNewPin.getText().toString().trim();
