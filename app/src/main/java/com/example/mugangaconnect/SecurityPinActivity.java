@@ -27,12 +27,27 @@ public class SecurityPinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_security_pin);
 
         // Initialize UI components
+        initializeViews();
+
+        // Setup click listeners
+        setupClickListeners();
+    }
+
+    /**
+     * Initialize all UI views
+     */
+    private void initializeViews() {
         btnBack = findViewById(R.id.btnBack);
         etCurrentPin = findViewById(R.id.etCurrentPin);
         etNewPin = findViewById(R.id.etNewPin);
         etConfirmPin = findViewById(R.id.etConfirmPin);
         btnChangePin = findViewById(R.id.btnChangePin);
+    }
 
+    /**
+     * Setup all click listeners
+     */
+    private void setupClickListeners() {
         // Back button functionality
         btnBack.setOnClickListener(v -> finish());
 
