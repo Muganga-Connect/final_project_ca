@@ -189,7 +189,8 @@
                         android:paddingHorizontal="16dp"
                         android:textColor="@color/black"
                         android:textColorHint="#AAAAAA"
-                        android:contentDescription="Current PIN input field" />
+                        android:contentDescription="Current PIN input field"
+                        android:importantForAutofill="no" />
 
                     <TextView
                         android:id="@+id/tvNewPinLabel"
@@ -215,7 +216,8 @@
                         android:paddingHorizontal="16dp"
                         android:textColor="@color/black"
                         android:textColorHint="#AAAAAA"
-                        android:contentDescription="New PIN input field" />
+                        android:contentDescription="New PIN input field"
+                        android:importantForAutofill="no" />
 
                     <TextView
                         android:id="@+id/tvConfirmPinLabel"
@@ -242,6 +244,7 @@
                         android:textColor="@color/black"
                         android:textColorHint="#AAAAAA"
                         android:contentDescription="Confirm new PIN input field"
+                        android:importantForAutofill="no"
                         android:layout_marginBottom="12dp"/>
 
                 </LinearLayout>
