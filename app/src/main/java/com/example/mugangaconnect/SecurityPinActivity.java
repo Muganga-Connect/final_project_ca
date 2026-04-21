@@ -15,6 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
  * SecurityPinActivity - Handles PIN change functionality
  * Allows users to change their 4-digit security PIN
+ * 
+ * Features:
+ * - Current PIN validation
+ * - New PIN validation with strength checks
+ * - Confirmation PIN matching
+ * - Auto-clear validation errors on input
+ * - Accessible UI with content descriptions
  */
 public class SecurityPinActivity extends AppCompatActivity {
 
