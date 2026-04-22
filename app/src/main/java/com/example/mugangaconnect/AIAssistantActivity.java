@@ -31,6 +31,7 @@ public class AIAssistantActivity extends AppCompatActivity {
 
         // Initialize AI Assistant UI components
         initAIAssistantUI();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
     }
 
     private void initAIAssistantUI() {
