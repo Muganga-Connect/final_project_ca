@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/dashboardScroll"
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
