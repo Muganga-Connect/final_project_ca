@@ -475,6 +475,66 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Your Care Hub Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Your Care Hub"
+                android:textColor="#112236"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/care_hub_tab_container_bg"
+                android:orientation="horizontal"
+                android:padding="6dp">
+
+                <TextView
+                    android:id="@+id/tab_upcoming"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_item_bg"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="Upcoming"
+                    android:textColor="#0C4DA1"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tab_rescheduled"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_item_bg"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="Rescheduled"
+                    android:textColor="#7E8A96" />
+
+                <TextView
+                    android:id="@+id/tab_cancelled"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/tab_item_bg"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    android:text="Cancelled"
+                    android:textColor="#7E8A96" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_appointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:nestedScrollingEnabled="false" />
+
             <!-- Reminders header -->
             <TextView
                 android:layout_width="match_parent"
