@@ -54,7 +54,7 @@
                         android:textColor="#0C4DA1"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:lineHeight="28" />
+                        android:lineHeight="28sp" />
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
