@@ -1,97 +1,94 @@
 package com.example.mugangaconnect;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mugangaconnect.data.model.Appointment;
+import com.example.mugangaconnect.data.repository.AppointmentRepository;
+import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
+import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.card.MaterialCardView;
 
-public class AppointmentHistoryActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private MaterialCardView tabCompleted, tabCancelled, tabMissed;
-    private TextView textCompleted, textCancelled, textMissed;
-    private MaterialCardView card1, card2, card3;
+public class AppointmentHistoryActivity extends AppCompatActivity
+        implements AppointmentAdapter.OnAppointmentActionListener {
+
+    private AppointmentRepository appointmentRepo;
+    private SessionManager session;
+    private AppointmentAdapter adapter;
+    private final List<Appointment> appointments = new ArrayList<>();
+    private String activeStatus = Appointment.Status.ATTENDED.name();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_history);
 
-        // Initialize Tabs
-        tabCompleted = findViewById(R.id.tabCompleted);
-        tabCancelled = findViewById(R.id.tabCancelled);
-        tabMissed = findViewById(R.id.tabMissed);
+        session         = new SessionManager(this);
+        appointmentRepo = new AppointmentRepository(this);
 
-        textCompleted = findViewById(R.id.textCompleted);
-        textCancelled = findViewById(R.id.textCancelled);
-        textMissed = findViewById(R.id.textMissed);
+        RecyclerView rv = findViewById(R.id.rv_history);
+        if (rv != null) {
+            adapter = new AppointmentAdapter(appointments, this);
+            rv.setLayoutManager(new LinearLayoutManager(this));
+            rv.setAdapter(adapter);
+        }
 
-        // Initialize Cards
-        card1 = findViewById(R.id.card1); // Completed
-        card2 = findViewById(R.id.card2); // Cancelled
-        card3 = findViewById(R.id.card3); // Missed
+        setupTabs();
 
-        // Tab Click Listeners
-        tabCompleted.setOnClickListener(v -> selectTab("completed"));
-        tabCancelled.setOnClickListener(v -> selectTab("cancelled"));
-        tabMissed.setOnClickListener(v -> selectTab("missed"));
-
-        // Back button functionality
         ImageView backBtn = findViewById(R.id.backBtn);
-        if (backBtn != null) {
-            backBtn.setOnClickListener(v -> finish());
-        }
+        if (backBtn != null) backBtn.setOnClickListener(v -> finish());
 
-        // More button functionality
         MaterialCardView moreBtn = findViewById(R.id.moreBtn);
-        if (moreBtn != null) {
-            moreBtn.setOnClickListener(v -> Toast.makeText(this, "Loading more appointments...", Toast.LENGTH_SHORT).show());
+        if (moreBtn != null) moreBtn.setOnClickListener(v ->
+                Toast.makeText(this, "No more appointments", Toast.LENGTH_SHORT).show());
+
+        loadByStatus(activeStatus);
+    }
+
+    private void setupTabs() {
+        int[] tabIds   = {R.id.tabCompleted, R.id.tabCancelled, R.id.tabMissed};
+        String[] statuses = {
+            Appointment.Status.ATTENDED.name(),
+            Appointment.Status.CANCELLED.name(),
+            Appointment.Status.MISSED.name()
+        };
+        for (int i = 0; i < tabIds.length; i++) {
+            MaterialCardView tab = findViewById(tabIds[i]);
+            if (tab == null) continue;
+            String status = statuses[i];
+            tab.setOnClickListener(v -> {
+                activeStatus = status;
+                loadByStatus(status);
+            });
         }
     }
 
-    private void selectTab(String status) {
-        // Reset all tabs to unselected state
-        resetTabs();
-
-        // Hide all cards initially
-        card1.setVisibility(View.GONE);
-        card2.setVisibility(View.GONE);
-        card3.setVisibility(View.GONE);
-
-        switch (status) {
-            case "completed":
-                updateTabStyle(tabCompleted, textCompleted, true);
-                card1.setVisibility(View.VISIBLE);
-                break;
-            case "cancelled":
-                updateTabStyle(tabCancelled, textCancelled, true);
-                card2.setVisibility(View.VISIBLE);
-                break;
-            case "missed":
-                updateTabStyle(tabMissed, textMissed, true);
-                card3.setVisibility(View.VISIBLE);
-                break;
-        }
+    private void loadByStatus(String status) {
+        String uid = session.getUid();
+        if (uid == null) return;
+        appointmentRepo.getCachedByStatus(uid, status,
+                new AppointmentRepository.Callback<List<Appointment>>() {
+                    @Override public void onResult(List<Appointment> data) {
+                        runOnUiThread(() -> {
+                            appointments.clear();
+                            appointments.addAll(data);
+                            if (adapter != null) adapter.notifyDataSetChanged();
+                        });
+                    }
+                    @Override public void onError(String message) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentHistoryActivity.this, message, Toast.LENGTH_SHORT).show());
+                    }
+                });
     }
 
-    private void resetTabs() {
-        updateTabStyle(tabCompleted, textCompleted, false);
-        updateTabStyle(tabCancelled, textCancelled, false);
-        updateTabStyle(tabMissed, textMissed, false);
-    }
-
-    private void updateTabStyle(MaterialCardView tab, TextView text, boolean isSelected) {
-        if (isSelected) {
-            tab.setCardBackgroundColor(Color.parseColor("#1A4C91"));
-            text.setTextColor(Color.WHITE);
-            text.setTypeface(null, android.graphics.Typeface.BOLD);
-        } else {
-            tab.setCardBackgroundColor(Color.WHITE);
-            text.setTextColor(Color.parseColor("#6C96C3"));
-            text.setTypeface(null, android.graphics.Typeface.NORMAL);
-        }
-    }
+    @Override public void onReschedule(Appointment appointment) { /* history is read-only */ }
+    @Override public void onCancel(Appointment appointment)     { /* history is read-only */ }
 }
