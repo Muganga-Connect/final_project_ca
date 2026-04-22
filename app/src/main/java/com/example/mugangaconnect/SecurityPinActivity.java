@@ -153,6 +153,11 @@ public class SecurityPinActivity extends AppCompatActivity {
             return false;
         }
 
+        if (!isNumeric(currentPin)) {
+            etCurrentPin.setError("PIN must contain only numbers");
+            return false;
+        }
+
         return true;
     }
 
@@ -173,6 +178,12 @@ public class SecurityPinActivity extends AppCompatActivity {
         // Check if new PIN is same as current PIN
         if (newPin.equals(etCurrentPin.getText().toString().trim())) {
             etNewPin.setError("New PIN must be different from current PIN");
+            return false;
+        }
+
+        // Check for weak PINs (sequential or repeated digits)
+        if (isWeakPin(newPin)) {
+            etNewPin.setError("PIN is too weak. Choose a different PIN");
             return false;
         }
 
@@ -232,5 +243,53 @@ public class SecurityPinActivity extends AppCompatActivity {
         etCurrentPin.setText("");
         etNewPin.setText("");
         etConfirmPin.setText("");
+    }
+
+    /**
+     * Check if string contains only numeric characters
+     * @param str String to check
+     * @return true if numeric, false otherwise
+     */
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if PIN is weak (repeated or sequential digits)
+     * @param pin PIN to check
+     * @return true if weak, false otherwise
+     */
+    private boolean isWeakPin(String pin) {
+        if (pin == null || pin.length() != 4) {
+            return false;
+        }
+
+        // Check for repeated digits (e.g., 1111, 2222)
+        if (pin.charAt(0) == pin.charAt(1) && 
+            pin.charAt(1) == pin.charAt(2) && 
+            pin.charAt(2) == pin.charAt(3)) {
+            return true;
+        }
+
+        // Check for sequential digits (e.g., 1234, 4321)
+        boolean ascending = true;
+        boolean descending = true;
+        for (int i = 0; i < pin.length() - 1; i++) {
+            if (pin.charAt(i + 1) - pin.charAt(i) != 1) {
+                ascending = false;
+            }
+            if (pin.charAt(i) - pin.charAt(i + 1) != 1) {
+                descending = false;
+            }
+        }
+        return ascending || descending;
     }
 }
