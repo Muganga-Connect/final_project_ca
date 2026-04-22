@@ -43,6 +43,16 @@ The SAFS mobile app is designed for **patients only**. It will:
 
 ## 3. User Roles
 
+### Use Case Diagram
+> Overview of all patient interactions with the system.
+
+![Use Case Diagram](./muganga_use_case_diagram.svg)
+
+### Login Use Case — UC-01
+> Detailed use case description for the Login action including UML diagram.
+
+![Login Use Case](./muganga_login_usecase.svg)
+
 Only one role exists: **Patient**
 - Register and log in
 - Book, cancel, or reschedule appointments
@@ -133,6 +143,26 @@ Only one role exists: **Patient**
 │  Data Layer                 │  Firebase database
 └─────────────────────────────┘
 ```
+
+### Class Diagram
+> Core domain model showing all classes, attributes, methods, and relationships.
+
+![Class Diagram](./muganga_class_diagram.svg)
+
+### Activity Diagram
+> Patient journey from app launch through authentication, booking, AI prediction, and reminders.
+
+![Activity Diagram](./muganga_activity_diagram.svg)
+
+### Sequence Diagram
+> Step-by-step interactions between Patient, Mobile App, Firebase Auth, Firestore, AI Engine, and FCM.
+
+![Sequence Diagram](./muganga_sequence_diagram.svg)
+
+### Data Flow Diagram (Level 1)
+> Data flows between all system processes, external entities, and Firebase data stores.
+
+![Data Flow Diagram](./muganga_dfd.svg)
 
 ---
 

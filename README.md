@@ -57,6 +57,40 @@ MugangaConnect+/
 | SHEMA Hubert              | Development                 |
 | Janvier Niyomwungeri      | Dev + Documentation         |
 
+## Diagrams
+
+### Use Case Diagram
+> Shows all patient interactions with the MugangaConnect+ system.
+
+![Use Case Diagram](./muganga_use_case_diagram.svg)
+
+### Login Use Case
+> Detailed UML use case description for the Login action.
+
+![Login Use Case](./muganga_login_usecase.svg)
+
+### Class Diagram
+> Core domain model showing all classes and their relationships.
+
+![Class Diagram](./muganga_class_diagram.svg)
+
+### Activity Diagram
+> Patient journey from app launch through booking, AI prediction, and reminders.
+
+![Activity Diagram](./muganga_activity_diagram.svg)
+
+### Sequence Diagram
+> Interactions between Patient, Mobile App, Firebase, AI Engine, and FCM.
+
+![Sequence Diagram](./muganga_sequence_diagram.svg)
+
+### Data Flow Diagram
+> Level 1 DFD showing data flows between all system processes and data stores.
+
+![Data Flow Diagram](./muganga_dfd.svg)
+
+---
+
 ## License
 
 This project is developed as part of an academic program at AUCA.
