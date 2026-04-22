@@ -45,7 +45,8 @@ public class BottomNavHelper {
                 activity.finish();
                 break;
             case SCHEDULE:
-                Toast.makeText(activity, "Schedule coming soon", Toast.LENGTH_SHORT).show();
+                activity.startActivity(new Intent(activity, AppointmentManagementActivity.class));
+                activity.finish();
                 break;
             case AI_ASSISTANT:
                 activity.startActivity(new Intent(activity, AIAssistantActivity.class));
