@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         setupAccountSettings();
         setupSupport();
-        setupBottomNav();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.PROFILE);
 
         // Edit profile button
         findViewById(R.id.editProfileBtn).setOnClickListener(v ->
@@ -74,24 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         findViewById(R.id.termsItem).setOnClickListener(v ->
                 Toast.makeText(this, "Terms of Service coming soon", Toast.LENGTH_SHORT).show());
-    }
-
-    private void setupBottomNav() {
-        findViewById(R.id.navDashboard).setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navSchedule).setOnClickListener(v ->
-                Toast.makeText(this, "Schedule coming soon", Toast.LENGTH_SHORT).show());
-
-        findViewById(R.id.navAiAssistant).setOnClickListener(v -> {
-            startActivity(new Intent(this, AIAssistantActivity.class));
-            finish();
-        });
-
-        // Profile is current screen — no action
-        findViewById(R.id.navProfile).setOnClickListener(v -> {});
     }
 
     private void showLanguageDialog() {
