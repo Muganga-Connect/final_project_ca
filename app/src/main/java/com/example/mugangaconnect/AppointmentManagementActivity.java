@@ -55,9 +55,7 @@ public class AppointmentManagementActivity extends AppCompatActivity {
         findViewById(R.id.hospitalStMarys).setOnClickListener(v -> searchHospital("St. Mary's"));
 
         // Navigation
-        findViewById(R.id.navDashboard).setOnClickListener(v -> Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show());
-        findViewById(R.id.navAI).setOnClickListener(v -> Toast.makeText(this, "AI Assistant", Toast.LENGTH_SHORT).show());
-        findViewById(R.id.navProfile).setOnClickListener(v -> Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show());
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
     }
 
     private void selectDepartment(String dept) {
