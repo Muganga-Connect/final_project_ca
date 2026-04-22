@@ -9,6 +9,8 @@
 
     <style name="Theme.Appointment_Schedule" parent="Base.Theme.Appointment_Schedule" />
 
+    <style name="Theme.MugangaConnect" parent="Base.Theme.Appointment_Schedule" />
+
     <style name="CircleImage" parent="">
         <item name="cornerSize">50%</item>
     </style>
