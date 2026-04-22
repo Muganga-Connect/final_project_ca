@@ -1,5 +1,6 @@
 package com.example.appointment_schedule;
 
+import com.example.mugangaconnect.R;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;

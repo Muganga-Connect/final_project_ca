@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/splash_background">
+
+    <!-- Logo Container - centered on screen -->
+    <LinearLayout
+        android:id="@+id/logo_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="60dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- MugangaConnect Logo Image -->
+        <ImageView
+            android:id="@+id/splash_logo"
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_muganga_connect_logo"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+    <!-- Loading Animation Container -->
+    <LinearLayout
+        android:id="@+id/loading_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Loading Dots -->
+        <ImageView
+            android:id="@+id/loading_dot1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/loading_pulse" />
+
+        <ImageView
+            android:id="@+id/loading_dot2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/loading_pulse" />
+
+        <ImageView
+            android:id="@+id/loading_dot3"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/loading_pulse" />
+
+    </LinearLayout>
+
+    <!-- Loading Text -->
+    <TextView
+        android:id="@+id/loading_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loading_container"
+        android:layout_centerHorizontal="true"
+        android:text="Loading..."
+        android:textColor="@color/text_hint"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:letterSpacing="0.1" />
+
+</RelativeLayout>
