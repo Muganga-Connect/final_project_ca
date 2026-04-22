@@ -23,4 +23,6 @@
     <color name="primary_white">#FFFFFF</color>
     <color name="accent_blue_light">#D6E6FF</color>
     <color name="success_green">#2E7D32</color>
+    <color name="success_green_light">#E8F5E9</color>
+    <color name="tab_bg">#F0F4FF</color>
 </resources>
