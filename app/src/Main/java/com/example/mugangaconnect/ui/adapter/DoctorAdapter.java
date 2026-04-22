@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.model.Doctor;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -39,17 +41,11 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
     @Override
     public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
         if (position < 0 || position >= doctorList.size()) return;
-        
+
         Doctor doctor = doctorList.get(position);
         holder.txtName.setText(doctor.getName());
         holder.txtSpecialty.setText(doctor.getSpecialty());
         holder.txtAvailability.setText(doctor.getAvailability());
-        
-        try {
-            holder.imgDoctor.setImageResource(doctor.getImageResId());
-        } catch (Exception e) {
-            holder.imgDoctor.setImageResource(R.mipmap.ic_launcher);
-        }
 
         if (selectedPosition == position) {
             holder.cardDoctor.setStrokeWidth(4);
@@ -61,17 +57,11 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         }
 
         holder.itemView.setOnClickListener(v -> {
-            int previousSelected = selectedPosition;
+            int prev = selectedPosition;
             selectedPosition = holder.getBindingAdapterPosition();
-            
-            if (previousSelected != -1) {
-                notifyItemChanged(previousSelected);
-            }
+            if (prev != -1) notifyItemChanged(prev);
             notifyItemChanged(selectedPosition);
-            
-            if (listener != null) {
-                listener.onDoctorSelected(doctor);
-            }
+            if (listener != null) listener.onDoctorSelected(doctor);
         });
     }
 
@@ -85,14 +75,14 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         ImageView imgDoctor, imgSelected;
         MaterialCardView cardDoctor;
 
-        public DoctorViewHolder(@NonNull View itemView) {
+        DoctorViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtName = itemView.findViewById(R.id.txt_doctor_name);
-            txtSpecialty = itemView.findViewById(R.id.txt_doctor_specialty);
+            txtName         = itemView.findViewById(R.id.txt_doctor_name);
+            txtSpecialty    = itemView.findViewById(R.id.txt_doctor_specialty);
             txtAvailability = itemView.findViewById(R.id.txt_doctor_availability);
-            imgDoctor = itemView.findViewById(R.id.img_doctor);
-            imgSelected = itemView.findViewById(R.id.img_selected);
-            cardDoctor = itemView.findViewById(R.id.card_doctor);
+            imgDoctor       = itemView.findViewById(R.id.img_doctor);
+            imgSelected     = itemView.findViewById(R.id.img_selected);
+            cardDoctor      = itemView.findViewById(R.id.card_doctor);
         }
     }
 }
