@@ -27,29 +27,18 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="dashboard">
-            <LinearLayout
-                android:id="@+id/navDashboardPill"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_dashboard"
+                app:tint="#667A90" />
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bottom_nav_selected_bg"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="8dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_dashboard"
-                    app:tint="#FFFFFF" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Dashboard"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:layout_marginTop="2dp"
+                android:text="Dashboard"
+                android:textColor="#667A90"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Schedule -->
