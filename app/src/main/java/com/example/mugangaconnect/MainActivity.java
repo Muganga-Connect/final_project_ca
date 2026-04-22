@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         View root = findViewById(R.id.main);
-        View scroll = findViewById(R.id.dashboardScroll);
+        View scroll = findViewById(R.id.nestedScrollView);
         View bottomBar = findViewById(R.id.bottomBar);
 
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
