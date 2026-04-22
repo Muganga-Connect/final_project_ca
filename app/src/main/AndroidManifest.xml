@@ -47,6 +47,16 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- PROFILE screen -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"/>
+
+        <!-- SECURITY PIN screen -->
+        <activity
+            android:name=".SecurityPinActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
