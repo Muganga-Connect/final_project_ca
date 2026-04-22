@@ -10,38 +10,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MugangaConnect">
-
-        <!-- LOGIN launcher screen it's first screen -->
+        android:theme="@style/Theme.Appointment_Schedule">
         <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- SIGNUP screen -->
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <!-- DASHBOARD screen -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <!-- NOTIFICATION PREFERENCES screen -->
-        <activity
-            android:name=".NotificationPreferencesActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:label="Notification Preferences"/>
-
     </application>
 
 </manifest>
