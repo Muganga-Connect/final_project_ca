@@ -35,6 +35,13 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- NOTIFICATION PREFERENCES screen -->
+        <activity
+            android:name=".NotificationPreferencesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:label="Notification Preferences"/>
+
     </application>
 
 </manifest>
