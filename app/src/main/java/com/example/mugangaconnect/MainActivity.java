@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (profileNav != null) {
             profileNav.setOnClickListener(v -> {
-                Toast.makeText(this, "Profile feature coming soon", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, ProfileActivity.class));
             });
         }
     }
