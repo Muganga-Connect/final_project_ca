@@ -99,36 +99,12 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Search Bar -->
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.search.SearchBar
                 android:id="@+id/searchCard"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                app:cardCornerRadius="27dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp"
-                android:layout_marginBottom="20dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingStart="20dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_menu_search"
-                        app:tint="#B0C4DE"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Search for hospital or clinic"
-                        android:textColor="#B0C4DE"
-                        android:textSize="15sp"
-                        android:layout_marginStart="12dp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_height="wrap_content"
+                android:hint="Search for hospital or clinic"
+                android:layout_marginBottom="20dp" />
 
             <!-- Recent Hospital -->
             <TextView
@@ -144,46 +120,34 @@
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:layout_marginBottom="24dp">
-                <LinearLayout
+                <com.google.android.material.chip.ChipGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    app:singleLine="true">
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalCityGeneral"
+                        style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="City General Hospital"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp"
-                        android:background="@android:color/white"
-                        android:textColor="#1A4C91"
-                        android:textSize="12sp"
                         android:layout_marginEnd="8dp"/>
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalMayo"
+                        style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mayo Clinic"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp"
-                        android:background="@android:color/white"
-                        android:textColor="#1A4C91"
-                        android:textSize="12sp"
                         android:layout_marginEnd="8dp"/>
 
-                    <TextView
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalStMarys"
+                        style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="St. Mary's"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp"
-                        android:background="@android:color/white"
-                        android:textColor="#1A4C91"
-                        android:textSize="12sp"/>
-                </LinearLayout>
+                        android:text="St. Mary's"/>
+                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <!-- Step 01: Department -->
@@ -210,17 +174,15 @@
                             android:layout_height="24dp"
                             android:src="@drawable/ic_menu"
                             app:tint="#1E88E5"/>
-                        <TextView
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Step 01"
                             android:layout_alignParentEnd="true"
-                            android:background="#E3F2FD"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="#1E88E5"
-                            android:textSize="10sp"
-                            android:textStyle="bold"/>
+                            android:text="Step 01"
+                            android:clickable="false"
+                            android:focusable="false"
+                            app:chipMinTouchTargetSize="0dp"/>
                     </RelativeLayout>
 
                     <TextView
@@ -284,17 +246,15 @@
                             android:layout_height="24dp"
                             android:src="@drawable/ic_account"
                             app:tint="#1E88E5"/>
-                        <TextView
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Step 02"
                             android:layout_alignParentEnd="true"
-                            android:background="#E3F2FD"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="#1E88E5"
-                            android:textSize="10sp"
-                            android:textStyle="bold"/>
+                            android:text="Step 02"
+                            android:clickable="false"
+                            android:focusable="false"
+                            app:chipMinTouchTargetSize="0dp"/>
                     </RelativeLayout>
 
                     <TextView
@@ -380,17 +340,15 @@
                             android:layout_height="24dp"
                             android:src="@drawable/ic_menu"
                             app:tint="#F57C00"/>
-                        <TextView
+                        <com.google.android.material.chip.Chip
+                            style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Step 03"
                             android:layout_alignParentEnd="true"
-                            android:background="#FFF3E0"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="#F57C00"
-                            android:textSize="10sp"
-                            android:textStyle="bold"/>
+                            android:text="Step 03"
+                            android:clickable="false"
+                            android:focusable="false"
+                            app:chipMinTouchTargetSize="0dp"/>
                     </RelativeLayout>
 
                     <TextView
@@ -412,6 +370,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSelectSession"
+                        style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:text="Select Session"
@@ -431,42 +390,28 @@
                 android:textColor="#1A4C91"
                 android:layout_marginBottom="16dp"/>
 
-            <LinearLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/hubTabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                style="@style/Widget.Material3.TabLayout.Secondary"
                 android:layout_marginBottom="24dp">
-                <TextView
+                <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabUpcoming"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Upcoming"
-                    android:gravity="center"
-                    android:paddingVertical="10dp"
-                    android:background="#FFFFFF"
-                    android:textColor="#1E88E5"
-                    android:textStyle="bold"/>
-                <TextView
+                    android:text="Upcoming" />
+                <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabRescheduled"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Rescheduled"
-                    android:gravity="center"
-                    android:paddingVertical="10dp"
-                    android:textColor="#8AA6C7"/>
-                <TextView
+                    android:text="Rescheduled" />
+                <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabCancelledHub"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Cancelled"
-                    android:gravity="center"
-                    android:paddingVertical="10dp"
-                    android:textColor="#8AA6C7"/>
-            </LinearLayout>
+                    android:text="Cancelled" />
+            </com.google.android.material.tabs.TabLayout>
 
             <!-- Appointment Card 1 -->
             <com.google.android.material.card.MaterialCardView
@@ -559,6 +504,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnConfirmPresence"
+                        style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Confirm Presence"
@@ -573,6 +519,7 @@
                         android:orientation="horizontal">
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnReschedule"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -584,6 +531,7 @@
                             android:layout_marginEnd="8dp"/>
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCancel"
+                            style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
