@@ -145,3 +145,7 @@ The team decided to change the UI and re-analyze stakeholders (users) to simplif
 - **What went well:** _(To be filled)_
 - **What could be improved:** _(To be filled)_
 - **Action items for next sprint:** _(To be filled)_
+
+---
+
+> **Document maintained by:** Uwizeye Gentille | Documentation & Testing
