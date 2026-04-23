@@ -50,8 +50,9 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="schedule">
+
             <ImageView
-                android:layout_width="22dp"
+                android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:src="@drawable/ic_schedule"
                 app:tint="#667A90" />
