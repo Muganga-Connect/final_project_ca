@@ -94,3 +94,5 @@ MugangaConnect+/
 ## License
 
 This project is developed as part of an academic program at AUCA.
+
+> **Branch:** Documentation | **Maintained by:** Uwizeye Gentille
