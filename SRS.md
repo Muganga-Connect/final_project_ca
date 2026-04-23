@@ -189,3 +189,5 @@ Only one role exists: **Patient**
 ## 10. Conclusion
 
 The SAFS system provides a simple, scalable solution focused on patients. By combining appointment management with basic AI prediction, it enhances reliability and efficiency in healthcare access.
+
+> **Document maintained by:** Uwizeye Gentille | Documentation & Testing
