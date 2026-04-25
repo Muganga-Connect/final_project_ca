@@ -21,9 +21,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.SessionManager;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private boolean isPasswordVisible = false;
+    private AuthRepository authRepo;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,51 +36,39 @@ public class SignUpActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.signup);
 
+        authRepo = new AuthRepository();
+        session  = new SessionManager(this);
+
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.signupRoot), (v, insets) -> {
-                    Insets sys = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars());
+                    Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
                     v.setPadding(sys.left, sys.top, sys.right, sys.bottom);
                     return insets;
                 });
 
-        // Views
-        EditText etFullName = findViewById(R.id.etFullName);
-        EditText etEmail = findViewById(R.id.etSignUpEmail);
-        EditText etPassword = findViewById(R.id.etSignUpPassword);
+        EditText etFullName   = findViewById(R.id.etFullName);
+        EditText etEmail      = findViewById(R.id.etSignUpEmail);
+        EditText etPassword   = findViewById(R.id.etSignUpPassword);
         ImageView ivPwdToggle = findViewById(R.id.ivPasswordToggle);
-        Button btnSignUp = findViewById(R.id.btnSignUp);
-        LinearLayout btnBio = findViewById(R.id.btnBiometric);
-        TextView tvLoginLink = findViewById(R.id.tvLoginLink);
+        Button btnSignUp      = findViewById(R.id.btnSignUp);
+        LinearLayout btnBio   = findViewById(R.id.btnBiometric);
+        TextView tvLoginLink  = findViewById(R.id.tvLoginLink);
         LinearLayout tabLogin = findViewById(R.id.tabLogin);
-        
         LinearLayout layoutStrength = findViewById(R.id.layoutPasswordStrength);
-        ProgressBar pbStrength = findViewById(R.id.pbStrength);
-        TextView tvStrengthLabel = findViewById(R.id.tvStrengthLabel);
+        ProgressBar pbStrength      = findViewById(R.id.pbStrength);
+        TextView tvStrengthLabel    = findViewById(R.id.tvStrengthLabel);
 
-        // Password visibility toggle
         ivPwdToggle.setOnClickListener(v -> {
             isPasswordVisible = !isPasswordVisible;
             etPassword.setTransformationMethod(isPasswordVisible
                     ? HideReturnsTransformationMethod.getInstance()
                     : PasswordTransformationMethod.getInstance());
-            ivPwdToggle.setImageResource(isPasswordVisible ? R.drawable.ic_eye : R.drawable.ic_eye); // Assuming same icon or change if needed
             etPassword.setSelection(etPassword.getText().length());
         });
 
-        // Password Strength Logic
-        etPassword.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus && etPassword.getText().length() > 0) {
-                layoutStrength.setVisibility(View.VISIBLE);
-            } else {
-                layoutStrength.setVisibility(View.GONE);
-            }
-        });
-
         etPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
@@ -85,40 +78,36 @@ public class SignUpActivity extends AppCompatActivity {
                     layoutStrength.setVisibility(View.GONE);
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
-        // Sign Up button
         btnSignUp.setOnClickListener(v -> {
             String fullName = etFullName.getText().toString().trim();
-            String email = etEmail.getText().toString().trim();
+            String email    = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (fullName.isEmpty()) {
-                etFullName.setError("Enter your full name");
-                return;
-            }
-            if (email.isEmpty()) {
-                etEmail.setError("Enter email or phone");
-                return;
-            }
-            if (password.length() < 6) {
-                etPassword.setError("Password too weak");
-                return;
-            }
+            if (fullName.isEmpty()) { etFullName.setError("Enter your full name"); return; }
+            if (email.isEmpty())    { etEmail.setError("Enter email"); return; }
+            if (password.length() < 6) { etPassword.setError("Password too weak"); return; }
 
-            Toast.makeText(this, "Account created for " + fullName, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            btnSignUp.setEnabled(false);
+            authRepo.register(fullName, email, password, new AuthRepository.AuthCallback() {
+                @Override
+                public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                    session.saveSession(user.getUid(), fullName, email);
+                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                    finish();
+                }
+                @Override
+                public void onError(String message) {
+                    btnSignUp.setEnabled(true);
+                    Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
         });
 
-        // Biometrics
         if (btnBio != null) {
             btnBio.setOnClickListener(v ->
-                    Toast.makeText(this, "Biometric registration coming soon", Toast.LENGTH_SHORT).show()
-            );
+                    Toast.makeText(this, "Biometric registration coming soon", Toast.LENGTH_SHORT).show());
         }
 
         tvLoginLink.setOnClickListener(v -> goToLogin());
@@ -128,22 +117,21 @@ public class SignUpActivity extends AppCompatActivity {
     private void updateStrengthIndicator(String password, ProgressBar pb, TextView label) {
         if (password.length() < 6) {
             pb.setProgress(30);
-            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFF4444)); // Red
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFF4444));
             label.setText("WEAK");
         } else if (password.length() < 10) {
             pb.setProgress(60);
-            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFFA500)); // Orange
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFFFFA500));
             label.setText("MEDIUM");
         } else {
             pb.setProgress(100);
-            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50)); // Green
+            pb.setProgressTintList(android.content.res.ColorStateList.valueOf(0xFF4CAF50));
             label.setText("STRONG");
         }
     }
 
     private void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 }

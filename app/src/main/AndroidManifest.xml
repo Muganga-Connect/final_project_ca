@@ -10,53 +10,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MugangaConnect">
-
-        <!-- SPLASH screen -->
+        android:theme="@style/Theme.Appointment_Schedule">
         <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- LOGIN Screen -->
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-
-        <!-- SIGNUP screen -->
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <!-- DASHBOARD screen -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <!-- AI ASSISTANT screen -->
-        <activity
-            android:name=".AIAssistantActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <!-- PROFILE screen -->
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false"/>
-
-        <!-- SECURITY PIN screen -->
-        <activity
-            android:name=".SecurityPinActivity"
-            android:exported="false"/>
-
     </application>
 
 </manifest>
