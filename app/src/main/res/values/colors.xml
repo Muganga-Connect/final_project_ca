@@ -3,6 +3,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#F0F7FF</color>
     <color name="primary_blue">#2176FF</color>
+    <color name="blue_primary">#1976D2</color>
     <color name="primary_dark">#102027</color>
     <color name="primary_white">#FFFFFF</color> <!-- Dark for visibility -->
     <color name="text_secondary">#455A64</color> <!-- Darker secondary text -->
