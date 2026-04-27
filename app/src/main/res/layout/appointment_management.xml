@@ -220,6 +220,16 @@
                         android:padding="12dp"
                         android:background="#1E88E5"
                         android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:id="@+id/deptDentistry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dentistry"
+                        android:padding="12dp"
+                        android:background="#F5F9FD"
+                        android:textColor="#1A4C91"
+                        android:layout_marginBottom="8dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
