@@ -10,6 +10,11 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.mugangaconnect.activity.MainActivity;
+import com.example.mugangaconnect.activity.AppointmentManagementActivity;
+import com.example.mugangaconnect.activity.AIAssistantActivity;
+import com.example.mugangaconnect.activity.ProfileActivity;
+
 public class BottomNavHelper {
 
     public enum Screen { DASHBOARD, SCHEDULE, AI_ASSISTANT, PROFILE }
