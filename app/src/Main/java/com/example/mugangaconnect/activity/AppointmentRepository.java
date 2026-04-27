@@ -72,14 +72,14 @@ public class AppointmentRepository {
         // Extract doctor data
         Doctor doctor = null;
         if (document.contains("doctor")) {
+            String doctorId = document.contains("doctor.id") ? document.getString("doctor.id") : "";
             String doctorName = document.getString("doctor.name");
             String doctorSpecialty = document.getString("doctor.specialty");
+            String doctorDepartment = document.contains("doctor.department") ? document.getString("doctor.department") : "";
             String doctorAvailability = document.getString("doctor.availability");
-            Long doctorImageResId = document.getLong("doctor.imageResId");
             
             if (doctorName != null && doctorSpecialty != null) {
-                int imageResId = doctorImageResId != null ? doctorImageResId.intValue() : 0;
-                doctor = new Doctor(doctorName, doctorSpecialty, doctorAvailability, imageResId);
+                doctor = new Doctor(doctorId, doctorName, doctorSpecialty, doctorDepartment, doctorAvailability);
             }
         }
         
