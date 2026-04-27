@@ -154,12 +154,23 @@ public class AppointmentManagementActivity extends AppCompatActivity
             Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show();
             return;
         }
+        
+        if (selectedDate == null || selectedDate.trim().isEmpty()) {
+            Toast.makeText(this, "Please select a date first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        if (selectedTime == null || selectedTime.trim().isEmpty()) {
+            Toast.makeText(this, "Please select a time first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         String uid = session.getUid();
         if (uid == null) return;
 
         Appointment appt = new Appointment(uid, selectedDoctor.getId(),
                 selectedDoctor.getName(), selectedDepartment,
-                "2025-08-01", "09:00");
+                selectedDate, selectedTime);
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override
