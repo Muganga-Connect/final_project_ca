@@ -47,6 +47,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         session         = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        doctorRepo      = new DoctorRepository();
 
         setupDoctorList();
         setupAppointmentList();
