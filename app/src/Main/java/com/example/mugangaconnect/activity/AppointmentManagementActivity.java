@@ -126,11 +126,21 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void loadDoctors() {
-        // Seed static doctors per department — replace with Firestore fetch when available
-        doctors.clear();
-        doctors.add(new Doctor("d1", "Dr. Mugisha Eric", "Cardiologist", selectedDepartment, "Mon-Fri 08:00-17:00"));
-        doctors.add(new Doctor("d2", "Dr. Uwase Claire", "Specialist", selectedDepartment, "Mon-Wed 09:00-15:00"));
-        if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+        doctorRepo.getByDepartment(selectedDepartment, new DoctorRepository.Callback<List<Doctor>>() {
+            @Override
+            public void onResult(List<Doctor> data) {
+                runOnUiThread(() -> {
+                    doctors.clear();
+                    doctors.addAll(data);
+                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+                });
+            }
+            
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void loadAppointments() {
