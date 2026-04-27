@@ -68,6 +68,7 @@ public class AppointmentRepository {
      */
     private Appointment documentToAppointment(DocumentSnapshot document) {
         String id = document.getId();
+        String patientId = document.getString("patientId");
         
         // Extract doctor data
         Doctor doctor = null;
@@ -92,7 +93,14 @@ public class AppointmentRepository {
         if (time == null) time = "";
         if (status == null) status = "UNKNOWN";
         
-        return new Appointment(id, doctor, date, time, status);
+        return new Appointment(
+            patientId != null ? patientId : "",       // patientId
+            doctor != null ? doctor.getId() : "",     // doctorId
+            doctor != null ? doctor.getName() : "",   // doctorName
+            doctor != null ? doctor.getDepartment() : "", // department
+            date,                                       // date
+            time                                        // time
+        );
     }
     
     /**
