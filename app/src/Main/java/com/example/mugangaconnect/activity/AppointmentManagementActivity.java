@@ -26,6 +26,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                    DoctorAdapter.OnDoctorSelectedListener {
 
     private AppointmentRepository appointmentRepo;
+    private DoctorRepository doctorRepo;
     private SessionManager session;
 
     private AppointmentAdapter appointmentAdapter;
