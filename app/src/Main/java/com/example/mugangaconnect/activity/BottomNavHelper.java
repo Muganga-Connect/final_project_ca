@@ -12,8 +12,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.mugangaconnect.MainActivity;
 import com.example.mugangaconnect.activity.AppointmentManagementActivity;
-import com.example.mugangaconnect.activity.AIAssistantActivity;
-import com.example.mugangaconnect.activity.ProfileActivity;
+import com.example.mugangaconnect.AIAssistantActivity;
+import com.example.mugangaconnect.ProfileActivity;
 
 public class BottomNavHelper {
 
