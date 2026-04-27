@@ -23,6 +23,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.example.mugangaconnect.activity.MainActivity;
+import com.example.mugangaconnect.activity.LoginActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 
