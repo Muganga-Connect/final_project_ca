@@ -25,4 +25,8 @@
     <color name="splash_accent_orange">#FF9800</color>
     <color name="bg_light">#F5F7FA</color>
     <color name="text_dark">#212121</color>
+    
+    <!-- Additional missing colors -->
+    <color name="black">#000000</color>
+    <color name="splash_background">#FFFFFF</color>
 </resources>
