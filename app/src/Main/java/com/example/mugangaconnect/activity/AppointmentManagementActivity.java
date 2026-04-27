@@ -90,11 +90,36 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private void setupButtons() {
         if (findViewById(R.id.btn_select_session) != null)
-            findViewById(R.id.btn_select_session).setOnClickListener(v ->
-                    Toast.makeText(this, "Select a session time", Toast.LENGTH_SHORT).show());
+            findViewById(R.id.btn_select_session).setOnClickListener(v -> showDatePicker());
 
         if (findViewById(R.id.btn_book_appointment) != null)
             findViewById(R.id.btn_book_appointment).setOnClickListener(v -> bookAppointment());
+    }
+
+    private void showDatePicker() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    // Format date as YYYY-MM-DD
+                    selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    showTimePicker();
+                },
+                2025, 8, 1 // Default date: August 1, 2025
+        );
+        datePickerDialog.show();
+    }
+
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view, hourOfDay, minute) -> {
+                    // Format time as HH:MM
+                    selectedTime = String.format("%02d:%02d", hourOfDay, minute);
+                    Toast.makeText(this, "Selected: " + selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
+                },
+                9, 0 // Default time: 09:00
+        );
+        timePickerDialog.show();
     }
 
     private void loadDoctors() {
