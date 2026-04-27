@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mugangaconnect.R;
 
 /**
  * SecurityPinActivity - Handles PIN change functionality
