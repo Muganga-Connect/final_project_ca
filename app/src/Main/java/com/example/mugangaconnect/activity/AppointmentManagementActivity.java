@@ -33,6 +33,8 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private String selectedDepartment = "Cardiology";
     private Doctor selectedDoctor;
+    private String selectedDate;
+    private String selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
