@@ -107,6 +107,7 @@
         app:layout_constraintTop_toBottomOf="@id/topStatsBar">
 
         <LinearLayout
+            android:id="@+id/chatContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -260,10 +261,13 @@
         app:layout_constraintBottom_toTopOf="@+id/inputCard">
 
         <TextView
+            android:id="@+id/checkRiskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:background="@drawable/quick_action_bg"
+            android:clickable="true"
+            android:focusable="true"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Check Risk"
@@ -271,9 +275,12 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/rescheduleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/quick_action_bg"
+            android:clickable="true"
+            android:focusable="true"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Reschedule Appointment"
@@ -292,7 +299,6 @@
         app:cardCornerRadius="30dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -307,6 +313,7 @@
                 app:tint="#7E8A96" />
 
             <EditText
+                android:id="@+id/messageEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
@@ -318,128 +325,33 @@
                 android:textSize="14sp" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/sendButtonContainer"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:cardBackgroundColor="#0C4DA1"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp">
                 <ImageView
+                    android:id="@+id/sendButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     android:src="@android:drawable/ic_menu_send"
-                    app:tint="#FFFFFF" />
+                    app:tint="#FFFFFF"
+                    android:clickable="true"
+                    android:focusable="true" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Bottom Navigation Bar (reused style from activity_main) -->
-    <androidx.cardview.widget.CardView
+    <include
+        layout="@layout/include_bottom_nav"
         android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="40dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="4">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_dialog_dialer"
-                    app:tint="#7E8A96" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dashboard"
-                    android:textColor="#7E8A96"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_my_calendar"
-                    app:tint="#7E8A96" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Schedule"
-                    android:textColor="#7E8A96"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    app:cardBackgroundColor="#0C4DA1"
-                    app:cardCornerRadius="30dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@android:drawable/ic_menu_info_details"
-                            app:tint="#FFFFFF" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="AI Assistant"
-                            android:textColor="#FFFFFF"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    app:tint="#7E8A96" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Profile"
-                    android:textColor="#7E8A96"
-                    android:textSize="10sp" />
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
