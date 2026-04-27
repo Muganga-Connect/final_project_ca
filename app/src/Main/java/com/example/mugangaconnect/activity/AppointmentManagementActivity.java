@@ -123,7 +123,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                     selectedTime = String.format("%02d:%02d", hourOfDay, minute);
                     Toast.makeText(this, "Selected: " + selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
                 },
-                9, 0 // Default time: 09:00
+                9, 0, false // Default time: 09:00, 24-hour format
         );
         timePickerDialog.show();
     }
