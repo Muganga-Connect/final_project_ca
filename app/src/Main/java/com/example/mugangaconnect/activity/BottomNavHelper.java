@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.example.mugangaconnect.MainActivity;
+import com.example.mugangaconnect.activity.MainActivity;
 import com.example.mugangaconnect.activity.AppointmentManagementActivity;
-import com.example.mugangaconnect.AIAssistantActivity;
-import com.example.mugangaconnect.ProfileActivity;
+import com.example.mugangaconnect.activity.AIAssistantActivity;
+import com.example.mugangaconnect.activity.ProfileActivity;
 
 public class BottomNavHelper {
 
