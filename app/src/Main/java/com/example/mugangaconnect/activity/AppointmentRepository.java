@@ -1,5 +1,7 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
+import com.example.mugangaconnect.data.model.Appointment;
+import com.example.mugangaconnect.data.model.Doctor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
