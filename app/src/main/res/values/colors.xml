@@ -16,4 +16,13 @@
     <color name="error_red">#B71C1C</color> <!-- Darker red for visibility -->
     <color name="error_red_light">#FFEBEB</color>
     <color name="tab_bg">#E8F2FF</color>
+    
+    <!-- Missing master palette colors -->
+    <color name="blue_field_bg">#E3F2FD</color>
+    <color name="tab_selected_bg">#E3F2FD</color>
+    <color name="tab_unselected_bg">#F5F7FA</color>
+    <color name="text_hint">#757575</color>
+    <color name="splash_accent_orange">#FF9800</color>
+    <color name="bg_light">#F5F7FA</color>
+    <color name="text_dark">#212121</color>
 </resources>
