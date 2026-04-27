@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
