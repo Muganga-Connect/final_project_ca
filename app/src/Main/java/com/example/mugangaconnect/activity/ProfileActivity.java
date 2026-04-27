@@ -13,6 +13,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.SecurityPinActivity;
+import com.example.mugangaconnect.activity.LoginActivity;
+
 public class ProfileActivity extends AppCompatActivity {
 
     @Override
