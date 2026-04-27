@@ -15,6 +15,8 @@ import com.example.mugangaconnect.activity.AppointmentManagementActivity;
 import com.example.mugangaconnect.activity.AIAssistantActivity;
 import com.example.mugangaconnect.activity.ProfileActivity;
 
+import com.example.mugangaconnect.R;
+
 public class BottomNavHelper {
 
     public enum Screen { DASHBOARD, SCHEDULE, AI_ASSISTANT, PROFILE }
