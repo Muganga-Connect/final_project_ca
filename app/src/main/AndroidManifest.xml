@@ -11,15 +11,52 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Appointment_Schedule">
+        
+        <!-- Splash Screen - Launcher Activity -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".activity.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Appointment_Schedule.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- Main Activities -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.AIAssistantActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="true" />
+        
+        <!-- Management Activities -->
+        <activity
+            android:name=".activity.AppointmentManagementActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.AppointmentHistoryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.SecurityPinActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.PersonalInformationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.NotificationPreferencesActivity"
+            android:exported="true" />
+        
     </application>
 
 </manifest>
