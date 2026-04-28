@@ -102,8 +102,27 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(v -> goToSignUp());
         tabSignUp.setOnClickListener(v -> goToSignUp());
 
-        tvForgot.setOnClickListener(v ->
-                Toast.makeText(this, "Password reset link sent", Toast.LENGTH_SHORT).show());
+        // Forgot Password — sends a real reset email via Firebase
+        tvForgot.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            if (email.isEmpty()) {
+                etEmail.setError("Enter your email first");
+                etEmail.requestFocus();
+                return;
+            }
+            authRepo.resetPassword(email, new AuthRepository.ResetCallback() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(LoginActivity.this,
+                            "Password reset link sent to " + email,
+                            Toast.LENGTH_LONG).show();
+                }
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+            });
+        });
 
         btnBio.setOnClickListener(v ->
                 Toast.makeText(this, "Biometric login coming soon", Toast.LENGTH_SHORT).show());

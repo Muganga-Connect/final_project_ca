@@ -13,12 +13,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.SessionManager;
+
 public class ProfileActivity extends AppCompatActivity {
+
+    private AuthRepository authRepo;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        authRepo = new AuthRepository();
+        session = new SessionManager(this);
 
         View root = findViewById(R.id.main);
         View scroll = findViewById(R.id.profileScroll);
@@ -90,6 +99,8 @@ public class ProfileActivity extends AppCompatActivity {
                 .setTitle("Log Out")
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("Log Out", (dialog, which) -> {
+                    authRepo.logout();
+                    session.clearSession();
                     Intent intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
