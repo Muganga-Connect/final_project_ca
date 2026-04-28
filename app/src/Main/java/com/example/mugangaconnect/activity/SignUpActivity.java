@@ -27,6 +27,8 @@ import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.activity.MainActivity;
 import com.example.mugangaconnect.activity.LoginActivity;
 
+import com.google.firebase.FirebaseApp;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private boolean isPasswordVisible = false;
@@ -35,7 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Initialize Firebase FIRST - before super.onCreate()
+        FirebaseApp.initializeApp(this);
+        
         super.onCreate(savedInstanceState);
+        
         EdgeToEdge.enable(this);
         setContentView(R.layout.signup);
 

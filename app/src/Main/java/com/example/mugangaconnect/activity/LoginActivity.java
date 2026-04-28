@@ -23,6 +23,8 @@ import com.example.mugangaconnect.utils.SessionManager;
 
 import com.example.mugangaconnect.R;
 
+import com.google.firebase.FirebaseApp;
+
 public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordVisible = false;
@@ -31,7 +33,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Initialize Firebase FIRST - before super.onCreate()
+        FirebaseApp.initializeApp(this);
+        
         super.onCreate(savedInstanceState);
+        
         EdgeToEdge.enable(this);
 
         authRepo = new AuthRepository();
