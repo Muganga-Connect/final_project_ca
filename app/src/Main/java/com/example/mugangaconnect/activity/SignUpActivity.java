@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.activity.MainActivity;
 import com.example.mugangaconnect.activity.LoginActivity;
 
