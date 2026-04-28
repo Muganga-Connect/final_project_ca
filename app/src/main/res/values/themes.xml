@@ -9,6 +9,12 @@
 
     <style name="Theme.Appointment_Schedule" parent="Base.Theme.Appointment_Schedule" />
 
+    <style name="Theme.Appointment_Schedule.NoActionBar" parent="Base.Theme.Appointment_Schedule">
+        <!-- Removes ActionBar for splash screen -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="CircleImage" parent="">
         <item name="cornerSize">50%</item>
     </style>
