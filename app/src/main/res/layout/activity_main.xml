@@ -79,9 +79,7 @@
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             app:cardCornerRadius="30dp"
-                            app:cardElevation="4dp"
-                            android:strokeWidth="2dp"
-                            android:strokeColor="#4A90E2">
+                            app:cardElevation="4dp">
 
                             <ImageView
                                 android:id="@+id/dashboardProfileImage"
@@ -434,8 +432,8 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 app:cornerRadius="22dp"
-                                android:strokeWidth="1dp"
-                                android:strokeColor="#E53E3E"/>
+                                app:strokeWidth="1dp"
+                                app:strokeColor="#E53E3E"/>
                         </LinearLayout>
 
                     </LinearLayout>
