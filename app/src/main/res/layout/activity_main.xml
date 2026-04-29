@@ -53,6 +53,7 @@
                                 android:textSize="12sp"/>
 
                             <TextView
+                                android:id="@+id/tvWelcomeName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Alexandrine\nMukamana"
@@ -157,12 +158,14 @@
                         android:layout_width="80sp"/>
 
                     <TextView
+                        android:id="@+id/tvSmartAlertBody"
                         android:text="You may miss your appointment 2 of \nlast 3 were missed."
                         android:textSize="12sp"
                         android:layout_height="30sp"
                         android:layout_width="320sp"/>
 
                     <Button
+                        android:id="@+id/btnEnableReminder"
                         android:layout_marginTop="10dp"
                         android:text="Enable early reminder"
                         android:backgroundTint="#FF8C00" android:layout_height="match_parent" android:layout_width="match_parent"/>
@@ -191,6 +194,7 @@
                         app:cardCornerRadius="15dp" />
 
                     <TextView
+                        android:id="@+id/tvUpcomingDoctor"
                         android:layout_width="170sp"
                         android:layout_height="20sp"
                         android:text="Dr. Diane Gashumba"
@@ -198,12 +202,14 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvUpcomingDateTime"
                         android:layout_width="120sp"
                         android:layout_height="30sp"
                         android:text="Tomorrow\nApril 24, 10:30 AM"
                         android:textColor="#1F4E9C" />
 
                     <TextView
+                        android:id="@+id/tvUpcomingStatus"
                         android:layout_width="130sp"
                         android:layout_height="30sp"
                         android:background="@drawable/bg_status"
@@ -224,6 +230,7 @@
                         android:orientation="horizontal">
 
                         <Button
+                            android:id="@+id/btnReschedule"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -231,6 +238,7 @@
                             android:text="Reschedule" />
 
                         <Button
+                            android:id="@+id/btnCancelAppointment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -323,6 +331,7 @@
 
                 <!-- RIGHT BUTTON -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAppointmentHistory"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

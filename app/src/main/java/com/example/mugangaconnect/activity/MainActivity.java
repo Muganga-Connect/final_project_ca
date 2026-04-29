@@ -2,7 +2,9 @@ package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,14 @@ public class MainActivity extends AppCompatActivity {
 
     private SessionManager session;
     private AppointmentRepository appointmentRepo;
+    private TextView tvWelcomeName;
+    private TextView tvSmartAlertBody;
+    private TextView tvUpcomingDoctor;
+    private TextView tvUpcomingDateTime;
+    private TextView tvUpcomingStatus;
+    private Button btnReschedule;
+    private Button btnCancelAppointment;
+    private Button btnEnableReminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        bindViews();
 
         bindUserName();
         loadDashboardData();
@@ -36,32 +47,22 @@ public class MainActivity extends AppCompatActivity {
         BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
     }
 
+    private void bindViews() {
+        tvWelcomeName = findViewById(R.id.tvWelcomeName);
+        tvSmartAlertBody = findViewById(R.id.tvSmartAlertBody);
+        tvUpcomingDoctor = findViewById(R.id.tvUpcomingDoctor);
+        tvUpcomingDateTime = findViewById(R.id.tvUpcomingDateTime);
+        tvUpcomingStatus = findViewById(R.id.tvUpcomingStatus);
+        btnReschedule = findViewById(R.id.btnReschedule);
+        btnCancelAppointment = findViewById(R.id.btnCancelAppointment);
+        btnEnableReminder = findViewById(R.id.btnEnableReminder);
+    }
+
     private void bindUserName() {
         String name = session.getFullName();
-        if (name != null && !name.isEmpty()) {
-            TextView tvName = findTextViewContaining("Alexandrine");
-            if (tvName != null) tvName.setText(name);
+        if (tvWelcomeName != null && name != null && !name.isEmpty()) {
+            tvWelcomeName.setText(name);
         }
-    }
-
-    /** Find the first TextView whose current text contains the given substring. */
-    private TextView findTextViewContaining(String text) {
-        android.view.View root = getWindow().getDecorView();
-        return findIn(root, text);
-    }
-
-    private TextView findIn(android.view.View v, String text) {
-        if (v instanceof TextView) {
-            if (((TextView) v).getText().toString().contains(text)) return (TextView) v;
-        }
-        if (v instanceof android.view.ViewGroup) {
-            android.view.ViewGroup vg = (android.view.ViewGroup) v;
-            for (int i = 0; i < vg.getChildCount(); i++) {
-                TextView found = findIn(vg.getChildAt(i), text);
-                if (found != null) return found;
-            }
-        }
-        return null;
     }
 
     private void loadDashboardData() {
@@ -95,31 +96,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDashboardUI(Appointment upcoming, String risk, int missed, int total) {
-        // Update upcoming appointment card
-        TextView tvDoctor = findTextViewContaining("Dr. Diane");
-        if (tvDoctor != null && upcoming != null) tvDoctor.setText(upcoming.getDoctorName());
+        if (upcoming != null) {
+            if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText(upcoming.getDoctorName());
+            if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
+            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatus());
+        } else {
+            if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText("No upcoming appointment");
+            if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText("Book one from Schedule");
+            if (tvUpcomingStatus != null) tvUpcomingStatus.setText("N/A");
+        }
 
-        TextView tvDateTime = findTextViewContaining("April 24");
-        if (tvDateTime != null && upcoming != null)
-            tvDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
-
-        // Update smart alert
-        TextView tvAlert = findTextViewContaining("2 of");
-        if (tvAlert != null) {
+        if (tvSmartAlertBody != null) {
             if (total >= 3 && missed > 0) {
-                tvAlert.setText(missed + " of last " + total + " appointments were missed.");
+                tvSmartAlertBody.setText(missed + " of last " + total + " appointments were missed.");
             } else {
-                tvAlert.setText("You're on track! Keep attending your appointments.");
+                tvSmartAlertBody.setText("You're on track! Keep attending your appointments.");
             }
         }
     }
 
     private void wireButtons() {
-        // "View Appointment History" card
-        TextView tvHistory = findTextViewContaining("View Appointment History");
-        if (tvHistory != null) {
-            tvHistory.setOnClickListener(v ->
-                    startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+        findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
+                startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+
+        if (btnReschedule != null) {
+            btnReschedule.setOnClickListener(v ->
+                    startActivity(new Intent(this, AppointmentManagementActivity.class)));
+        }
+
+        if (btnCancelAppointment != null) {
+            btnCancelAppointment.setOnClickListener(v ->
+                    startActivity(new Intent(this, AppointmentManagementActivity.class)));
+        }
+
+        if (btnEnableReminder != null) {
+            btnEnableReminder.setOnClickListener(v ->
+                    Toast.makeText(this, "Early reminder enabled for upcoming appointments", Toast.LENGTH_SHORT).show());
         }
     }
 }

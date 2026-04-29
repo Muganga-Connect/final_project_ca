@@ -4,6 +4,9 @@ import com.example.mugangaconnect.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.Map;
 
 public class AuthRepository {
 
@@ -97,5 +100,34 @@ public class AuthRepository {
     public interface ResetCallback {
         void onSuccess();
         void onError(String message);
+    }
+
+    public interface PersonalInfoCallback {
+        void onSuccess(Map<String, Object> personalInfo);
+        void onError(String message);
+    }
+
+    public interface SimpleCallback {
+        void onSuccess();
+        void onError(String message);
+    }
+
+    public void updatePersonalInformation(String uid, Map<String, Object> personalInfo, SimpleCallback callback) {
+        db.collection(USERS_COLLECTION).document(uid)
+                .set(personalInfo, SetOptions.merge())
+                .addOnSuccessListener(v -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    public void getPersonalInformation(String uid, PersonalInfoCallback callback) {
+        db.collection(USERS_COLLECTION).document(uid).get()
+                .addOnSuccessListener(doc -> {
+                    if (!doc.exists()) {
+                        callback.onError("Profile not found");
+                        return;
+                    }
+                    callback.onSuccess(doc.getData());
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 }
