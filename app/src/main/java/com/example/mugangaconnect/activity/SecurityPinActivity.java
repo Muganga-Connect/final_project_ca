@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -74,6 +75,13 @@ public class SecurityPinActivity extends AppCompatActivity {
                 return;
             }
         }
+
+        String newHash = String.valueOf(newPin.hashCode());
+        prefs.edit().putString(KEY_PIN_HASH, newHash).apply();
+        Toast.makeText(this, "PIN successfully updated!", Toast.LENGTH_SHORT).show();
+        etCurrentPin.setText("");
+        etNewPin.setText("");
+        etConfirmPin.setText("");
     }
 
     private void initializeViews() {
