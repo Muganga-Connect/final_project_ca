@@ -49,7 +49,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         loadAppointments();
 
-        BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
+        com.example.mugangaconnect.BottomNavHelper.setup(this, com.example.mugangaconnect.BottomNavHelper.Screen.SCHEDULE);
     }
 
     private void setupDoctorList() {
