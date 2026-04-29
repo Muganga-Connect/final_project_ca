@@ -35,5 +35,7 @@ public class MugangaFcmService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
+        new SessionManager(getApplicationContext()).updateFcmToken(token);
+        Log.d(TAG, "FCM token refreshed and stored via SessionManager");
     }
 }
