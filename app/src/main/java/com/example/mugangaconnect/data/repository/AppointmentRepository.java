@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.mugangaconnect.data.local.AppDatabase;
 import com.example.mugangaconnect.data.local.AppointmentDao;
 import com.example.mugangaconnect.data.model.Appointment;
+import com.example.mugangaconnect.utils.ReminderManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -20,6 +21,7 @@ public class AppointmentRepository {
 
     private final FirebaseFirestore remote;
     private final AppointmentDao local;
+    private final Context context;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
     public interface Callback<T> {
@@ -28,8 +30,9 @@ public class AppointmentRepository {
     }
 
     public AppointmentRepository(Context context) {
+        this.context = context.getApplicationContext();
         this.remote = FirebaseFirestore.getInstance();
-        this.local = new AppointmentDao(AppDatabase.getInstance(context));
+        this.local = new AppointmentDao(AppDatabase.getInstance(this.context));
     }
 
     /** Book a new appointment — writes to Firestore, caches locally */
@@ -39,7 +42,10 @@ public class AppointmentRepository {
 
         remote.collection(COLLECTION).document(id).set(appointment)
               .addOnSuccessListener(v -> {
-                  executor.execute(() -> local.upsert(appointment));
+                  executor.execute(() -> {
+                      local.upsert(appointment);
+                      ReminderManager.scheduleReminders(context, appointment);
+                  });
                   callback.onResult(appointment);
               })
               .addOnFailureListener(e -> callback.onError(e.getMessage()));
@@ -75,7 +81,12 @@ public class AppointmentRepository {
         remote.collection(COLLECTION).document(appointmentId)
               .update("status", newStatus)
               .addOnSuccessListener(v -> {
-                  executor.execute(() -> local.updateStatus(appointmentId, newStatus));
+                  executor.execute(() -> {
+                      local.updateStatus(appointmentId, newStatus);
+                      if (Appointment.Status.CANCELLED.name().equals(newStatus)) {
+                          ReminderManager.cancelReminders(context, appointmentId);
+                      }
+                  });
                   callback.onResult(null);
               })
               .addOnFailureListener(e -> callback.onError(e.getMessage()));
@@ -91,6 +102,16 @@ public class AppointmentRepository {
                   executor.execute(() -> {
                       local.updateDateAndTime(appointmentId, newDate, newTime);
                       local.updateStatus(appointmentId, Appointment.Status.UPCOMING.name());
+                      
+                      // Reschedule reminders
+                      remote.collection(COLLECTION).document(appointmentId).get()
+                          .addOnSuccessListener(documentSnapshot -> {
+                              Appointment updated = documentSnapshot.toObject(Appointment.class);
+                              if (updated != null) {
+                                  ReminderManager.cancelReminders(context, appointmentId);
+                                  ReminderManager.scheduleReminders(context, updated);
+                              }
+                          });
                   });
                   callback.onResult(null);
               })
