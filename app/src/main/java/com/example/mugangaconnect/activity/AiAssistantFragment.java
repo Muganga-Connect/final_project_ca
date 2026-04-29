@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.cardview.widget.CardView;
+
+import com.example.mugangaconnect.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
