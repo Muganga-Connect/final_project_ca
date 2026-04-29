@@ -8,14 +8,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.cardview.widget.CardView;
-
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.model.ChatMessage;
+import com.example.mugangaconnect.data.repository.ChatRepository;
+import com.example.mugangaconnect.utils.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +26,8 @@ public class AiAssistantFragment extends Fragment {
     private EditText messageEditText;
     private ImageView sendButton;
     private LinearLayout chatContainer;
+    private ChatRepository chatRepo;
+    private SessionManager session;
 
     @Nullable
     @Override
@@ -35,6 +37,10 @@ public class AiAssistantFragment extends Fragment {
         messageEditText = view.findViewById(R.id.messageEditText);
         sendButton = view.findViewById(R.id.sendButton);
         chatContainer = view.findViewById(R.id.chatContainer);
+        session = new SessionManager(requireContext());
+        chatRepo = new ChatRepository(requireContext());
+
+        loadHistory();
         
         TextView checkRiskBtn = view.findViewById(R.id.checkRiskButton);
         TextView rescheduleBtn = view.findViewById(R.id.rescheduleButton);
@@ -57,33 +63,56 @@ public class AiAssistantFragment extends Fragment {
             });
         }
 
+        View clearBtn = view.findViewById(R.id.clearChatBtn);
+        if (clearBtn != null) {
+            clearBtn.setOnClickListener(v -> {
+                String uid = session.getUid();
+                if (uid != null) chatRepo.clearHistory(uid);
+                chatContainer.removeAllViews();
+            });
+        }
+
         return view;
     }
 
     private void sendMessage(String text) {
         addUserMessageBubble(text);
-        
-        // Simulate "Thinking" and then responding
-        new android.os.Handler().postDelayed(() -> {
-            String response = getConsultationResponse(text.toLowerCase());
-            addAiMessageBubble(response);
-        }, 1500);
+        String patientId = session.getUid();
+        if (patientId == null) return;
+
+        chatRepo.sendMessage(patientId, text, new ChatRepository.ChatCallback() {
+            @Override
+            public void onResponse(String aiReply) {
+                if (!isAdded()) return;
+                requireActivity().runOnUiThread(() -> addAiMessageBubble(aiReply));
+            }
+
+            @Override
+            public void onError(String message) {
+                if (!isAdded()) return;
+                requireActivity().runOnUiThread(() ->
+                        addAiMessageBubble("Sorry, I couldn't process that. Please try again."));
+            }
+        });
     }
 
-    private String getConsultationResponse(String query) {
-        if (query.contains("risk") || query.contains("check risk")) {
-            return "Based on your history, you've attended 90% of your appointments. However, your last two visits were delayed by 15 mins. Your current risk of missing the next one is LOW (12%). Would you like a 1-hour early reminder?";
-        } else if (query.contains("reschedule") || query.contains("appointment")) {
-            return "I can help with that. You have an upcoming appointment on Friday at 2:00 PM. I see slots available on Monday at 10:00 AM or Tuesday at 3:30 PM. Which works better for you?";
-        } else if (query.contains("heart") || query.contains("bpm")) {
-            return "Your heart rate is currently 72 BPM, which is within the normal range for you. You've been active for 30 minutes today. Keep it up!";
-        } else if (query.contains("pressure") || query.contains("blood")) {
-            return "Your last blood pressure reading was 118/76 mmHg. This is optimal. Are you feeling any dizziness or headaches today?";
-        } else if (query.contains("hello") || query.contains("hi")) {
-            return "Hello! I'm your Muganga AI Assistant. I can help you analyze your health trends, manage appointments, or check your adherence risks. What can I do for you today?";
-        } else {
-            return "I understand you're asking about '" + query + "'. As your health consultant, I recommend monitoring your vitals daily. Is there a specific symptom or record you'd like me to look into?";
-        }
+    private void loadHistory() {
+        String patientId = session.getUid();
+        if (patientId == null) return;
+
+        chatRepo.getHistory(patientId, messages -> {
+            if (!isAdded()) return;
+            requireActivity().runOnUiThread(() -> {
+                chatContainer.removeAllViews();
+                for (ChatMessage msg : messages) {
+                    if (ChatMessage.ROLE_USER.equals(msg.getRole())) {
+                        addUserMessageBubble(msg.getContent());
+                    } else {
+                        addAiMessageBubble(msg.getContent());
+                    }
+                }
+            });
+        });
     }
 
     private void addUserMessageBubble(String text) {
