@@ -3,17 +3,21 @@ package com.example.mugangaconnect.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.utils.NoShowPredictor;
 import com.example.mugangaconnect.utils.SessionManager;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SessionManager session;
     private AppointmentRepository appointmentRepo;
+    private FirebaseFirestore firestore;
+    private ImageView dashboardProfileImage;
     private TextView tvWelcomeName;
     private TextView tvSmartAlertBody;
     private TextView tvUpcomingDoctor;
