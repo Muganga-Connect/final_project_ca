@@ -119,6 +119,11 @@ public class ImageUploadUtils {
                 if (imageUrl != null && !imageUrl.isEmpty()) {
                     // Save image URL to Firestore
                     saveImageUrlToFirestore(currentUser.getUid(), imageUrl, folder, callback);
+                    
+                    // If it's a profile image, also save to user's main document for persistence
+                    if ("profile_images".equals(folder)) {
+                        saveProfileImageToUserDocument(currentUser.getUid(), imageUrl);
+                    }
                 } else {
                     callback.onError("Failed to get image URL from Cloudinary");
                 }
@@ -148,6 +153,17 @@ public class ImageUploadUtils {
                     // Even if Firestore fails, the image is uploaded to Cloudinary
                     callback.onSuccess(imageUrl);
                 });
+    }
+    
+    private void saveProfileImageToUserDocument(String userId, String imageUrl) {
+        Map<String, Object> profileUpdate = new HashMap<>();
+        profileUpdate.put("profilePicture", imageUrl);
+        profileUpdate.put("updatedAt", System.currentTimeMillis());
+        
+        firestore.collection("users").document(userId)
+                .update(profileUpdate)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Profile image saved to user document"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error saving profile image to user document", e));
     }
     
     public void uploadProfileImage(Uri imageUri, UploadCallback callback) {
