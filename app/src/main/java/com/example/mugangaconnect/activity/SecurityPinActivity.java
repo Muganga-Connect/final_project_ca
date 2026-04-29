@@ -19,6 +19,12 @@ public class SecurityPinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_pin);
         initializeViews();
+        setupClickListeners();
+    }
+
+    private void setupClickListeners() {
+        btnBack.setOnClickListener(v -> finish());
+        btnChangePin.setOnClickListener(v -> processPinChange());
     }
 
     private void initializeViews() {
