@@ -1,6 +1,7 @@
 package com.example.mugangaconnect;
 
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,5 +27,10 @@ public class SecurityPinActivity extends AppCompatActivity {
         etNewPin = findViewById(R.id.etNewPin);
         etConfirmPin = findViewById(R.id.etConfirmPin);
         btnChangePin = findViewById(R.id.btnChangePin);
+
+        InputFilter[] pinFilter = new InputFilter[]{new InputFilter.LengthFilter(4)};
+        etCurrentPin.setFilters(pinFilter);
+        etNewPin.setFilters(pinFilter);
+        etConfirmPin.setFilters(pinFilter);
     }
 }
