@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
