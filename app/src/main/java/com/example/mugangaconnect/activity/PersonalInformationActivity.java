@@ -32,9 +32,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class PersonalInformationActivity extends AppCompatActivity {
@@ -184,6 +186,48 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
         setSelectionFromValue(spinnerGender, prefs.getString("profile_gender", "Female"));
         setSelectionFromValue(spinnerBlood, prefs.getString("profile_bloodType", "O+"));
+
+        String uid = session.getUid();
+        if (uid != null) {
+            authRepo.getPersonalInformation(uid, new AuthRepository.PersonalInfoCallback() {
+                @Override
+                public void onSuccess(Map<String, Object> personalInfo) {
+                    runOnUiThread(() -> applyRemotePersonalInformation(personalInfo));
+                }
+
+                @Override
+                public void onError(String message) {
+                    // Keep local fallback from SharedPreferences.
+                }
+            });
+        }
+    }
+
+    private void applyRemotePersonalInformation(Map<String, Object> personalInfo) {
+        if (personalInfo == null || personalInfo.isEmpty()) return;
+
+        setIfPresent(etName, personalInfo.get("fullName"));
+        setIfPresent(etEmail, personalInfo.get("email"));
+        setIfPresent(etPhone, personalInfo.get("phone"));
+        setIfPresent(etDob, personalInfo.get("dob"));
+        setIfPresent(etInsurance, personalInfo.get("insuranceId"));
+        setIfPresent(etAllergies, personalInfo.get("allergies"));
+        setIfPresent(etEmergency, personalInfo.get("emergencyContact"));
+        setSpinnerIfPresent(spinnerGender, personalInfo.get("gender"));
+        setSpinnerIfPresent(spinnerBlood, personalInfo.get("bloodType"));
+
+        tvDisplayName.setText(etName.getText().toString().trim());
+    }
+
+    private void setIfPresent(TextInputEditText field, Object value) {
+        if (field == null || value == null) return;
+        String text = String.valueOf(value).trim();
+        if (!text.isEmpty()) field.setText(text);
+    }
+
+    private void setSpinnerIfPresent(Spinner spinner, Object value) {
+        if (spinner == null || value == null) return;
+        setSelectionFromValue(spinner, String.valueOf(value));
     }
 
     private void setSelectionFromValue(Spinner spinner, String value) {
@@ -414,30 +458,62 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void saveData() {
+        String fullName = etName.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String dob = etDob.getText().toString().trim();
+        String gender = spinnerGender.getSelectedItem().toString();
+        String insuranceId = etInsurance.getText().toString().trim();
+        String bloodType = spinnerBlood.getSelectedItem().toString();
+        String allergies = etAllergies.getText().toString().trim();
+        String emergencyContact = etEmergency.getText().toString().trim();
+
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("profile_fullName", etName.getText().toString().trim());
-        editor.putString("profile_email", etEmail.getText().toString().trim());
-        editor.putString("profile_phone", etPhone.getText().toString().trim());
-        editor.putString("profile_dob", etDob.getText().toString().trim());
-        editor.putString("profile_gender", spinnerGender.getSelectedItem().toString());
-        editor.putString("profile_insuranceId", etInsurance.getText().toString().trim());
-        editor.putString("profile_bloodType", spinnerBlood.getSelectedItem().toString());
-        editor.putString("profile_allergies", etAllergies.getText().toString().trim());
-        editor.putString("profile_emergencyContact", etEmergency.getText().toString().trim());
+        editor.putString("profile_fullName", fullName);
+        editor.putString("profile_email", email);
+        editor.putString("profile_phone", phone);
+        editor.putString("profile_dob", dob);
+        editor.putString("profile_gender", gender);
+        editor.putString("profile_insuranceId", insuranceId);
+        editor.putString("profile_bloodType", bloodType);
+        editor.putString("profile_allergies", allergies);
+        editor.putString("profile_emergencyContact", emergencyContact);
         editor.apply();
 
-        tvDisplayName.setText(etName.getText().toString().trim());
+        tvDisplayName.setText(fullName);
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
 
-        // Sync name and phone to Firestore
+        // Sync full personal information to Firestore
         String uid = session.getUid();
         if (uid != null) {
-            String newName  = etName.getText().toString().trim();
-            String newPhone = etPhone.getText().toString().trim();
-            authRepo.updateProfile(uid, newName, newPhone,
+            Map<String, Object> personalInfo = new HashMap<>();
+            personalInfo.put("fullName", fullName);
+            personalInfo.put("email", email);
+            personalInfo.put("phone", phone);
+            personalInfo.put("dob", dob);
+            personalInfo.put("gender", gender);
+            personalInfo.put("insuranceId", insuranceId);
+            personalInfo.put("bloodType", bloodType);
+            personalInfo.put("allergies", allergies);
+            personalInfo.put("emergencyContact", emergencyContact);
+
+            authRepo.updatePersonalInformation(uid, personalInfo, new AuthRepository.SimpleCallback() {
+                @Override
+                public void onSuccess() {
+                    session.saveSession(uid, fullName, email, phone);
+                }
+
+                @Override
+                public void onError(String message) {
+                    runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this,
+                            "Saved locally, cloud sync failed: " + message, Toast.LENGTH_LONG).show());
+                }
+            });
+
+            authRepo.updateProfile(uid, fullName, phone,
                     new AuthRepository.ProfileCallback() {
                         @Override public void onSuccess(com.example.mugangaconnect.data.model.User u) {
-                            session.saveSession(uid, u.getFullName(), session.getEmail(), newPhone);
+                            session.saveSession(uid, fullName, email, phone);
                         }
                         @Override public void onError(String message) {}
                     });
