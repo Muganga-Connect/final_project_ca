@@ -132,7 +132,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_menu_more"
+                                android:src="@android:drawable/ic_menu_info_details"
                                 app:tint="#4A90E2"
                                 android:layout_marginBottom="4dp"/>
                             <TextView
