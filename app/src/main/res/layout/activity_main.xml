@@ -80,8 +80,8 @@
                             android:layout_height="60dp"
                             app:cardCornerRadius="30dp"
                             app:cardElevation="4dp"
-                            app:cardStrokeWidth="2dp"
-                            app:cardStrokeColor="#4A90E2">
+                            android:strokeWidth="2dp"
+                            android:strokeColor="#4A90E2">
 
                             <ImageView
                                 android:id="@+id/dashboardProfileImage"
@@ -419,8 +419,8 @@
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 app:cornerRadius="22dp"
-                                android:strokeWidth="1dp"
-                                android:strokeColor="#4A90E2"/>
+                                app:strokeWidth="1dp"
+                                app:strokeColor="#4A90E2"/>
 
                             <Button
                                 android:id="@+id/btnCancelAppointment"
