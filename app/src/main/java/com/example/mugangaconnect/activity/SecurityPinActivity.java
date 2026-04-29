@@ -2,6 +2,7 @@ package com.example.mugangaconnect;
 
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +26,19 @@ public class SecurityPinActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnChangePin.setOnClickListener(v -> processPinChange());
+
+        TextWatcher clearErrorWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                etCurrentPin.setError(null);
+                etNewPin.setError(null);
+                etConfirmPin.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        };
+        etCurrentPin.addTextChangedListener(clearErrorWatcher);
+        etNewPin.addTextChangedListener(clearErrorWatcher);
+        etConfirmPin.addTextChangedListener(clearErrorWatcher);
     }
 
     private void initializeViews() {
