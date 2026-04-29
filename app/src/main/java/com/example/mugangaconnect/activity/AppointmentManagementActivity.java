@@ -3,13 +3,19 @@ package com.example.mugangaconnect.activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +26,13 @@ public class AppointmentManagementActivity extends AppCompatActivity {
     private SessionManager session;
     private final List<Appointment> appointments = new ArrayList<>();
 
-    // UI Components
-    private TextView userNameText;
-    private TextView profileImage;
+    // UI Components - Updated for new layout
+    private TextView nextCheckupTime;
+    private EditText searchEditText;
+    private MaterialButton confirmButton;
+    private RecyclerView doctorRecyclerView;
+    private RecyclerView timeSlotRecyclerView;
+    private RecyclerView appointmentRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,51 +52,90 @@ public class AppointmentManagementActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        userNameText = findViewById(R.id.userNameText);
-        profileImage = findViewById(R.id.profileImage);
+        nextCheckupTime = findViewById(R.id.nextCheckupTime);
+        searchEditText = findViewById(R.id.searchEditText);
+        confirmButton = findViewById(R.id.confirmButton);
+        doctorRecyclerView = findViewById(R.id.doctorRecyclerView);
+        timeSlotRecyclerView = findViewById(R.id.timeSlotRecyclerView);
+        appointmentRecyclerView = findViewById(R.id.appointmentRecyclerView);
     }
 
     private void setupClickListeners() {
-        // Smart Alert button
-        findViewById(R.id.btnScheduleCheckup).setOnClickListener(v -> {
-            Toast.makeText(this, "Opening appointment scheduling...", Toast.LENGTH_SHORT).show();
-            // TODO: Navigate to appointment booking flow
+        // Search functionality
+        searchEditText.setOnClickListener(v -> {
+            Toast.makeText(this, "Opening search...", Toast.LENGTH_SHORT).show();
+            // TODO: Implement search functionality
         });
 
-        // Appointment card buttons
-        findViewById(R.id.btnRescheduleAppointment).setOnClickListener(v -> {
-            Toast.makeText(this, "Opening reschedule options...", Toast.LENGTH_SHORT).show();
-            // TODO: Open reschedule dialog
+        // Department selection buttons
+        findViewById(R.id.btnCardiology).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by Cardiology...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter doctors by cardiology
         });
 
-        findViewById(R.id.btnCancelAppointment).setOnClickListener(v -> {
-            Toast.makeText(this, "Cancelling appointment...", Toast.LENGTH_SHORT).show();
-            // TODO: Cancel appointment logic
+        findViewById(R.id.btnNeurology).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by Neurology...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter doctors by neurology
         });
 
-        // Health metrics "View All"
-        findViewById(R.id.healthMetricsCard).setOnClickListener(v -> {
-            Toast.makeText(this, "Opening detailed health metrics...", Toast.LENGTH_SHORT).show();
-            // TODO: Navigate to detailed health metrics screen
+        findViewById(R.id.btnDentistry).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by Dentistry...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter doctors by dentistry
         });
 
-        // Reminders "Add New"
-        findViewById(R.id.remindersCard).setOnClickListener(v -> {
-            Toast.makeText(this, "Opening add reminder...", Toast.LENGTH_SHORT).show();
-            // TODO: Open add reminder dialog
+        findViewById(R.id.btnPediatrics).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by Pediatrics...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter doctors by pediatrics
+        });
+
+        // Hospital chips
+        findViewById(R.id.chipKingFaisal).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by King Faisal Hospital...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter by hospital
+        });
+
+        findViewById(R.id.chipRwandaMilitary).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by Rwanda Military Hospital...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter by hospital
+        });
+
+        findViewById(R.id.chipCHUK).setOnClickListener(v -> {
+            Toast.makeText(this, "Filtering by CHUK Hospital...", Toast.LENGTH_SHORT).show();
+            // TODO: Filter by hospital
+        });
+
+        // Tab switching
+        findViewById(R.id.tabUpcoming).setOnClickListener(v -> {
+            Toast.makeText(this, "Showing upcoming appointments...", Toast.LENGTH_SHORT).show();
+            // TODO: Switch to upcoming tab
+        });
+
+        findViewById(R.id.tabRescheduled).setOnClickListener(v -> {
+            Toast.makeText(this, "Showing rescheduled appointments...", Toast.LENGTH_SHORT).show();
+            // TODO: Switch to rescheduled tab
+        });
+
+        findViewById(R.id.tabCancelled).setOnClickListener(v -> {
+            Toast.makeText(this, "Showing cancelled appointments...", Toast.LENGTH_SHORT).show();
+            // TODO: Switch to cancelled tab
+        });
+
+        // Primary confirm button
+        confirmButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Confirming appointment...", Toast.LENGTH_SHORT).show();
+            // TODO: Implement appointment confirmation
         });
     }
 
     private void loadUserData() {
         String userName = session.getFullName();
-        if (userName != null && !userName.isEmpty() && userNameText != null) {
-            userNameText.setText(userName);
-        }
-        
+        // TODO: Display user name in summary card if needed
         // TODO: Load user profile image using Glide or similar
-        // if (profileImage != null) {
-        //     Glide.with(this).load(userProfileImageUrl).into(profileImage);
-        // }
+        
+        // Set default next checkup time
+        if (nextCheckupTime != null) {
+            nextCheckupTime.setText("Tomorrow 10:30");
+        }
     }
 
     private void loadAppointments() {
