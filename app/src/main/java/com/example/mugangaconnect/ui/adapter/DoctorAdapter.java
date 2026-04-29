@@ -58,7 +58,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         holder.itemView.setOnClickListener(v -> {
             int prev = selectedPosition;
-            selectedPosition = holder.getBindingAdapterPosition();
+            selectedPosition = holder.getAdapterPosition();
             if (prev != -1) notifyItemChanged(prev);
             notifyItemChanged(selectedPosition);
             if (listener != null) listener.onDoctorSelected(doctor);
