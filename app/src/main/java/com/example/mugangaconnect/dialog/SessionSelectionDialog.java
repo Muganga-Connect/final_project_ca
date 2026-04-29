@@ -28,6 +28,9 @@ public class SessionSelectionDialog extends DialogFragment {
     private OnSessionSelectedListener listener;
     private DatePicker datePicker;
     private TimePicker timePicker;
+    private Button btnMorningSession;
+    private Button btnAfternoonSession;
+    private Button btnEveningSession;
 
     public SessionSelectionDialog() {
         // Required empty constructor
@@ -46,12 +49,18 @@ public class SessionSelectionDialog extends DialogFragment {
 
         datePicker = view.findViewById(R.id.date_picker);
         timePicker = view.findViewById(R.id.time_picker);
+        btnMorningSession = view.findViewById(R.id.btn_morning_session);
+        btnAfternoonSession = view.findViewById(R.id.btn_afternoon_session);
+        btnEveningSession = view.findViewById(R.id.btn_evening_session);
         Button btnConfirm = view.findViewById(R.id.btn_confirm_session);
         Button btnCancel = view.findViewById(R.id.btn_cancel_session);
 
         // Set minimum date to today
         Calendar calendar = Calendar.getInstance();
         datePicker.setMinDate(calendar.getTimeInMillis());
+
+        // Setup quick session buttons
+        setupQuickSessionButtons();
 
         btnConfirm.setOnClickListener(v -> {
             int day = datePicker.getDayOfMonth();
@@ -74,5 +83,49 @@ public class SessionSelectionDialog extends DialogFragment {
 
         builder.setView(view);
         return builder.create();
+    }
+
+    private void setupQuickSessionButtons() {
+        btnMorningSession.setOnClickListener(v -> {
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth();
+            int year = datePicker.getYear();
+            
+            String date = String.format("%04d-%02d-%02d", year, month + 1, day);
+            String time = "09:00"; // Morning session
+            
+            if (listener != null) {
+                listener.onSessionSelected(date, time);
+            }
+            dismiss();
+        });
+
+        btnAfternoonSession.setOnClickListener(v -> {
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth();
+            int year = datePicker.getYear();
+            
+            String date = String.format("%04d-%02d-%02d", year, month + 1, day);
+            String time = "14:00"; // Afternoon session
+            
+            if (listener != null) {
+                listener.onSessionSelected(date, time);
+            }
+            dismiss();
+        });
+
+        btnEveningSession.setOnClickListener(v -> {
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth();
+            int year = datePicker.getYear();
+            
+            String date = String.format("%04d-%02d-%02d", year, month + 1, day);
+            String time = "17:00"; // Evening session
+            
+            if (listener != null) {
+                listener.onSessionSelected(date, time);
+            }
+            dismiss();
+        });
     }
 }
