@@ -99,12 +99,45 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Search Bar -->
-            <com.google.android.material.search.SearchBar
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/searchCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search for hospital or clinic"
-                android:layout_marginBottom="20dp" />
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_search"
+                        app:tint="#8AA6C7"/>
+                    <EditText
+                        android:id="@+id/et_hospital_search"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:hint="Search for hospital or clinic"
+                        android:background="@null"
+                        android:textColor="#1A4C91"
+                        android:textColorHint="#8AA6C7"
+                        android:textSize="14sp"/>
+                    <ImageView
+                        android:id="@+id/btn_clear_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        app:tint="#8AA6C7"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Recent Hospital -->
             <TextView
@@ -152,10 +185,11 @@
 
             <!-- Step 01: Department -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stepDepartmentCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                app:cardElevation="4dp"
                 app:strokeWidth="2dp"
                 app:strokeColor="#1E88E5"
                 android:layout_marginBottom="16dp">
@@ -169,20 +203,41 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_menu"
-                            app:tint="#1E88E5"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Assist"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_menu"
+                                app:tint="#1E88E5"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Step 01"
+                                android:textStyle="bold"
+                                android:textColor="#1E88E5"
+                                android:textSize="12sp"
+                                android:layout_marginStart="8dp"/>
+                        </LinearLayout>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:text="Step 01"
-                            android:clickable="false"
-                            android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Active"
+                                android:textColor="#4CAF50"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/active_step_bg"
+                                android:padding="4dp"/>
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <TextView
@@ -203,12 +258,25 @@
                         android:layout_marginBottom="12dp"/>
 
                     <TextView
+                        android:id="@+id/selectedDepartmentText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Neurology"
+                        android:textColor="#4CAF50"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/selected_item_bg"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone"/>
+
+                    <TextView
                         android:id="@+id/deptCardiology"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Cardiology"
                         android:padding="12dp"
-                        android:background="#F5F9FD"
+                        android:background="@drawable/department_item_bg"
                         android:textColor="#1A4C91"
                         android:layout_marginBottom="8dp"/>
 
@@ -218,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:text="Neurology"
                         android:padding="12dp"
-                        android:background="#1E88E5"
+                        android:background="@drawable/department_item_selected_bg"
                         android:textColor="#FFFFFF"
                         android:layout_marginBottom="8dp"/>
 
@@ -228,18 +296,20 @@
                         android:layout_height="wrap_content"
                         android:text="Dentistry"
                         android:padding="12dp"
-                        android:background="#F5F9FD"
+                        android:background="@drawable/department_item_bg"
                         android:textColor="#1A4C91"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Step 02: Specialist -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stepSpecialistCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E0E0E0"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -251,20 +321,41 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_account"
-                            app:tint="#1E88E5"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Assist"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_account"
+                                app:tint="#8AA6C7"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Step 02"
+                                android:textStyle="bold"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"
+                                android:layout_marginStart="8dp"/>
+                        </LinearLayout>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:text="Step 02"
-                            android:clickable="false"
-                            android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Locked"
+                                android:textColor="#8AA6C7"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/locked_step_bg"
+                                android:padding="4dp"/>
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <TextView
@@ -284,6 +375,19 @@
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
 
+                    <TextView
+                        android:id="@+id/selectedSpecialistText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dr. Sarah Chen"
+                        android:textColor="#4CAF50"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/selected_item_bg"
+                        android:padding="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:visibility="gone"/>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_doctors"
                         android:layout_width="match_parent"
@@ -296,19 +400,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#E3F2FD">
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="#E3F2FD"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="#1E88E5">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="12dp"
                             android:gravity="center_vertical">
-                            <com.google.android.material.imageview.ShapeableImageView
+                            <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:src="@drawable/ic_account"
-                                app:shapeAppearanceOverlay="@style/CircleImage"/>
+                                android:src="@android:drawable/ic_menu_camera"
+                                android:background="@drawable/circle_bg"
+                                android:padding="8dp"
+                                app:tint="#FFFFFF"/>
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -325,7 +433,26 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Available Today"
-                                    android:textColor="#8AA6C7"
+                                    android:textColor="#4CAF50"
+                                    android:textSize="10sp"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginStart="auto">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="★ 4.8"
+                                    android:textColor="#FFA000"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="$80/hr"
+                                    android:textColor="#1A4C91"
                                     android:textSize="10sp"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -335,13 +462,14 @@
 
             <!-- Step 03: Visit Details -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stepVisitDetailsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="2dp"
-                app:strokeColor="#F57C00"
-                android:layout_marginBottom="32dp">
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E0E0E0"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -352,20 +480,41 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_menu"
-                            app:tint="#F57C00"/>
-                        <com.google.android.material.chip.Chip
-                            style="@style/Widget.Material3.Chip.Assist"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_menu"
+                                app:tint="#8AA6C7"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Step 03"
+                                android:textStyle="bold"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"
+                                android:layout_marginStart="8dp"/>
+                        </LinearLayout>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:text="Step 03"
-                            android:clickable="false"
-                            android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Locked"
+                                android:textColor="#8AA6C7"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/locked_step_bg"
+                                android:padding="4dp"/>
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <TextView
@@ -428,6 +577,182 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Appointment Summary Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/summaryCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="#4CAF50"
+                android:layout_marginBottom="32dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_info_details"
+                            app:tint="#4CAF50"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Appointment Summary"
+                            android:textStyle="bold"
+                            android:textColor="#1A4C91"
+                            android:textSize="18sp"
+                            android:layout_marginStart="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ready to Book"
+                            android:textColor="#4CAF50"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/ready_to_book_bg"
+                            android:padding="4dp"/>
+                    </LinearLayout>
+
+                    <!-- Summary Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#F8F9FA"
+                        android:padding="16dp"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="Department:"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/summaryDepartment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Neurology"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="Specialist:"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/summarySpecialist"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Dr. Sarah Chen"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="Date & Time:"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/summaryDateTime"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Nov 24, 10:30 AM"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="Hospital:"
+                                android:textColor="#8AA6C7"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/summaryHospital"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="City General Hospital"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_edit_booking"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Edit Details"
+                            app:cornerRadius="12dp"
+                            android:textAllCaps="false"
+                            android:backgroundTint="#E3F2FD"
+                            android:textColor="#1E88E5"
+                            android:layout_marginEnd="8dp"/>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_confirm_booking"
+                            style="@style/Widget.Material3.Button"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Confirm Booking"
+                            app:cornerRadius="12dp"
+                            android:textAllCaps="false"
+                            android:backgroundTint="#4CAF50"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Your Care Hub -->
             <TextView
                 android:layout_width="wrap_content"
@@ -468,29 +793,84 @@
                 android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Appointment Card 1 -->
+            <!-- Appointment Card 1 - Float Card Design -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/appointmentCard1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="4dp"
-                app:strokeColor="#1E88E5"
-                android:layout_marginBottom="20dp">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:strokeWidth="0dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/float_card_shadow">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
-                    <com.google.android.material.card.MaterialCardView
+                    <!-- Header with Status and Actions -->
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#E3F2FD">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+                        
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@android:drawable/ic_menu_info_details"
+                                app:tint="#1E88E5"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upcoming"
+                                android:textColor="#1E88E5"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginStart="8dp"/>
+                        </LinearLayout>
+                        
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/btn_share_appointment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/ic_menu_share"
+                                app:tint="#8AA6C7"
+                                android:layout_marginEnd="12dp"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:padding="2dp"/>
+                            <ImageView
+                                android:id="@+id/btn_bookmark_appointment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/ic_menu_save"
+                                app:tint="#8AA6C7"
+                                android:background="?android:attr/selectableItemBackgroundBorderless"
+                                android:padding="2dp"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <!-- Date Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="80dp"
+                        android:layout_height="100dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="#E3F2FD"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="#1E88E5"
+                        android:layout_marginBottom="16dp">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -502,12 +882,13 @@
                                 android:layout_height="wrap_content"
                                 android:text="NOV"
                                 android:textSize="10sp"
+                                android:textStyle="bold"
                                 android:textColor="#1E88E5"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="24"
-                                android:textSize="24sp"
+                                android:textSize="28sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A4C91"/>
                             <TextView
@@ -519,22 +900,103 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Appointment Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Neurological Follow-up"
-                        android:textStyle="bold"
-                        android:textColor="#1A4C91"
-                        android:textSize="18sp"
-                        android:layout_marginTop="16dp"/>
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+                        
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Neurological Follow-up"
+                                android:textStyle="bold"
+                                android:textColor="#1A4C91"
+                                android:textSize="18sp"
+                                android:layout_marginBottom="4dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dr. Sarah Chen"
+                                android:textColor="#8AA6C7"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+                        
+                        <!-- Rating and Price -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="end">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="★ 4.8"
+                                android:textColor="#FFA000"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="2dp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$80/hr"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Time and Location -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dr. Sarah Chen"
-                        android:textColor="#8AA6C7"
-                        android:layout_marginBottom="8dp"/>
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@android:drawable/ic_menu_recent_history"
+                                app:tint="#8AA6C7"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10:30 AM"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:layout_marginStart="4dp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="16dp">
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@android:drawable/ic_menu_mylocation"
+                                app:tint="#8AA6C7"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Building B, Room 402"
+                                android:textColor="#1A4C91"
+                                android:textSize="12sp"
+                                android:layout_marginStart="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
 
+                    <!-- Skills/Tags -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -543,43 +1005,49 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10:30 AM"
-                            android:textColor="#1A4C91"
-                            android:textSize="12sp"
-                            android:drawablePadding="4dp"/>
+                            android:text="Neurology"
+                            android:textColor="#1E88E5"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/skill_tag_bg"
+                            android:padding="4dp"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Building B, Room 402"
-                            android:textColor="#1A4C91"
-                            android:textSize="12sp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="4dp"/>
+                            android:text="Follow-up"
+                            android:textColor="#1E88E5"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:background="@drawable/skill_tag_bg"
+                            android:padding="4dp"
+                            android:layout_marginStart="8dp"/>
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnConfirmPresence"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Confirm Presence"
-                        app:cornerRadius="8dp"
-                        android:backgroundTint="#E8F5E9"
-                        android:textColor="#4CAF50"
-                        android:textAllCaps="false"/>
-
+                    <!-- Action Buttons -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnConfirmPresence"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:text="Confirm Presence"
+                            app:cornerRadius="12dp"
+                            android:backgroundTint="#E8F5E9"
+                            android:textColor="#4CAF50"
+                            android:textAllCaps="false"
+                            android:layout_marginEnd="8dp"/>
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnReschedule"
                             style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="48dp"
                             android:layout_weight="1"
                             android:text="Reschedule"
-                            app:cornerRadius="8dp"
+                            app:cornerRadius="12dp"
                             android:backgroundTint="#FFF3E0"
                             android:textColor="#F57C00"
                             android:textAllCaps="false"
@@ -588,13 +1056,31 @@
                             android:id="@+id/btnCancel"
                             style="@style/Widget.Material3.Button.TextButton"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="48dp"
                             android:layout_weight="1"
                             android:text="Cancel"
-                            app:cornerRadius="8dp"
+                            app:cornerRadius="12dp"
                             android:backgroundTint="#FFEBEE"
                             android:textColor="#E53935"
                             android:textAllCaps="false"/>
+                    </LinearLayout>
+                    
+                    <!-- Delete Option -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp">
+                        <TextView
+                            android:id="@+id/btn_delete_appointment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delete Appointment"
+                            android:textColor="#E53935"
+                            android:textSize="12sp"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                            android:padding="8dp"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
