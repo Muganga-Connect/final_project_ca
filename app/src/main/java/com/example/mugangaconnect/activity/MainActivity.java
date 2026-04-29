@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        firestore = FirebaseFirestore.getInstance();
         bindViews();
 
         bindUserName();
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        dashboardProfileImage = findViewById(R.id.dashboardProfileImage);
         tvWelcomeName = findViewById(R.id.tvWelcomeName);
         tvSmartAlertBody = findViewById(R.id.tvSmartAlertBody);
         tvUpcomingDoctor = findViewById(R.id.tvUpcomingDoctor);
@@ -69,6 +71,28 @@ public class MainActivity extends AppCompatActivity {
         if (tvWelcomeName != null && name != null && !name.isEmpty()) {
             tvWelcomeName.setText(name);
         }
+        
+        // Load profile image
+        loadProfileImage();
+    }
+    
+    private void loadProfileImage() {
+        String uid = session.getUid();
+        if (uid == null) return;
+        
+        firestore.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("profilePicture");
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(this).load(profileImageUrl).into(dashboardProfileImage);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Log error but don't show to user
+                    android.util.Log.e("MainActivity", "Error loading profile image", e);
+                });
     }
 
     private void loadDashboardData() {
