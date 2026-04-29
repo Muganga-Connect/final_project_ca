@@ -26,6 +26,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -64,6 +66,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private boolean isModified = false;
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "MugangaConnectPrefs";
+    private AuthRepository authRepo;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_personal_information);
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        authRepo = new AuthRepository();
+        session  = new SessionManager(this);
 
         initViews();
         setupFields();
@@ -163,9 +169,12 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void loadSavedData() {
-        etName.setText(prefs.getString("profile_fullName", "Alexandrine Mukamana"));
-        etEmail.setText(prefs.getString("profile_email", "patient@example.com"));
-        etPhone.setText(prefs.getString("profile_phone", "+250781234567"));
+        String savedName  = prefs.getString("profile_fullName", "");
+        String savedEmail = prefs.getString("profile_email", "");
+        String savedPhone = prefs.getString("profile_phone", "");
+        etName.setText(savedName.isEmpty()  ? session.getFullName() : savedName);
+        etEmail.setText(savedEmail.isEmpty() ? session.getEmail()    : savedEmail);
+        etPhone.setText(savedPhone.isEmpty() ? session.getPhone()    : savedPhone);
         etDob.setText(prefs.getString("profile_dob", "15 / Jan / 2000"));
         etInsurance.setText(prefs.getString("profile_insuranceId", "INS-2024-001234"));
         etAllergies.setText(prefs.getString("profile_allergies", "None"));
@@ -419,6 +428,20 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
         tvDisplayName.setText(etName.getText().toString().trim());
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+
+        // Sync name and phone to Firestore
+        String uid = session.getUid();
+        if (uid != null) {
+            String newName  = etName.getText().toString().trim();
+            String newPhone = etPhone.getText().toString().trim();
+            authRepo.updateProfile(uid, newName, newPhone,
+                    new AuthRepository.ProfileCallback() {
+                        @Override public void onSuccess(com.example.mugangaconnect.data.model.User u) {
+                            session.saveSession(uid, u.getFullName(), session.getEmail(), newPhone);
+                        }
+                        @Override public void onError(String message) {}
+                    });
+        }
 
         // Lock fields again
         lockFields();
