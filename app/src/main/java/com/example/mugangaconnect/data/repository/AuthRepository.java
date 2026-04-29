@@ -81,6 +81,13 @@ public class AuthRepository {
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
+    /** Compatibility overload that uses AuthCallback as requested. */
+    public void resetPassword(String email, AuthCallback callback) {
+        auth.sendPasswordResetEmail(email)
+                .addOnSuccessListener(v -> callback.onSuccess(auth.getCurrentUser()))
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
     /** Update fullName and phone on the user's Firestore document. */
     public void updateProfile(String uid, String fullName, String phone, ProfileCallback callback) {
         db.collection(USERS_COLLECTION).document(uid)

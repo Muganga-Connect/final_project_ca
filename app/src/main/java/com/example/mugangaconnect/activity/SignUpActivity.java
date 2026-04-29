@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             authRepo.register(fullName, email, password, new AuthRepository.AuthCallback() {
                 @Override
                 public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
-                    session.saveSession(user.getUid(), fullName, email);
+                    session.saveSession(user.getUid(), fullName, email, "");
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     finish();
                 }
