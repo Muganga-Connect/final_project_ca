@@ -103,7 +103,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@android:drawable/ic_menu_scale"
+                                android:src="@android:drawable/ic_menu_info_details"
                                 app:tint="#4A90E2"
                                 android:layout_marginBottom="4dp"/>
                             <TextView
@@ -132,7 +132,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@android:drawable/ic_menu_more"
+                                android:src="@drawable/ic_menu_more"
                                 app:tint="#4A90E2"
                                 android:layout_marginBottom="4dp"/>
                             <TextView
@@ -483,7 +483,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:layout_marginStart="auto">
+                            android:layout_marginStart="16dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -545,7 +545,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:layout_marginStart="auto">
+                            android:layout_marginStart="16dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -590,7 +590,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@android:drawable/ic_menu_scale"
+                                android:src="@android:drawable/ic_menu_info_details"
                                 app:tint="#4A90E2"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -606,7 +606,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:layout_marginStart="auto">
+                            android:layout_marginStart="16dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
