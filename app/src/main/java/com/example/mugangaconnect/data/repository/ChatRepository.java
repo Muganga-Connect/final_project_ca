@@ -61,11 +61,6 @@ public class ChatRepository {
 
     private String askGemini(String prompt) throws Exception {
         String apiKey = BuildConfig.GEMINI_API_KEY;
-        
-        // Debug logging to check API key
-        System.out.println("DEBUG: API Key length: " + (apiKey != null ? apiKey.length() : "null"));
-        System.out.println("DEBUG: API Key first 10 chars: " + (apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) + "..." : "invalid"));
-        
         if (apiKey == null || apiKey.trim().isEmpty() || "YOUR_API_KEY_HERE".equals(apiKey)) {
             return "Gemini API key is missing. Set GEMINI_API_KEY in gradle.properties to enable AI responses.";
         }
