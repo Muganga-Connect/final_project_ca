@@ -219,7 +219,17 @@
                         android:text="Neurology"
                         android:padding="12dp"
                         android:background="#1E88E5"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:id="@+id/deptDentistry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dentistry"
+                        android:padding="12dp"
+                        android:background="#F5F9FD"
+                        android:textColor="#1A4C91"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -273,6 +283,13 @@
                         android:textColor="#8AA6C7"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_doctors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:layout_marginBottom="8dp"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/specialistCard"
@@ -369,14 +386,25 @@
                         android:layout_marginBottom="16dp"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSelectSession"
+                        android:id="@+id/btn_select_session"
                         style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:text="Select Session"
                         app:cornerRadius="12dp"
                         android:textAllCaps="false"
-                        android:backgroundTint="#1E88E5"/>
+                        android:backgroundTint="#1E88E5"
+                        android:layout_marginBottom="8dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_book_appointment"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Book Appointment"
+                        app:cornerRadius="12dp"
+                        android:textAllCaps="false"
+                        android:backgroundTint="#4CAF50"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -412,6 +440,13 @@
                     android:layout_height="wrap_content"
                     android:text="Cancelled" />
             </com.google.android.material.tabs.TabLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_appointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="16dp"/>
 
             <!-- Appointment Card 1 -->
             <com.google.android.material.card.MaterialCardView
