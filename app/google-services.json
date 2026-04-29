@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "788599600402",
+    "project_id": "mugangaconnect-fe6e8",
+    "storage_bucket": "mugangaconnect-fe6e8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788599600402:android:0319db97d3854ea059efcb",
+        "android_client_info": {
+          "package_name": "com.example.mugangaconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788599600402-v9iprpb9r9gvfdvq0snkg8h9rf39eh1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw1KLVc4Ye7gm0MdrshvAj5n6SwMHluOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788599600402-v9iprpb9r9gvfdvq0snkg8h9rf39eh1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

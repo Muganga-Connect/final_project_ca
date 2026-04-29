@@ -7,7 +7,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
@@ -50,7 +49,24 @@ public class AppointmentHistoryActivity extends AppCompatActivity
         if (moreBtn != null) moreBtn.setOnClickListener(v ->
                 Toast.makeText(this, "No more appointments", Toast.LENGTH_SHORT).show());
 
-        loadByStatus(activeStatus);
+        syncAndLoad();
+    }
+
+    private void syncAndLoad() {
+        String uid = session.getUid();
+        if (uid == null) return;
+
+        appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
+            @Override
+            public void onResult(List<Appointment> data) {
+                loadByStatus(activeStatus);
+            }
+
+            @Override
+            public void onError(String message) {
+                loadByStatus(activeStatus);
+            }
+        });
     }
 
     private void setupTabs() {

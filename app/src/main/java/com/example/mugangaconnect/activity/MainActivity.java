@@ -1,6 +1,5 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mugangaconnect.activity.BottomNavHelper;
+import com.example.mugangaconnect.R;
 
 public class MainActivity extends AppCompatActivity {
 

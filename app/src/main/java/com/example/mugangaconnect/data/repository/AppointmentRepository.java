@@ -89,7 +89,8 @@ public class AppointmentRepository {
                       "status", Appointment.Status.UPCOMING.name())
               .addOnSuccessListener(v -> {
                   executor.execute(() -> {
-                      local.updateStatus(appointmentId, Appointment.Status.RESCHEDULED.name());
+                      local.updateDateAndTime(appointmentId, newDate, newTime);
+                      local.updateStatus(appointmentId, Appointment.Status.UPCOMING.name());
                   });
                   callback.onResult(null);
               })
