@@ -280,8 +280,8 @@
 
                 <!-- LEFT -->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="88dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -323,17 +323,23 @@
 
                 <!-- RIGHT BUTTON -->
                 <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
                     app:cardCornerRadius="24dp"
                     app:cardBackgroundColor="#7FA8D8">
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="20dp">
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="View Appointment History"
                             android:textColor="#0C2D57"/>
                     </LinearLayout>
