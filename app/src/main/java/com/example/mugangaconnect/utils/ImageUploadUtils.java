@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 public class ImageUploadUtils {
     private static final String TAG = "ImageUploadUtils";
     
+    private final Context context;
     private final Cloudinary cloudinary;
     private final ExecutorService executor;
     private final FirebaseFirestore firestore;
@@ -36,6 +37,8 @@ public class ImageUploadUtils {
     }
     
     public ImageUploadUtils(Context context) {
+        this.context = context;
+        
         Map<String, Object> config = new HashMap<>();
         config.put("cloud_name", CloudinaryConfig.CLOUD_NAME);
         config.put("api_key", CloudinaryConfig.API_KEY);
@@ -48,6 +51,43 @@ public class ImageUploadUtils {
         this.auth = FirebaseAuth.getInstance();
     }
     
+    private File getFileFromUri(Context context, Uri uri) throws Exception {
+        String fileName = getFileName(context, uri);
+        File tempFile = new File(context.getCacheDir(), fileName);
+        
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
+             FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+            
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
+        
+        return tempFile;
+    }
+    
+    private String getFileName(Context context, Uri uri) {
+        String fileName = "temp_image_" + System.currentTimeMillis() + ".jpg";
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (nameIndex != -1) {
+                    fileName = cursor.getString(nameIndex);
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        
+        return fileName;
+    }
+
     public void uploadImageToCloudinary(Uri imageUri, String folder, UploadCallback callback) {
         executor.execute(() -> {
             try {
@@ -56,6 +96,9 @@ public class ImageUploadUtils {
                     callback.onError("User not authenticated");
                     return;
                 }
+                
+                // Convert Uri to File
+                File imageFile = getFileFromUri(context, imageUri);
                 
                 String publicId = folder + "/" + currentUser.getUid() + "/" + UUID.randomUUID().toString();
                 
@@ -66,9 +109,12 @@ public class ImageUploadUtils {
                 uploadParams.put("overwrite", false);
                 uploadParams.put("invalidate", true);
                 
-                // Upload to Cloudinary
-                Map<String, Object> uploadResult = cloudinary.uploader().upload(imageUri, uploadParams);
+                // Upload to Cloudinary using File
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(imageFile, uploadParams);
                 String imageUrl = (String) uploadResult.get("secure_url");
+                
+                // Clean up temp file
+                imageFile.delete();
                 
                 if (imageUrl != null && !imageUrl.isEmpty()) {
                     // Save image URL to Firestore
