@@ -26,6 +26,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.local.AppDatabase;
+import com.example.mugangaconnect.data.local.UserDao;
+import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -70,6 +73,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MugangaConnectPrefs";
     private AuthRepository authRepo;
     private SessionManager session;
+    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         authRepo = new AuthRepository();
         session  = new SessionManager(this);
+        userDao = new UserDao(AppDatabase.getInstance(this));
 
         initViews();
         setupFields();
@@ -171,23 +176,43 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void loadSavedData() {
+        String uid = session.getUid();
+        User localUser = uid == null ? null : userDao.getByUid(uid);
+
         String savedName  = prefs.getString("profile_fullName", "");
         String savedEmail = prefs.getString("profile_email", "");
         String savedPhone = prefs.getString("profile_phone", "");
-        etName.setText(savedName.isEmpty()  ? session.getFullName() : savedName);
-        etEmail.setText(savedEmail.isEmpty() ? session.getEmail()    : savedEmail);
-        etPhone.setText(savedPhone.isEmpty() ? session.getPhone()    : savedPhone);
-        etDob.setText(prefs.getString("profile_dob", "15 / Jan / 2000"));
-        etInsurance.setText(prefs.getString("profile_insuranceId", "INS-2024-001234"));
-        etAllergies.setText(prefs.getString("profile_allergies", "None"));
-        etEmergency.setText(prefs.getString("profile_emergencyContact", "+250788654321"));
+        etName.setText(localUser != null && localUser.getFullName() != null
+                ? localUser.getFullName()
+                : (savedName.isEmpty() ? session.getFullName() : savedName));
+        etEmail.setText(localUser != null && localUser.getEmail() != null
+                ? localUser.getEmail()
+                : (savedEmail.isEmpty() ? session.getEmail() : savedEmail));
+        etPhone.setText(localUser != null && localUser.getPhone() != null
+                ? localUser.getPhone()
+                : (savedPhone.isEmpty() ? session.getPhone() : savedPhone));
+        etDob.setText(localUser != null && localUser.getDob() != null
+                ? localUser.getDob()
+                : prefs.getString("profile_dob", "15 / Jan / 2000"));
+        etInsurance.setText(localUser != null && localUser.getInsuranceId() != null
+                ? localUser.getInsuranceId()
+                : prefs.getString("profile_insuranceId", "INS-2024-001234"));
+        etAllergies.setText(localUser != null && localUser.getAllergies() != null
+                ? localUser.getAllergies()
+                : prefs.getString("profile_allergies", "None"));
+        etEmergency.setText(localUser != null && localUser.getEmergencyContact() != null
+                ? localUser.getEmergencyContact()
+                : prefs.getString("profile_emergencyContact", "+250788654321"));
 
         tvDisplayName.setText(etName.getText().toString());
 
-        setSelectionFromValue(spinnerGender, prefs.getString("profile_gender", "Female"));
-        setSelectionFromValue(spinnerBlood, prefs.getString("profile_bloodType", "O+"));
+        setSelectionFromValue(spinnerGender, localUser != null && localUser.getGender() != null
+                ? localUser.getGender()
+                : prefs.getString("profile_gender", "Female"));
+        setSelectionFromValue(spinnerBlood, localUser != null && localUser.getBloodType() != null
+                ? localUser.getBloodType()
+                : prefs.getString("profile_bloodType", "O+"));
 
-        String uid = session.getUid();
         if (uid != null) {
             authRepo.getPersonalInformation(uid, new AuthRepository.PersonalInfoCallback() {
                 @Override
@@ -486,6 +511,15 @@ public class PersonalInformationActivity extends AppCompatActivity {
         // Sync full personal information to Firestore
         String uid = session.getUid();
         if (uid != null) {
+            User userLocal = new User(uid, fullName, email, phone);
+            userLocal.setDob(dob);
+            userLocal.setGender(gender);
+            userLocal.setInsuranceId(insuranceId);
+            userLocal.setBloodType(bloodType);
+            userLocal.setAllergies(allergies);
+            userLocal.setEmergencyContact(emergencyContact);
+            userDao.upsert(userLocal);
+
             Map<String, Object> personalInfo = new HashMap<>();
             personalInfo.put("fullName", fullName);
             personalInfo.put("email", email);

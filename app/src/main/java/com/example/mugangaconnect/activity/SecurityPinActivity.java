@@ -1,6 +1,7 @@
 package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,6 +26,8 @@ import com.example.mugangaconnect.R;
  * - Accessible UI with content descriptions
  */
 public class SecurityPinActivity extends AppCompatActivity {
+    private static final String PREFS_NAME = "MugangaConnectPrefs";
+    private static final String KEY_PIN_HASH = "security_pin_hash";
 
     // UI Components
     private ImageView btnBack;
@@ -213,20 +216,22 @@ public class SecurityPinActivity extends AppCompatActivity {
      * Process the PIN change operation
      */
     private void processPinChange() {
-        // TODO: In a real application, implement the following:
-        // 1. Verify current PIN against stored PIN
-        // 2. Hash the new PIN using secure encryption
-        // 3. Save the new PIN to SharedPreferences or secure storage
-        // 4. Clear any cached PIN data
-        
-        // Show success message
+        String currentPin = etCurrentPin.getText().toString().trim();
+        String newPin = etNewPin.getText().toString().trim();
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String storedHash = prefs.getString(KEY_PIN_HASH, "");
+        String currentHash = String.valueOf(currentPin.hashCode());
+
+        if (!storedHash.isEmpty() && !storedHash.equals(currentHash)) {
+            etCurrentPin.setError("Current PIN is incorrect");
+            showToast("Current PIN is incorrect");
+            return;
+        }
+
+        prefs.edit().putString(KEY_PIN_HASH, String.valueOf(newPin.hashCode())).apply();
         showToast("PIN successfully updated!");
-        
-        // Clear input fields after successful update
         clearPinFields();
-        
-        // Optionally close activity or return to previous screen
-        // finish();
     }
 
     /**
