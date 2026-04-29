@@ -568,12 +568,14 @@
                 android:padding="12dp">
 
                 <!-- Doctor avatar -->
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/ivDoctorAvatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/img_doctor_sarah"
-                    app:civ_border_width="0dp" />
+                    android:background="@drawable/bg_dot_green"
+                    android:padding="2dp"
+                    android:contentDescription="Doctor" />
 
                 <LinearLayout
                     android:layout_width="0dp"
