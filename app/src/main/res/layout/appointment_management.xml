@@ -24,16 +24,15 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 1. Top Summary Card (Glassy Elevated) -->
+            <!-- 1. Top Summary Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/summaryCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="12dp"
-                app:cardBackgroundColor="#FFFFFF"
-                android:background="@drawable/glassy_gradient">
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -94,9 +93,9 @@
                                 android:background="#E5E7EB"/>
 
                             <View
-                                android:layout_width="56dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="56dp"
-                                android:background="@drawable/circular_progress"/>
+                                android:background="@drawable/circular_progress" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -118,7 +117,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 2. Search Bar (Pill Shape) -->
+            <!-- 2. Search Bar -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/searchCard"
                 android:layout_width="match_parent"
@@ -126,7 +125,7 @@
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="#EEF2F7">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,7 +146,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Search doctors, hospitals..."
+                        android:hint="Search hospitals, clinics..."
                         android:textSize="14sp"
                         android:textColor="#111827"
                         android:textColorHint="#9CA3AF"
@@ -156,7 +155,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 3. Recent Hospitals (Soft Chips) -->
+            <!-- 3. Recent Hospitals -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,7 +186,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="King Faisal Hospital"
-                            app:chipBackgroundColor="#F3F4F6"
+                            app:chipBackgroundColor="#EEF2F7"
                             app:chipIcon="@drawable/ic_hospital"
                             app:chipIconTint="#6B7280"
                             android:layout_marginEnd="8dp"/>
@@ -207,289 +206,305 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CHUK Hospital"
-                            app:chipBackgroundColor="#F3F4F6"
+                            app:chipBackgroundColor="#EEF2F7"
                             app:chipIcon="@drawable/ic_hospital"
                             app:chipIconTint="#6B7280"/>
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <!-- 4. Progress Stepper (Top) -->
+            <!-- 4. Step-Based Booking Flow -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/progressCard"
+                android:id="@+id/bookingFlowCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
                 app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:weightSum="4">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <!-- Doctor Step -->
+                    <!-- Step Indicator -->
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="24dp">
 
-                        <FrameLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginBottom="8dp">
+                        <!-- Department Step -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
 
-                            <View
+                            <FrameLayout
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:background="@drawable/step_completed_circle"/>
+                                android:layout_marginBottom="8dp">
 
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_check"
-                                android:tint="#FFFFFF"
-                                android:layout_gravity="center"/>
-                        </FrameLayout>
+                                <View
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/step_active_circle"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Doctor"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#22C55E"/>
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#FFFFFF"
+                                    android:layout_gravity="center"/>
+                            </FrameLayout>
 
-                    <!-- Date Step -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Department"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#3A7AFE"/>
+                        </LinearLayout>
 
+                        <!-- Connector Line -->
                         <View
-                            android:id="@+id/dateStepCircle"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/step_active_circle"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_width="0dp"
+                            android:layout_height="2dp"
+                            android:layout_weight="1"
+                            android:background="#E5E7EB"
+                            android:layout_marginHorizontal="8dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- Doctor Step -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Date"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#3A7AFE"/>
-                    </LinearLayout>
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
 
-                    <!-- Time Step -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                            <View
+                                android:id="@+id/doctorStepCircle"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/step_inactive_circle" />
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Doctor"
+                                android:textSize="12sp"
+                                android:textColor="#6B7280"/>
+                        </LinearLayout>
+
+                        <!-- Connector Line -->
                         <View
-                            android:id="@+id/timeStepCircle"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/step_inactive_circle"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_width="0dp"
+                            android:layout_height="2dp"
+                            android:layout_weight="1"
+                            android:background="#E5E7EB"
+                            android:layout_marginHorizontal="8dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- Time Step -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Time"
-                            android:textSize="12sp"
-                            android:textColor="#6B7280"/>
-                    </LinearLayout>
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
 
-                    <!-- Confirm Step -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                            <View
+                                android:id="@+id/timeStepCircle"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/step_inactive_circle"
+                                android:layout_marginBottom="8dp"/>
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Time"
+                                android:textSize="12sp"
+                                android:textColor="#6B7280"/>
+                        </LinearLayout>
+
+                        <!-- Connector Line -->
                         <View
-                            android:id="@+id/confirmStepCircle"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/step_inactive_circle"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_width="0dp"
+                            android:layout_height="2dp"
+                            android:layout_weight="1"
+                            android:background="#E5E7EB"
+                            android:layout_marginHorizontal="8dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- Confirm Step -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Confirm"
-                            android:textSize="12sp"
-                            android:textColor="#6B7280"/>
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <View
+                                android:id="@+id/confirmStepCircle"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/step_inactive_circle"
+                                android:layout_marginBottom="8dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Confirm"
+                                android:textSize="12sp"
+                                android:textColor="#6B7280"/>
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <!-- 5. Department Selection (Cards/Chips) -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select Department"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#111827"
-                    android:layout_marginBottom="12dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCardiology"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="Cardiology"
-                        android:textSize="13sp"
-                        app:cornerRadius="20dp"
-                        app:strokeColor="#E5E7EB"
-                        app:strokeWidth="1dp"
-                        android:textColor="#6B7280"
-                        android:layout_marginEnd="4dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnNeurology"
-                        style="@style/Widget.Material3.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="Neurology"
-                        android:textSize="13sp"
-                        app:cornerRadius="20dp"
-                        app:backgroundTint="#3A7AFE"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginEnd="4dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnDentistry"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="Dentistry"
-                        android:textSize="13sp"
-                        app:cornerRadius="20dp"
-                        app:strokeColor="#E5E7EB"
-                        app:strokeWidth="1dp"
-                        android:textColor="#6B7280"
-                        android:layout_marginEnd="4dp"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnPediatrics"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="Pediatrics"
-                        android:textSize="13sp"
-                        app:cornerRadius="20dp"
-                        app:strokeColor="#E5E7EB"
-                        app:strokeWidth="1dp"
-                        android:textColor="#6B7280"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- 6. Doctor Selection (Upgraded Cards) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/doctorSelectionCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Available Doctors"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#111827"
-                        android:layout_marginBottom="16dp"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/doctorRecyclerView"
+                    <!-- 5. Department Selection -->
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- 7. Time Slot Section (Grid) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/timeSlotCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select Time Slot"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#111827"
-                        android:layout_marginBottom="16dp"/>
+                        android:orientation="vertical">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/timeSlotRecyclerView"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Department"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            android:layout_marginBottom="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCardiology"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Cardiology"
+                                android:textSize="13sp"
+                                app:cornerRadius="16dp"
+                                app:strokeColor="#EEF2F7"
+                                app:strokeWidth="1dp"
+                                android:textColor="#6B7280"
+                                android:layout_marginEnd="4dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnNeurology"
+                                style="@style/Widget.Material3.Button"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Neurology"
+                                android:textSize="13sp"
+                                app:cornerRadius="16dp"
+                                app:backgroundTint="#3A7AFE"
+                                android:textColor="#FFFFFF"
+                                android:layout_marginEnd="4dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnDentistry"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Dentistry"
+                                android:textSize="13sp"
+                                app:cornerRadius="16dp"
+                                app:strokeColor="#EEF2F7"
+                                app:strokeWidth="1dp"
+                                android:textColor="#6B7280"
+                                android:layout_marginEnd="4dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnPediatrics"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:text="Pediatrics"
+                                android:textSize="13sp"
+                                app:cornerRadius="16dp"
+                                app:strokeColor="#EEF2F7"
+                                app:strokeWidth="1dp"
+                                android:textColor="#6B7280"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 6. Doctor Selection (Initially Hidden) -->
+                    <LinearLayout
+                        android:id="@+id/doctorSection"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:layout_marginTop="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Available Doctors"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            android:layout_marginBottom="16dp"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/doctorRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- 7. Time Slot Selection (Initially Hidden) -->
+                    <LinearLayout
+                        android:id="@+id/timeSlotSection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        android:layout_marginTop="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Time Slot"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"
+                            android:layout_marginBottom="16dp"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/timeSlotRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 8. AI Suggestion Card (Elegant) -->
+            <!-- 8. Smart Features UI (Optional) -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/aiSuggestionCard"
+                android:id="@+id/smartFeaturesCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                android:background="@drawable/ai_suggestion_gradient"
+                app:cardBackgroundColor="#F0F9FF"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -532,7 +547,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 9. Care Hub (Appointments Section) -->
+            <!-- 9. Care Hub Section -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/careHubCard"
                 android:layout_width="match_parent"
@@ -553,7 +568,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:background="#F3F4F6"
+                        android:background="#EEF2F7"
                         android:padding="4dp"
                         android:weightSum="3"
                         android:layout_marginBottom="20dp">
@@ -604,7 +619,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 10. Primary CTA (Single Strong Button) -->
+    <!-- 10. Primary CTA Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirmButton"
         android:layout_width="0dp"
