@@ -1,5 +1,7 @@
 package com.example.mugangaconnect;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -11,6 +13,9 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SecurityPinActivity extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "MugangaConnectPrefs";
+    private static final String KEY_PIN_HASH = "security_pin_hash";
 
     private ImageView btnBack;
     private EditText etCurrentPin, etNewPin, etConfirmPin;
@@ -58,6 +63,16 @@ public class SecurityPinActivity extends AppCompatActivity {
         if (!newPin.equals(confirmPin)) {
             etConfirmPin.setError("PINs do not match");
             return;
+        }
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String storedHash = prefs.getString(KEY_PIN_HASH, null);
+        if (storedHash != null) {
+            String currentHash = String.valueOf(currentPin.hashCode());
+            if (!currentHash.equals(storedHash)) {
+                etCurrentPin.setError("Incorrect current PIN");
+                return;
+            }
         }
     }
 
