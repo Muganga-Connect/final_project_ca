@@ -1,8 +1,10 @@
 package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +18,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.ImagePickerUtils;
+import com.example.mugangaconnect.utils.ImageUploadUtils;
 import com.example.mugangaconnect.utils.SessionManager;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ImagePickerUtils.ImagePickerResultHandler {
 
     private AuthRepository authRepo;
     private SessionManager session;
+    private ImageView profilePicture;
+    private ImageUploadUtils imageUploadUtils;
+    private ImagePickerUtils.ImagePickerCallback pendingImageCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         authRepo = new AuthRepository();
         session = new SessionManager(this);
+        imageUploadUtils = new ImageUploadUtils(this);
+
+        profilePicture = findViewById(R.id.profilePicture);
+        profilePicture.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 2);
+        });
 
         View root = findViewById(R.id.main);
         View scroll = findViewById(R.id.profileScroll);
@@ -136,5 +150,45 @@ public class ProfileActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void uploadProfileImage(Uri imageUri) {
+        imageUploadUtils.uploadProfileImage(imageUri, new ImageUploadUtils.UploadCallback() {
+            @Override
+            public void onSuccess(String imageUrl) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ProfileActivity.this, "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
+                    // You can load the image into the ImageView using a library like Glide or Picasso
+                    // For now, we'll just show a success message
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ProfileActivity.this, "Upload failed: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    @Override
+    public void setPendingImageCallback(ImagePickerUtils.ImagePickerCallback callback) {
+        this.pendingImageCallback = callback;
+    }
+
+    @Override
+    public ImagePickerUtils.ImagePickerCallback getPendingImageCallback() {
+        return pendingImageCallback;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            uploadProfileImage(imageUri);
+        }
     }
 }

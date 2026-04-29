@@ -338,6 +338,16 @@
                 android:textColor="#112236"
                 android:textSize="14sp" />
 
+            <ImageView
+                android:id="@+id/uploadButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:src="@android:drawable/ic_menu_camera"
+                app:tint="#7E8A96"
+                android:clickable="true"
+                android:focusable="true" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/sendButtonContainer"
                 android:layout_width="40dp"
