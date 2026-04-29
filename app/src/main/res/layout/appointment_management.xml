@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FB">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- 🔷 TOP CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:text="Next Checkup"
+                            android:textSize="12sp"
+                            android:textColor="#6B7280"/>
+
+                        <TextView
+                            android:text="Tomorrow, 10:30 AM"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#111827"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:text="92/100"
+                        android:textColor="#F59E0B"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 🔍 SEARCH -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Search hospital or clinic..."
+                android:background="@drawable/bg_search"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- 🏥 RECENT -->
+            <TextView
+                android:text="Recent Hospital"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:layout_marginBottom="8dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <!-- Chip -->
+                    <TextView
+                        style="@style/ChipStyle"
+                        android:text="City General"/>
+
+                    <TextView
+                        style="@style/ChipStyle"
+                        android:text="Mayo Clinic"/>
+
+                    <TextView
+                        style="@style/ChipStyle"
+                        android:text="St. Mary’s"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- 🧩 DEPARTMENT CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Department"
+                        android:textStyle="bold"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:text="Choose clinical specialty"
+                        android:textSize="12sp"
+                        android:textColor="#6B7280"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- OPTIONS -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/DeptItem"
+                            android:text="Cardiology"/>
+
+                        <TextView
+                            style="@style/DeptItemSelected"
+                            android:text="Neurology"/>
+
+                        <TextView
+                            style="@style/DeptItem"
+                            android:text="Dentistry"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 👨‍⚕️ SPECIALIST -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_user"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:text="Dr. Sarah Chen"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:text="Neurologist"
+                            android:textColor="#6B7280"/>
+
+                        <TextView
+                            android:text="● Available Today"
+                            android:textColor="#22C55E"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:text="⭐ 4.8"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ⏰ TIME SLOT -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="Time Slot"
+                        android:textStyle="bold"/>
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="3"
+                        android:layout_marginTop="12dp">
+
+                        <TextView style="@style/TimeAvailable" android:text="09:00 AM"/>
+                        <TextView style="@style/TimeAvailable" android:text="09:30 AM"/>
+                        <TextView style="@style/TimeBooked" android:text="10:00 AM"/>
+
+                        <TextView style="@style/TimeSelected" android:text="10:30 AM"/>
+                        <TextView style="@style/TimeAvailable" android:text="11:00 AM"/>
+                        <TextView style="@style/TimeAvailable" android:text="11:30 AM"/>
+                    </GridLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 🤖 AI -->
+            <TextView
+                android:layout_marginTop="12dp"
+                android:text="Best time for you: 10:30 AM"
+                android:textColor="#3A7AFE"/>
+
+            <!-- ✅ BUTTON -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Book Appointment"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_button_green"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
