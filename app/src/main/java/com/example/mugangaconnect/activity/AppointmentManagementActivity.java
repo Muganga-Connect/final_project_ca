@@ -78,8 +78,8 @@ public class AppointmentManagementActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        String userName = session.getUserName();
-        if (userName != null && userNameText != null) {
+        String userName = session.getFullName();
+        if (userName != null && !userName.isEmpty() && userNameText != null) {
             userNameText.setText(userName);
         }
         
