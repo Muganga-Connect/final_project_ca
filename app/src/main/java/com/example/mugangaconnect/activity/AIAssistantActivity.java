@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mugangaconnect.activity.BottomNavHelper;
+
 public class AIAssistantActivity extends AppCompatActivity {
 
     @Override
