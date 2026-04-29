@@ -333,7 +333,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Step 03: Time Slot -->
+            <!-- Step 03: Visit Details -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -371,7 +371,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time Slot"
+                        android:text="Visit Details"
                         android:textStyle="bold"
                         android:textColor="#1A4C91"
                         android:textSize="18sp"
@@ -380,10 +380,30 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="finalize your visit"
+                        android:text="Finalize your visit reason and time"
                         android:textColor="#8AA6C7"
                         android:textSize="12sp"
                         android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Reason for visit / Symptoms"
+                        android:layout_marginBottom="16dp"
+                        app:boxStrokeColor="#1E88E5"
+                        app:hintTextColor="#1E88E5">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_visit_reason"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:lines="3"
+                            android:textColor="#1A4C91"
+                            android:textSize="14sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_select_session"

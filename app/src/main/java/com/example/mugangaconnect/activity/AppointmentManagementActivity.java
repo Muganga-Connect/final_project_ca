@@ -1,6 +1,7 @@
 package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private String selectedDepartment = "Cardiology";
     private Doctor selectedDoctor;
+    private EditText etVisitReason;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         session         = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        etVisitReason   = findViewById(R.id.et_visit_reason);
 
         setupDoctorList();
         setupAppointmentList();
@@ -129,9 +132,12 @@ public class AppointmentManagementActivity extends AppCompatActivity
         String uid = session.getUid();
         if (uid == null) return;
 
+        String reason = etVisitReason != null ? etVisitReason.getText().toString().trim() : "";
+
         Appointment appt = new Appointment(uid, selectedDoctor.getId(),
                 selectedDoctor.getName(), selectedDepartment,
                 "2025-08-01", "09:00");
+        appt.setReason(reason);
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override
@@ -139,6 +145,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 runOnUiThread(() -> {
                     appointments.add(data);
                     if (appointmentAdapter != null) appointmentAdapter.notifyItemInserted(appointments.size() - 1);
+                    if (etVisitReason != null) etVisitReason.setText("");
                     Toast.makeText(AppointmentManagementActivity.this, "Appointment booked!", Toast.LENGTH_SHORT).show();
                 });
             }

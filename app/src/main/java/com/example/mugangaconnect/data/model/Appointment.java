@@ -11,6 +11,7 @@ public class Appointment {
     private String department;
     private String date;        // ISO format: yyyy-MM-dd
     private String time;        // HH:mm
+    private String reason;
     private String status;
     private String riskLevel;
     private long createdAt;
@@ -37,6 +38,7 @@ public class Appointment {
     public String getDepartment() { return department; }
     public String getDate() { return date; }
     public String getTime() { return time; }
+    public String getReason() { return reason; }
     public String getStatus() { return status; }
     public String getRiskLevel() { return riskLevel; }
     public long getCreatedAt() { return createdAt; }
@@ -50,5 +52,6 @@ public class Appointment {
     public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
     public void setDate(String date) { this.date = date; }
     public void setTime(String time) { this.time = time; }
+    public void setReason(String reason) { this.reason = reason; }
     public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
 }
