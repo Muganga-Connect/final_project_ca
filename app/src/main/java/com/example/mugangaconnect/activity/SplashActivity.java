@@ -17,13 +17,15 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         // 3-second delay timer
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish(); // Destroys the splash screen so the user can't hit "Back" to it
-            }
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            com.example.mugangaconnect.utils.SessionManager session =
+                    new com.example.mugangaconnect.utils.SessionManager(SplashActivity.this);
+            com.example.mugangaconnect.data.repository.AuthRepository auth =
+                    new com.example.mugangaconnect.data.repository.AuthRepository();
+            Class<?> dest = (session.isLoggedIn() && auth.isLoggedIn())
+                    ? MainActivity.class : LoginActivity.class;
+            startActivity(new Intent(SplashActivity.this, dest));
+            finish();
         }, 3000);
     }
 }
