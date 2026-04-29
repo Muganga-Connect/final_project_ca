@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void wireButtons() {
-        findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
-                startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+        // findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
+        //         startActivity(new Intent(this, AppointmentHistoryActivity.class)));
 
         if (btnReschedule != null) {
             btnReschedule.setOnClickListener(v ->
