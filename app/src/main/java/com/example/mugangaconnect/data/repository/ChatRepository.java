@@ -60,7 +60,7 @@ public class ChatRepository {
     }
 
     private String askGemini(String prompt) throws Exception {
-        String apiKey = BuildConfig.GEMINI_API_KEY;
+        String apiKey = BuildConfig.AIzaSyD1jjidlw-h-pv5P3UZc9Jbz6fuLiKpNPE;
         if (apiKey == null || apiKey.trim().isEmpty() || "YOUR_GEMINI_API_KEY_HERE".equals(apiKey)) {
             return "Gemini API key is missing. Set GEMINI_API_KEY in local properties to enable AI responses.";
         }
