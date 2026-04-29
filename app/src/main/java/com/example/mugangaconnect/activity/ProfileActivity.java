@@ -16,11 +16,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.ImagePickerUtils;
 import com.example.mugangaconnect.utils.ImageUploadUtils;
 import com.example.mugangaconnect.utils.SessionManager;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class ProfileActivity extends AppCompatActivity implements ImagePickerUtils.ImagePickerResultHandler {
 
