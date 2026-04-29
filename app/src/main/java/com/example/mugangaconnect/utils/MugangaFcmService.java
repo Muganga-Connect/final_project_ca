@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -22,15 +23,23 @@ public class MugangaFcmService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        FirebaseUser user = new AuthRepository().getCurrentUser();
+        AuthRepository authRepository = new AuthRepository();
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.saveFcmToken(token);
+
+        FirebaseUser user = authRepository.getCurrentUser();
         if (user != null) {
-            new AuthRepository().updateFcmToken(user.getUid(), token);
+            authRepository.updateFcmToken(user.getUid(), token);
         }
     }
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
         if (message.getNotification() == null) return;
+        SharedPreferences prefs = getSharedPreferences("MugangaConnectPrefs", MODE_PRIVATE);
+        boolean appointmentEnabled = prefs.getBoolean("notification_appointmentReminders", true);
+        boolean pushEnabled = prefs.getBoolean("notification_pushNotifications", true);
+        if (!appointmentEnabled || !pushEnabled) return;
 
         String title = message.getNotification().getTitle();
         String body  = message.getNotification().getBody();
