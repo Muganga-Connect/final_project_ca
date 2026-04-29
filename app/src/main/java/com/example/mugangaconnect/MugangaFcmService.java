@@ -18,10 +18,17 @@ public class MugangaFcmService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         SharedPreferences prefs = getSharedPreferences("MugangaConnectPrefs", Context.MODE_PRIVATE);
+        boolean allowReminders = prefs.getBoolean(NotificationPreferencesActivity.KEY_APPOINTMENT_REMINDERS, true);
         boolean allowPush = prefs.getBoolean(NotificationPreferencesActivity.KEY_PUSH_NOTIFICATIONS, true);
 
         if (!allowPush) {
             Log.d(TAG, "Push notifications are disabled in preferences.");
+            return;
+        }
+
+        String type = remoteMessage.getData().get("type");
+        if ("appointment".equals(type) && !allowReminders) {
+            Log.d(TAG, "Appointment reminders are disabled in preferences.");
             return;
         }
 
