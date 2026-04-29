@@ -38,6 +38,12 @@
             </intent-filter>
         </service>
 
+        <!-- SECURITY PIN screen -->
+        <activity
+            android:name=".SecurityPinActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>
