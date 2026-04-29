@@ -61,6 +61,7 @@ public class ChatRepository {
 
     private String askGemini(String prompt) throws Exception {
         String apiKey = BuildConfig.GEMINI_API_KEY;
+        System.out.println("DEBUG: API Key exists: " + (apiKey != null && !apiKey.isEmpty()));
         if (apiKey == null || apiKey.trim().isEmpty() || "YOUR_API_KEY_HERE".equals(apiKey)) {
             return "Gemini API key is missing. Set GEMINI_API_KEY in gradle.properties to enable AI responses.";
         }
@@ -89,8 +90,10 @@ public class ChatRepository {
         }
 
         int code = conn.getResponseCode();
+        System.out.println("DEBUG: Response code: " + code);
         InputStream stream = code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream();
         String response = readStream(stream);
+        System.out.println("DEBUG: Response: " + response);
         if (code < 200 || code >= 300) {
             throw new Exception("Gemini request failed (" + code + "): " + response);
         }
