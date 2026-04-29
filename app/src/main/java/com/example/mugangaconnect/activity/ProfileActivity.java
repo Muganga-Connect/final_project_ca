@@ -34,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
     private ImageView profilePicture;
     private ImageUploadUtils imageUploadUtils;
     private ImagePickerUtils.ImagePickerCallback pendingImageCallback;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
         authRepo = new AuthRepository();
         session = new SessionManager(this);
         imageUploadUtils = new ImageUploadUtils(this);
+        firestore = FirebaseFirestore.getInstance();
 
         profilePicture = findViewById(R.id.profileImage);
         profilePicture.setOnClickListener(v -> {
@@ -105,7 +107,24 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
                 }
                 @Override public void onError(String message) {}
             });
+            
+            // Load profile image
+            loadProfileImage(uid);
         }
+    }
+
+    private void loadProfileImage(String uid) {
+        firestore.collection("users").document(uid).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QueryDocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String imageUrl = document.getString("profilePicture");
+                    if (imageUrl != null) {
+                        Glide.with(this).load(imageUrl).into(profilePicture);
+                    }
+                }
+            }
+        });
     }
 
     private void setupAccountSettings() {
@@ -163,8 +182,7 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
             public void onSuccess(String imageUrl) {
                 runOnUiThread(() -> {
                     Toast.makeText(ProfileActivity.this, "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
-                    // You can load the image into the ImageView using a library like Glide or Picasso
-                    // For now, we'll just show a success message
+                    Glide.with(ProfileActivity.this).load(imageUrl).into(profilePicture);
                 });
             }
 
