@@ -334,7 +334,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="Type your message..."
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:textColor="#112236"
                 android:textSize="14sp" />
 
