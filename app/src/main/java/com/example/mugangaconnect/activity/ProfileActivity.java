@@ -114,6 +114,29 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
     }
 
     private void loadProfileImage(String uid) {
+        // First try to load from user's main document (most reliable)
+        firestore.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("profilePicture");
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(ProfileActivity.this).load(profileImageUrl).into(profilePicture);
+                        } else {
+                            // Fallback to user_images collection
+                            loadProfileImageFromUserImages(uid);
+                        }
+                    } else {
+                        // Fallback to user_images collection
+                        loadProfileImageFromUserImages(uid);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Fallback to user_images collection on error
+                    loadProfileImageFromUserImages(uid);
+                });
+    }
+    
+    private void loadProfileImageFromUserImages(String uid) {
         firestore.collection("user_images")
                 .whereEqualTo("userId", uid)
                 .whereEqualTo("folder", "profile_images")
