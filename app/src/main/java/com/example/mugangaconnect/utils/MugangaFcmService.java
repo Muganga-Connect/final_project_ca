@@ -9,7 +9,7 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.mugangaconnect.LoginActivity;
+import com.example.mugangaconnect.activity.LoginActivity;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.google.firebase.auth.FirebaseUser;
