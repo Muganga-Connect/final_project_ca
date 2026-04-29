@@ -2,6 +2,7 @@ package com.example.mugangaconnect;
 
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,25 @@ public class SecurityPinActivity extends AppCompatActivity {
         etCurrentPin.addTextChangedListener(clearErrorWatcher);
         etNewPin.addTextChangedListener(clearErrorWatcher);
         etConfirmPin.addTextChangedListener(clearErrorWatcher);
+    }
+
+    private void processPinChange() {
+        String currentPin = etCurrentPin.getText().toString().trim();
+        String newPin = etNewPin.getText().toString().trim();
+        String confirmPin = etConfirmPin.getText().toString().trim();
+
+        if (TextUtils.isEmpty(currentPin) || currentPin.length() < 4) {
+            etCurrentPin.setError("Enter 4-digit current PIN");
+            return;
+        }
+        if (TextUtils.isEmpty(newPin) || newPin.length() < 4) {
+            etNewPin.setError("Enter 4-digit new PIN");
+            return;
+        }
+        if (!newPin.equals(confirmPin)) {
+            etConfirmPin.setError("PINs do not match");
+            return;
+        }
     }
 
     private void initializeViews() {
