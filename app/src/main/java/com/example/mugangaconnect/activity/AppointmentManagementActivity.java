@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
@@ -49,7 +50,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         loadAppointments();
 
-        com.example.mugangaconnect.BottomNavHelper.setup(this, com.example.mugangaconnect.BottomNavHelper.Screen.SCHEDULE);
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
     }
 
     private void setupDoctorList() {
