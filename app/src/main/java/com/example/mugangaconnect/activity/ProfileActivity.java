@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -41,13 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+        loadProfileData();
         setupAccountSettings();
         setupSupport();
         BottomNavHelper.setup(this, BottomNavHelper.Screen.PROFILE);
 
-        // Edit profile button
+        // Edit profile button → Personal Information
         findViewById(R.id.editProfileBtn).setOnClickListener(v ->
-                Toast.makeText(this, "Edit profile coming soon", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, PersonalInformationActivity.class)));
 
         // Language selector
         findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
@@ -61,15 +63,41 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }
 
+    private void loadProfileData() {
+        String name = session.getFullName();
+        String uid  = session.getUid();
+
+        TextView tvName = findViewById(R.id.profileName);
+        if (tvName != null && name != null && !name.isEmpty()) tvName.setText(name);
+
+        TextView tvId = findViewById(R.id.patientId);
+        if (tvId != null && uid != null) tvId.setText("PN-" + uid.substring(0, 6).toUpperCase());
+
+        // Load extra fields from Firestore
+        if (uid != null) {
+            authRepo.getProfile(uid, new com.example.mugangaconnect.data.repository.AuthRepository.ProfileCallback() {
+                @Override
+                public void onSuccess(com.example.mugangaconnect.data.model.User user) {
+                    runOnUiThread(() -> {
+                        if (tvName != null && user.getFullName() != null) tvName.setText(user.getFullName());
+                        session.saveSession(uid, user.getFullName(), user.getEmail(),
+                                user.getPhone() != null ? user.getPhone() : "");
+                    });
+                }
+                @Override public void onError(String message) {}
+            });
+        }
+    }
+
     private void setupAccountSettings() {
         findViewById(R.id.personalInfoItem).setOnClickListener(v ->
-                Toast.makeText(this, "Personal Information coming soon", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, PersonalInformationActivity.class)));
 
         findViewById(R.id.securityPinItem).setOnClickListener(v ->
                 startActivity(new Intent(this, SecurityPinActivity.class)));
 
         findViewById(R.id.notificationItem).setOnClickListener(v ->
-                Toast.makeText(this, "Notification Preferences coming soon", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, NotificationPreferencesActivity.class)));
 
         findViewById(R.id.remindersItem).setOnClickListener(v ->
                 Toast.makeText(this, "Manage Reminders coming soon", Toast.LENGTH_SHORT).show());
