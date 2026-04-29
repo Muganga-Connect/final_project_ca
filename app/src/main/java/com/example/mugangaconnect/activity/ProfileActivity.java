@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
         session = new SessionManager(this);
         imageUploadUtils = new ImageUploadUtils(this);
 
-        profilePicture = findViewById(R.id.profilePicture);
+        profilePicture = findViewById(R.id.profileImage);
         profilePicture.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, 2);
