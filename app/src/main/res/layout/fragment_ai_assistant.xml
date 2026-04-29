@@ -286,6 +286,20 @@
             android:text="Reschedule Appointment"
             android:textColor="#0C4DA1"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/clearChatBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/quick_action_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="Clear Chat"
+            android:textColor="#0C4DA1"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <!-- Input Field -->
