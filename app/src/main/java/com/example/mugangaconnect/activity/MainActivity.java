@@ -19,26 +19,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        View root = findViewById(R.id.main);
-        View scroll = findViewById(R.id.nestedScrollView);
-        View bottomBar = findViewById(R.id.bottomBar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            if (scroll != null) {
-                scroll.setPadding(systemBars.left + dp(14), systemBars.top + dp(14), systemBars.right + dp(14), dp(120));
-            }
-            if (bottomBar != null) {
-                bottomBar.setPadding(0, 0, 0, systemBars.bottom);
-            }
-            return insets;
-        });
-
         BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
-    }
-
-    private int dp(int value) {
-        return Math.round(getResources().getDisplayMetrics().density * value);
     }
 }
