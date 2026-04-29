@@ -10,7 +10,6 @@
     <style name="Theme.Appointment_Schedule" parent="Base.Theme.Appointment_Schedule" />
 
     <style name="CircleImage" parent="">
-<<<<<<< HEAD
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
@@ -19,8 +18,6 @@
         <item name="android:layout_height">56dp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
-=======
         <item name="cornerSize">50%</item>
->>>>>>> 1c059427a44d8fe9416dd6aa12ba92228fac1029
     </style>
 </resources>
