@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.mugangaconnect.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,6 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.example.mugangaconnect.data.local.AppDatabase;
+import com.example.mugangaconnect.data.model.User;
+import com.example.mugangaconnect.data.repository.AuthRepository;
 
 public class PersonalInformationActivity extends AppCompatActivity {
 
@@ -162,29 +169,79 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void loadSavedData() {
-        etName.setText(prefs.getString("profile_fullName", "Alexandrine Mukamana"));
-        etEmail.setText(prefs.getString("profile_email", "patient@example.com"));
-        etPhone.setText(prefs.getString("profile_phone", "+250781234567"));
-        etDob.setText(prefs.getString("profile_dob", "15 / Jan / 2000"));
-        etInsurance.setText(prefs.getString("profile_insuranceId", "INS-2024-001234"));
-        etAllergies.setText(prefs.getString("profile_allergies", "None"));
-        etEmergency.setText(prefs.getString("profile_emergencyContact", "+250788654321"));
-
-        tvDisplayName.setText(etName.getText().toString());
-
-        setSelectionFromValue(spinnerGender, prefs.getString("profile_gender", "Female"));
-        setSelectionFromValue(spinnerBlood, prefs.getString("profile_bloodType", "O+"));
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    
+    if (currentUser == null) {
+        // User not logged in, load from SharedPreferences
+        loadFromPreferences();
+        return;
     }
 
-    private void setSelectionFromValue(Spinner spinner, String value) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
-                spinner.setSelection(i);
-                break;
-            }
+    String uid = currentUser.getUid();
+    AppDatabase db = AppDatabase.getInstance(this);
+
+    // Run on background thread to avoid blocking UI
+    new Thread(() -> {
+        // Step 1: Try loading from SQLite first (works offline)
+        User user = db.userDao().getByUid(uid);
+
+        if (user != null) {
+            // User data found locally in SQLite
+            runOnUiThread(() -> {
+                etName.setText(user.fullName != null ? user.fullName : "");
+                etEmail.setText(user.email != null ? user.email : "");
+                etPhone.setText(user.phone != null ? user.phone : "");
+                etDob.setText(user.dob != null ? user.dob : "");
+                etInsurance.setText(user.insuranceId != null ? user.insuranceId : "");
+                etAllergies.setText(user.allergies != null ? user.allergies : "None");
+                etEmergency.setText(user.emergencyContact != null ? user.emergencyContact : "");
+
+                tvDisplayName.setText(user.fullName != null ? user.fullName : "");
+
+                if (user.gender != null) {
+                    setSelectionFromValue(spinnerGender, user.gender);
+                }
+                if (user.bloodType != null) {
+                    setSelectionFromValue(spinnerBlood, user.bloodType);
+                }
+            });
+        } else {
+            // Step 2: Fall back to SharedPreferences if no SQLite data
+            runOnUiThread(this::loadFromPreferences);
         }
-    }
+    }).start();
 
+    //  Step 3: Optional - Fetch from Firestore in background to sync
+    AuthRepository authRepo = new AuthRepository();
+    authRepo.getProfile(uid, new AuthRepository.Callback() {
+        @Override
+        public void onSuccess(String message) {
+            // Sync successful - UI already shows local data
+        }
+
+        @Override
+        public void onError(String error) {
+            // User can still use offline data
+            android.util.Log.d("Profile", "Cloud sync failed: " + error);
+        }
+    });
+}
+
+// Helper method to load from SharedPreferences
+private void loadFromPreferences() {
+    etName.setText(prefs.getString("profile_fullName", "Alexandrine Mukamana"));
+    etEmail.setText(prefs.getString("profile_email", "patient@example.com"));
+    etPhone.setText(prefs.getString("profile_phone", "+250781234567"));
+    etDob.setText(prefs.getString("profile_dob", "15 / Jan / 2000"));
+    etInsurance.setText(prefs.getString("profile_insuranceId", "INS-2024-001234"));
+    etAllergies.setText(prefs.getString("profile_allergies", "None"));
+    etEmergency.setText(prefs.getString("profile_emergencyContact", "+250788654321"));
+
+    tvDisplayName.setText(etName.getText().toString());
+
+    setSelectionFromValue(spinnerGender, prefs.getString("profile_gender", "Female"));
+    setSelectionFromValue(spinnerBlood, prefs.getString("profile_bloodType", "O+"));
+}
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
 
@@ -404,26 +461,75 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void saveData() {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("profile_fullName", etName.getText().toString().trim());
-        editor.putString("profile_email", etEmail.getText().toString().trim());
-        editor.putString("profile_phone", etPhone.getText().toString().trim());
-        editor.putString("profile_dob", etDob.getText().toString().trim());
-        editor.putString("profile_gender", spinnerGender.getSelectedItem().toString());
-        editor.putString("profile_insuranceId", etInsurance.getText().toString().trim());
-        editor.putString("profile_bloodType", spinnerBlood.getSelectedItem().toString());
-        editor.putString("profile_allergies", etAllergies.getText().toString().trim());
-        editor.putString("profile_emergencyContact", etEmergency.getText().toString().trim());
-        editor.apply();
+    String fullName = etName.getText().toString().trim();
+    String email = etEmail.getText().toString().trim();
+    String phone = etPhone.getText().toString().trim();
+    String dob = etDob.getText().toString().trim();
+    String gender = spinnerGender.getSelectedItem().toString();
+    String insuranceId = etInsurance.getText().toString().trim();
+    String bloodType = spinnerBlood.getSelectedItem().toString();
+    String allergies = etAllergies.getText().toString().trim();
+    String emergency = etEmergency.getText().toString().trim();
 
-        tvDisplayName.setText(etName.getText().toString().trim());
-        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+    // Step 1: Save to SharedPreferences (keep for backward compatibility)
+    SharedPreferences.Editor editor = prefs.edit();
+    editor.putString("profile_fullName", fullName);
+    editor.putString("profile_email", email);
+    editor.putString("profile_phone", phone);
+    editor.putString("profile_dob", dob);
+    editor.putString("profile_gender", gender);
+    editor.putString("profile_insuranceId", insuranceId);
+    editor.putString("profile_bloodType", bloodType);
+    editor.putString("profile_allergies", allergies);
+    editor.putString("profile_emergencyContact", emergency);
+    editor.apply();
 
-        // Lock fields again
-        lockFields();
-        isModified = false;
-        btnSave.setEnabled(false);
+    // Step 2: NEW - Save to SQLite Database (offline support)
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    if (currentUser != null) {
+        new Thread(() -> {
+            User user = new User(
+                currentUser.getUid(),
+                fullName,
+                email,
+                phone
+            );
+            // Set additional fields
+            user.dob = dob;
+            user.gender = gender;
+            user.insuranceId = insuranceId;
+            user.bloodType = bloodType;
+            user.allergies = allergies;
+            user.emergencyContact = emergency;
+            
+            // Save to SQLite
+            AppDatabase.getInstance(this).userDao().upsert(user);
+        }).start();
     }
+
+    // Step 3: NEW - Also sync to Firestore
+    AuthRepository authRepo = new AuthRepository();
+    authRepo.updateProfile(fullName, phone, email, new AuthRepository.Callback() {
+        @Override
+        public void onSuccess(String message) {
+            // Firestore sync successful
+        }
+
+        @Override
+        public void onError(String error) {
+            // User can still use local data
+            android.util.Log.d("Profile", "Firestore sync failed: " + error);
+        }
+    });
+
+    tvDisplayName.setText(fullName);
+    Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+
+    // Lock fields again
+    lockFields();
+    isModified = false;
+    btnSave.setEnabled(false);
+}
 
     private void lockFields() {
         etName.setEnabled(false);
@@ -446,4 +552,14 @@ public class PersonalInformationActivity extends AppCompatActivity {
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void setSelectionFromValue(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
 }
+
