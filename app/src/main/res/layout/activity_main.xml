@@ -57,7 +57,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="WELCOME BACK"
+                                android:text="@string/welcome_back"
                                 android:textColor="#8B9DC3"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif-medium"
@@ -67,7 +67,7 @@
                                 android:id="@+id/tvWelcomeName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Alexandrine Mukamana"
+                                android:text="@string/welcome_name"
                                 android:textColor="#1A365D"
                                 android:textStyle="bold"
                                 android:textSize="24sp"
@@ -86,6 +86,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/user"
+                                android:contentDescription="@string/dashboard_profile_image_description"
                                 android:scaleType="centerCrop"
                                 android:background="@drawable/circle_gradient_bg"/>
                         </androidx.cardview.widget.CardView>

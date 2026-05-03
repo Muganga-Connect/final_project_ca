@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mugangaconnect.R;
@@ -21,6 +22,9 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class AppointmentManagementActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class AppointmentManagementActivity extends AppCompatActivity {
     private RecyclerView specialistRecyclerView;
     private RecyclerView timeSlotRecyclerView;
     private RecyclerView appointmentRecyclerView;
+    private View aiRecommendationCard;
     
     // Step Flow Components
     private LinearLayout specialistSection;
@@ -76,6 +81,7 @@ public class AppointmentManagementActivity extends AppCompatActivity {
         specialistRecyclerView = findViewById(R.id.specialistRecyclerView);
         timeSlotRecyclerView = findViewById(R.id.timeSlotRecyclerView);
         appointmentRecyclerView = findViewById(R.id.appointmentRecyclerView);
+        aiRecommendationCard = findViewById(R.id.aiRecommendationCard);
         
         // Step flow components
         specialistSection = findViewById(R.id.specialistSection);
@@ -147,29 +153,6 @@ public class AppointmentManagementActivity extends AppCompatActivity {
             });
         }
 
-        // Tab switching
-        findViewById(R.id.tabUpcoming).setOnClickListener(v -> {
-            Toast.makeText(this, "Showing upcoming appointments...", Toast.LENGTH_SHORT).show();
-            // TODO: Switch to upcoming tab
-        });
-
-        findViewById(R.id.tabRescheduled).setOnClickListener(v -> {
-            Toast.makeText(this, "Showing rescheduled appointments...", Toast.LENGTH_SHORT).show();
-            // TODO: Switch to rescheduled tab
-        });
-
-        findViewById(R.id.tabCancelled).setOnClickListener(v -> {
-            Toast.makeText(this, "Showing cancelled appointments...", Toast.LENGTH_SHORT).show();
-            // TODO: Switch to cancelled tab
-        });
-
-        // Primary book appointment button
-        if (bookAppointmentButton != null) {
-            bookAppointmentButton.setOnClickListener(v -> {
-                Toast.makeText(this, "Booking appointment...", Toast.LENGTH_SHORT).show();
-                // TODO: Implement appointment booking
-            });
-        }
     }
 
     private void loadUserData() {
@@ -193,12 +176,7 @@ public class AppointmentManagementActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     appointments.clear();
                     appointments.addAll(data);
-                    // Sort by date and time, newest first
-                    appointments.sort((a1, a2) -> {
-                        String dateTime1 = a1.getDate() + " " + a1.getTime();
-                        String dateTime2 = a2.getDate() + " " + a2.getTime();
-                        return dateTime2.compareTo(dateTime1);
-                    });
+                    appointments.sort(this::compareAppointmentsNewestFirst);
                     updateAppointmentCard();
                 });
             }
@@ -218,6 +196,25 @@ public class AppointmentManagementActivity extends AppCompatActivity {
             // TODO: Update the appointment card UI with latestAppointment data
             // This would involve updating doctor name, specialty, date, time, etc.
         }
+    }
+
+    private int compareAppointmentsNewestFirst(Appointment a1, Appointment a2) {
+        String dateTime1 = safeDateTime(a1);
+        String dateTime2 = safeDateTime(a2);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
+        formatter.setLenient(false);
+        try {
+            return formatter.parse(dateTime2).compareTo(formatter.parse(dateTime1));
+        } catch (ParseException | NullPointerException e) {
+            return dateTime2.compareTo(dateTime1);
+        }
+    }
+
+    private String safeDateTime(Appointment appointment) {
+        if (appointment == null) return "";
+        String date = appointment.getDate() == null ? "" : appointment.getDate();
+        String time = appointment.getTime() == null ? "" : appointment.getTime();
+        return date + " " + time;
     }
 
     // Step-based booking flow methods for premium design
@@ -248,29 +245,29 @@ public class AppointmentManagementActivity extends AppCompatActivity {
         if (dateApr24 != null) {
             dateApr24.setBackgroundColor(android.graphics.Color.TRANSPARENT);
             dateApr24.setStrokeColorResource(android.R.color.darker_gray);
-            dateApr24.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            dateApr24.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
         }
         if (dateApr25 != null) {
             dateApr25.setBackgroundColor(android.graphics.Color.TRANSPARENT);
             dateApr25.setStrokeColorResource(android.R.color.darker_gray);
-            dateApr25.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            dateApr25.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
         }
         if (dateApr26 != null) {
             dateApr26.setBackgroundColor(android.graphics.Color.TRANSPARENT);
             dateApr26.setStrokeColorResource(android.R.color.darker_gray);
-            dateApr26.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            dateApr26.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
         }
         
         // Highlight selected date
         if ("Apr 24".equals(selectedDate) && dateApr24 != null) {
-            dateApr24.setBackgroundTintList(getResources().getColorStateList(R.color.primary_blue));
-            dateApr24.setTextColor(getResources().getColor(android.R.color.white));
+            dateApr24.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.primary_blue));
+            dateApr24.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         } else if ("Apr 25".equals(selectedDate) && dateApr25 != null) {
-            dateApr25.setBackgroundTintList(getResources().getColorStateList(R.color.primary_blue));
-            dateApr25.setTextColor(getResources().getColor(android.R.color.white));
+            dateApr25.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.primary_blue));
+            dateApr25.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         } else if ("Apr 26".equals(selectedDate) && dateApr26 != null) {
-            dateApr26.setBackgroundTintList(getResources().getColorStateList(R.color.primary_blue));
-            dateApr26.setTextColor(getResources().getColor(android.R.color.white));
+            dateApr26.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.primary_blue));
+            dateApr26.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         }
     }
     
@@ -300,7 +297,9 @@ public class AppointmentManagementActivity extends AppCompatActivity {
                 break;
             case 4:
                 // Show AI recommendation
-                findViewById(R.id.aiRecommendationCard).setVisibility(android.view.View.VISIBLE);
+                if (aiRecommendationCard != null) {
+                    aiRecommendationCard.setVisibility(android.view.View.VISIBLE);
+                }
                 break;
         }
     }
@@ -337,7 +336,9 @@ public class AppointmentManagementActivity extends AppCompatActivity {
         // 3. Populating time slots with proper states (available, booked, selected)
         
         // Show AI recommendation card
-        findViewById(R.id.aiRecommendationCard).setVisibility(android.view.View.VISIBLE);
+        if (aiRecommendationCard != null) {
+            aiRecommendationCard.setVisibility(android.view.View.VISIBLE);
+        }
     }
     
     private void selectTimeSlot(String timeSlot) {
@@ -348,7 +349,9 @@ public class AppointmentManagementActivity extends AppCompatActivity {
         moveToStep(4);
         
         // Show AI recommendation card
-        findViewById(R.id.aiRecommendationCard).setVisibility(android.view.View.VISIBLE);
+        if (aiRecommendationCard != null) {
+            aiRecommendationCard.setVisibility(android.view.View.VISIBLE);
+        }
     }
 
     // Placeholder methods for future implementation

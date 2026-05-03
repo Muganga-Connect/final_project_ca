@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 // Find next upcoming appointment
                 Appointment next = null;
                 for (Appointment a : data) {
-                    if (Appointment.Status.UPCOMING.name().equals(a.getStatus())) {
+                    if (Appointment.Status.UPCOMING.equals(a.getStatus())) {
                         if (next == null || a.getDate().compareTo(next.getDate()) < 0) next = a;
                     }
                 }
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         if (upcoming != null) {
             if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText(upcoming.getDoctorName());
             if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
-            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatus());
+            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatusValue());
         } else {
             if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText("No upcoming appointment");
             if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText("Book one from Schedule");

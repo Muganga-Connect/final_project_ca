@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -84,10 +85,13 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(v -> {
             String fullName = etFullName.getText().toString().trim();
             String email    = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String password = etPassword.getText().toString();
 
             if (fullName.isEmpty()) { etFullName.setError("Enter your full name"); return; }
-            if (email.isEmpty())    { etEmail.setError("Enter email"); return; }
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                etEmail.setError("Enter a valid email");
+                return;
+            }
             if (password.length() < 6) { etPassword.setError("Password too weak"); return; }
 
             btnSignUp.setEnabled(false);

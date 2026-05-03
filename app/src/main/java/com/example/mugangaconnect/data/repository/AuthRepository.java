@@ -1,5 +1,7 @@
 package com.example.mugangaconnect.data.repository;
 
+import android.util.Log;
+
 import com.example.mugangaconnect.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,6 +13,7 @@ import java.util.Map;
 public class AuthRepository {
 
     private static final String USERS_COLLECTION = "users";
+    private static final String TAG = "AuthRepository";
 
     private final FirebaseAuth auth;
     private final FirebaseFirestore db;
@@ -71,7 +74,9 @@ public class AuthRepository {
 
     public void updateFcmToken(String uid, String token) {
         db.collection(USERS_COLLECTION).document(uid)
-                .update("fcmToken", token);
+                .update("fcmToken", token)
+                .addOnSuccessListener(v -> Log.d(TAG, "Updated FCM token for uid=" + uid))
+                .addOnFailureListener(e -> Log.e(TAG, "Failed to update FCM token for uid=" + uid, e));
     }
 
     /** Send a password-reset email to the given address. */
@@ -84,7 +89,7 @@ public class AuthRepository {
     /** Compatibility overload that uses AuthCallback as requested. */
     public void resetPassword(String email, AuthCallback callback) {
         auth.sendPasswordResetEmail(email)
-                .addOnSuccessListener(v -> callback.onSuccess(auth.getCurrentUser()))
+                .addOnSuccessListener(v -> callback.onSuccess(null))
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
@@ -92,10 +97,12 @@ public class AuthRepository {
     public void updateProfile(String uid, String fullName, String phone, ProfileCallback callback) {
         db.collection(USERS_COLLECTION).document(uid)
                 .update("fullName", fullName, "phone", phone)
-                .addOnSuccessListener(v -> {
-                    User updated = new User(uid, fullName, null, phone);
-                    callback.onSuccess(updated);
-                })
+                .addOnSuccessListener(v -> db.collection(USERS_COLLECTION).document(uid).get()
+                        .addOnSuccessListener(doc -> {
+                            String email = doc.getString("email");
+                            callback.onSuccess(new User(uid, fullName, email, phone));
+                        })
+                        .addOnFailureListener(e -> callback.onError(e.getMessage())))
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 

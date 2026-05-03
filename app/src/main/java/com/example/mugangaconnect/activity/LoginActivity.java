@@ -82,13 +82,15 @@ public class LoginActivity extends AppCompatActivity {
                     authRepo.getProfile(user.getUid(), new AuthRepository.ProfileCallback() {
                         @Override
                         public void onSuccess(com.example.mugangaconnect.data.model.User profile) {
-                            session.saveSession(user.getUid(), profile.getFullName(), profile.getEmail(),
+                            String profileEmail = profile.getEmail() != null ? profile.getEmail() : email;
+                            session.saveSession(user.getUid(), profile.getFullName(), profileEmail,
                                     profile.getPhone() != null ? profile.getPhone() : "");
                             goToDashboard();
                         }
                         @Override
                         public void onError(String message) {
-                            session.saveSession(user.getUid(), "", email, "");
+                            String authoritativeEmail = user.getEmail() != null ? user.getEmail() : email;
+                            session.saveSession(user.getUid(), "", authoritativeEmail, "");
                             goToDashboard();
                         }
                     });

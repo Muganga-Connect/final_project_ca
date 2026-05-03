@@ -107,6 +107,15 @@ public class AiAssistantFragment extends Fragment implements ImagePickerUtils.Im
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        chatRepo = null;
+        session = null;
+        imageUploadUtils = null;
+        pendingImageCallback = null;
+    }
+
     private void sendMessage(String text) {
         addUserMessageBubble(text);
         String patientId = session.getUid();

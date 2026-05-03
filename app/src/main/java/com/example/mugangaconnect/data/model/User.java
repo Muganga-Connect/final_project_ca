@@ -45,4 +45,9 @@ public class User {
     public void setInsuranceId(String insuranceId) { this.insuranceId = insuranceId; }
     public void setAllergies(String allergies) { this.allergies = allergies; }
     public void setEmergencyContact(String emergencyContact) { this.emergencyContact = emergencyContact; }
+
+    @Override
+    public String toString() {
+        return "User{uid='" + uid + "', fullName='" + (fullName == null ? "" : fullName) + "'}";
+    }
 }

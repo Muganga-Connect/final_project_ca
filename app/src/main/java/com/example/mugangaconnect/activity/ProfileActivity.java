@@ -92,7 +92,13 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
         if (tvName != null && name != null && !name.isEmpty()) tvName.setText(name);
 
         TextView tvId = findViewById(R.id.patientId);
-        if (tvId != null && uid != null) tvId.setText("PN-" + uid.substring(0, 6).toUpperCase());
+        if (tvId != null) {
+            String safeUidPart = "";
+            if (uid != null && !uid.isEmpty()) {
+                safeUidPart = uid.substring(0, Math.min(uid.length(), 6)).toUpperCase();
+            }
+            tvId.setText(safeUidPart.isEmpty() ? "PN-N/A" : "PN-" + safeUidPart);
+        }
 
         // Load extra fields from Firestore
         if (uid != null) {
@@ -101,7 +107,8 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
                 public void onSuccess(com.example.mugangaconnect.data.model.User user) {
                     runOnUiThread(() -> {
                         if (tvName != null && user.getFullName() != null) tvName.setText(user.getFullName());
-                        session.saveSession(uid, user.getFullName(), user.getEmail(),
+                        String email = user.getEmail() != null ? user.getEmail() : session.getEmail();
+                        session.saveSession(uid, user.getFullName(), email,
                                 user.getPhone() != null ? user.getPhone() : "");
                     });
                 }
