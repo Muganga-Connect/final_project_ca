@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permissions for image upload -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -21,63 +21,16 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
-        android:theme="@style/Theme.Appointment_Schedule">
-        
-        <!-- Splash Screen - Launcher Activity -->
-        <activity
-            android:name=".activity.SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Appointment_Schedule.NoActionBar">
-=======
         android:theme="@style/Theme.Appointment_Schedule"
         android:usesCleartextTraffic="false">
         <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
->>>>>>> main
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        
-        <!-- Main Activities -->
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.SignUpActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.AIAssistantActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.ProfileActivity"
-            android:exported="true" />
-        
-        <!-- Management Activities -->
-        <activity
-            android:name=".activity.AppointmentManagementActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.AppointmentHistoryActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.SecurityPinActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.PersonalInformationActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.NotificationPreferencesActivity"
-            android:exported="true" />
-        
-=======
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />
@@ -116,7 +69,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
->>>>>>> main
     </application>
 
 </manifest>

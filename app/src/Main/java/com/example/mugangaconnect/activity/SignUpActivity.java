@@ -1,97 +1,3 @@
-<<<<<<< HEAD:app/src/Main/java/com/example/mugangaconnect/activity/SignUpActivity.java
-package com.example.mugangaconnect.activity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.activity.EdgeToEdge;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.mugangaconnect.data.repository.AuthRepository;
-import com.example.mugangaconnect.utils.SessionManager;
-import com.example.mugangaconnect.R;
-import com.example.mugangaconnect.activity.MainActivity;
-import com.example.mugangaconnect.activity.LoginActivity;
-
-import com.google.firebase.FirebaseApp;
-
-public class SignUpActivity extends AppCompatActivity {
-
-    private boolean isPasswordVisible = false;
-    private AuthRepository authRepo;
-    private SessionManager session;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // Initialize Firebase FIRST - before super.onCreate()
-        FirebaseApp.initializeApp(this);
-        
-        super.onCreate(savedInstanceState);
-        
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.signup);
-
-        authRepo = new AuthRepository();
-        session  = new SessionManager(this);
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(R.id.signupRoot), (v, insets) -> {
-                    Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                    v.setPadding(sys.left, sys.top, sys.right, sys.bottom);
-                    return insets;
-                });
-
-        EditText etFullName   = findViewById(R.id.etFullName);
-        EditText etEmail      = findViewById(R.id.etSignUpEmail);
-        EditText etPassword   = findViewById(R.id.etSignUpPassword);
-        ImageView ivPwdToggle = findViewById(R.id.ivPasswordToggle);
-        Button btnSignUp      = findViewById(R.id.btnSignUp);
-        LinearLayout btnBio   = findViewById(R.id.btnBiometric);
-        TextView tvLoginLink  = findViewById(R.id.tvLoginLink);
-        LinearLayout tabLogin = findViewById(R.id.tabLogin);
-        LinearLayout layoutStrength = findViewById(R.id.layoutPasswordStrength);
-        ProgressBar pbStrength      = findViewById(R.id.pbStrength);
-        TextView tvStrengthLabel    = findViewById(R.id.tvStrengthLabel);
-
-        ivPwdToggle.setOnClickListener(v -> {
-            isPasswordVisible = !isPasswordVisible;
-            etPassword.setTransformationMethod(isPasswordVisible
-                    ? HideReturnsTransformationMethod.getInstance()
-                    : PasswordTransformationMethod.getInstance());
-            etPassword.setSelection(etPassword.getText().length());
-        });
-
-        etPassword.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    layoutStrength.setVisibility(View.VISIBLE);
-                    updateStrengthIndicator(s.toString(), pbStrength, tvStrengthLabel);
-                } else {
-                    layoutStrength.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        btnSignUp.setOnClickListener(v -> {
-=======
 package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
@@ -177,7 +83,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         btnSignUp.setOnClickListener(v -> {
->>>>>>> main:app/src/main/java/com/example/mugangaconnect/activity/SignUpActivity.java
             String fullName = etFullName.getText().toString().trim();
             String email    = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString();

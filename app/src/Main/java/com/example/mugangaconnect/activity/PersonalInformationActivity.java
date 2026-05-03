@@ -1,10 +1,5 @@
-<<<<<<< HEAD:app/src/Main/java/com/example/mugangaconnect/activity/PersonalInformationActivity.java
 package com.example.mugangaconnect.activity;
 
-=======
-package com.example.mugangaconnect.activity;
-
->>>>>>> main:app/src/main/java/com/example/mugangaconnect/activity/PersonalInformationActivity.java
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
@@ -15,37 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-<<<<<<< HEAD:app/src/Main/java/com/example/mugangaconnect/activity/PersonalInformationActivity.java
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.example.mugangaconnect.R;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.regex.Pattern;
-
-public class PersonalInformationActivity extends AppCompatActivity {
-
-    // Request Codes
-    private static final int REQ_CAMERA = 101;
-    private static final int REQ_GALLERY = 102;
-=======
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -81,7 +45,6 @@ import java.util.regex.Pattern;
 public class PersonalInformationActivity extends AppCompatActivity {
 
     // Request Codes
->>>>>>> main:app/src/main/java/com/example/mugangaconnect/activity/PersonalInformationActivity.java
     private static final int PERM_CAMERA = 201;
     private static final int PERM_STORAGE = 202;
     private static final int PERM_MEDIA = 203;
@@ -92,18 +55,15 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private TextView tvDisplayName;
 
-    // Form Fields (using the included layout pattern)
     private View fieldName, fieldEmail, fieldPhone, fieldDob, fieldInsurance, fieldAllergies, fieldEmergency;
     private TextInputEditText etName, etEmail, etPhone, etDob, etInsurance, etAllergies, etEmergency;
     private ImageButton btnEditName, btnEditEmail, btnEditPhone, btnEditDob, btnEditInsurance, btnEditAllergies, btnEditEmergency;
     private TextView tvErrorName, tvErrorEmail, tvErrorPhone, tvErrorDob, tvErrorInsurance, tvErrorAllergies, tvErrorEmergency;
 
-    // Spinners
     private Spinner spinnerGender, spinnerBlood;
     private ImageButton btnEditGender, btnEditBlood;
     private TextView tvErrorGender, tvErrorBlood;
 
-    // State
     private boolean isModified = false;
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "MugangaConnectPrefs";
@@ -154,7 +114,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save_changes);
         tvDisplayName = findViewById(R.id.tv_display_name);
 
-        // Map fields from included layouts
         fieldName = findViewById(R.id.field_full_name);
         fieldEmail = findViewById(R.id.field_email);
         fieldPhone = findViewById(R.id.field_phone);
@@ -209,11 +168,10 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void setupFields() {
-        // Set specific input types
         etName.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         etEmail.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         etPhone.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
-        etDob.setFocusable(false); // Date picker only
+        etDob.setFocusable(false);
         etDob.setClickable(false);
         etInsurance.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
         etAllergies.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
@@ -322,10 +280,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
 
-        // Profile Photo Edit
         btnEditPhoto.setOnClickListener(v -> showPhotoOptions());
 
-        // Enable editing listeners
         btnEditName.setOnClickListener(v -> enableEditing(etName));
         btnEditEmail.setOnClickListener(v -> enableEditing(etEmail));
         btnEditPhone.setOnClickListener(v -> enableEditing(etPhone));
@@ -345,16 +301,10 @@ public class PersonalInformationActivity extends AppCompatActivity {
             markModified();
         });
 
-        // Modification trackers
         TextWatcher modificationWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                markModified();
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { markModified(); }
+            @Override public void afterTextChanged(Editable s) {}
         };
 
         etName.addTextChangedListener(modificationWatcher);
@@ -399,7 +349,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void showPhotoOptions() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.layout_photo_bottom_sheet, null);
-        
+
         view.findViewById(R.id.btn_take_photo).setOnClickListener(v -> {
             checkCameraPermission();
             bottomSheetDialog.dismiss();
@@ -447,7 +397,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void validateAndSave() {
         boolean isValid = true;
 
-        // Reset errors
         tvErrorName.setVisibility(View.GONE);
         tvErrorEmail.setVisibility(View.GONE);
         tvErrorPhone.setVisibility(View.GONE);
@@ -550,7 +499,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
         tvDisplayName.setText(fullName);
         Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
 
-        // Sync full personal information to Firestore
         String uid = session.getUid();
         if (uid != null) {
             User userLocal = new User(uid, fullName, email, phone);
@@ -596,7 +544,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
             });
         }
 
-        // Lock fields again
         lockFields();
         isModified = false;
         btnSave.setEnabled(false);

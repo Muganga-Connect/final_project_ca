@@ -1,32 +1,3 @@
-<<<<<<< HEAD:app/src/Main/java/com/example/mugangaconnect/activity/AppointmentHistoryActivity.java
-package com.example.mugangaconnect.activity;
-
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.mugangaconnect.data.model.Appointment;
-import com.example.mugangaconnect.data.repository.AppointmentRepository;
-import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
-import com.example.mugangaconnect.utils.SessionManager;
-import com.example.mugangaconnect.R;
-import com.google.android.material.card.MaterialCardView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class AppointmentHistoryActivity extends AppCompatActivity
-        implements AppointmentAdapter.OnAppointmentActionListener {
-
-    private AppointmentRepository appointmentRepo;
-    private SessionManager session;
-    private AppointmentAdapter adapter;
-    private final List<Appointment> appointments = new ArrayList<>();
-=======
 package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
@@ -53,7 +24,6 @@ public class AppointmentHistoryActivity extends AppCompatActivity
     private SessionManager session;
     private AppointmentAdapter adapter;
     private final List<Appointment> appointments = new ArrayList<>();
->>>>>>> main:app/src/main/java/com/example/mugangaconnect/activity/AppointmentHistoryActivity.java
     private String activeStatus = Appointment.Status.ATTENDED.name();
 
     @Override

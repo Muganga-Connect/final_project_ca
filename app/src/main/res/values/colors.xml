@@ -1,37 +1,3 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background">#F0F7FF</color>
-    <color name="primary_blue">#2176FF</color>
-    <color name="blue_primary">#1976D2</color>
-    <color name="primary_dark">#102027</color>
-    <color name="primary_white">#FFFFFF</color> <!-- Dark for visibility -->
-    <color name="text_secondary">#455A64</color> <!-- Darker secondary text -->
-    <color name="card_bg">#FFFFFF</color>
-    <color name="accent_blue_light">#DDF2FF</color>
-    <color name="success_green">#1B5E20</color> <!-- Darker green for visibility -->
-    <color name="success_green_light">#E3F5E9</color>
-    <color name="warning_orange">#BF360C</color> <!-- Darker orange for visibility -->
-    <color name="warning_orange_light">#FFF3E0</color>
-    <color name="error_red">#B71C1C</color> <!-- Darker red for visibility -->
-    <color name="error_red_light">#FFEBEB</color>
-    <color name="tab_bg">#E8F2FF</color>
-    
-    <!-- Missing master palette colors -->
-    <color name="blue_field_bg">#E3F2FD</color>
-    <color name="tab_selected_bg">#E3F2FD</color>
-    <color name="tab_unselected_bg">#F5F7FA</color>
-    <color name="text_hint">#757575</color>
-    <color name="splash_accent_orange">#FF9800</color>
-    <color name="bg_light">#F5F7FA</color>
-    <color name="text_dark">#212121</color>
-    
-    <!-- Additional missing colors -->
-    <color name="black">#000000</color>
-    <color name="splash_background">#FFFFFF</color>
-</resources>
-=======
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
@@ -62,4 +28,3 @@
     <color name="tab_unselected_bg">#E8F2FF</color>
     <color name="text_hint">#888888</color>
 </resources>
->>>>>>> main
