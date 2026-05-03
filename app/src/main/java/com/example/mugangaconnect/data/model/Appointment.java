@@ -1,5 +1,7 @@
 package com.example.mugangaconnect.data.model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class Appointment {
     public enum Status { UPCOMING, ATTENDED, MISSED, CANCELLED, RESCHEDULED }
     public enum RiskLevel { LOW, MEDIUM, HIGH }
@@ -57,7 +59,10 @@ public class Appointment {
     public void setReason(String reason) { this.reason = reason; }
     public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
 
+    @Exclude
     public String getStatusValue() { return status == null ? null : status.name(); }
+
+    @Exclude
     public String getRiskLevelValue() { return riskLevel == null ? null : riskLevel.name(); }
 
     public static Status statusFromString(String value) {
