@@ -10,6 +10,14 @@
     <style name="Theme.Appointment_Schedule" parent="Base.Theme.Appointment_Schedule" />
 
     <style name="CircleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="MugangaActionButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
         <item name="cornerSize">50%</item>
     </style>
 </resources>

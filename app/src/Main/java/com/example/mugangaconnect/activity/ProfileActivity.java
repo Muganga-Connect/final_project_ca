@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.activity.SecurityPinActivity;
+import com.example.mugangaconnect.activity.LoginActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 

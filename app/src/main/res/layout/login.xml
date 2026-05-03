@@ -221,7 +221,8 @@
                             android:inputType="textPassword"
                             android:singleLine="true"/>
                         <ImageView
-                            android:id="@+id/ivPasswordToggle"
+                android:id="@+id/ivPasswordToggle"
+                android:contentDescription="@string/toggle_password_visibility"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_eye"

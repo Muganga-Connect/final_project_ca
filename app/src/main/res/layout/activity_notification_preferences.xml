@@ -21,7 +21,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notification Preferences"
+            android:text="@string/notification_preferences"
             android:textColor="#1A1A2E"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -81,7 +81,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Enable All"
+                        android:text="@string/enable_all"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -103,7 +103,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.05"
-                android:text="REMINDERS"
+                android:text="@string/reminders"
                 android:textColor="#1A237E"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -133,7 +133,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Appointment Reminders"
+                        android:text="@string/appointment_reminders"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -172,7 +172,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="SMS Notifications"
+                        android:text="@string/sms_notifications"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -211,7 +211,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Push Notifications"
+                        android:text="@string/push_notifications"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -233,7 +233,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.05"
-                android:text="REMINDER TIMING"
+                android:text="@string/reminder_timing"
                 android:textColor="#1A237E"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -263,7 +263,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1 Day Before"
+                        android:text="@string/one_day_before"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -302,7 +302,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="2 Hours Before"
+                        android:text="@string/two_hours_before"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -341,7 +341,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="30 Minutes Before"
+                        android:text="@string/thirty_minutes_before"
                         android:textColor="#1A1A2E"
                         android:textSize="16sp" />
 
@@ -365,7 +365,7 @@
         android:layout_height="52dp"
         android:layout_margin="16dp"
         android:backgroundTint="#1565C0"
-        android:text="Save Preferences"
+        android:text="@string/save_preferences"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="16sp"

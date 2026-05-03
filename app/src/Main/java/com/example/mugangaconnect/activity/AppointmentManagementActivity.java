@@ -1,6 +1,10 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+
+import com.example.mugangaconnect.R;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
+import com.example.mugangaconnect.data.repository.DoctorRepository;
 import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
 import com.example.mugangaconnect.ui.adapter.DoctorAdapter;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.example.mugangaconnect.activity.BottomNavHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                    DoctorAdapter.OnDoctorSelectedListener {
 
     private AppointmentRepository appointmentRepo;
+    private DoctorRepository doctorRepo;
     private SessionManager session;
 
     private AppointmentAdapter appointmentAdapter;
@@ -33,6 +40,8 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private String selectedDepartment = "Cardiology";
     private Doctor selectedDoctor;
+    private String selectedDate;
+    private String selectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         session         = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        doctorRepo      = new DoctorRepository();
 
         setupDoctorList();
         setupAppointmentList();
@@ -86,19 +96,54 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private void setupButtons() {
         if (findViewById(R.id.btn_select_session) != null)
-            findViewById(R.id.btn_select_session).setOnClickListener(v ->
-                    Toast.makeText(this, "Select a session time", Toast.LENGTH_SHORT).show());
+            findViewById(R.id.btn_select_session).setOnClickListener(v -> showDatePicker());
 
         if (findViewById(R.id.btn_book_appointment) != null)
             findViewById(R.id.btn_book_appointment).setOnClickListener(v -> bookAppointment());
     }
 
+    private void showDatePicker() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    // Format date as YYYY-MM-DD
+                    selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    showTimePicker();
+                },
+                2025, 8, 1 // Default date: August 1, 2025
+        );
+        datePickerDialog.show();
+    }
+
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view, hourOfDay, minute) -> {
+                    // Format time as HH:MM
+                    selectedTime = String.format("%02d:%02d", hourOfDay, minute);
+                    Toast.makeText(this, "Selected: " + selectedDate + " " + selectedTime, Toast.LENGTH_SHORT).show();
+                },
+                9, 0, false // Default time: 09:00, 24-hour format
+        );
+        timePickerDialog.show();
+    }
+
     private void loadDoctors() {
-        // Seed static doctors per department — replace with Firestore fetch when available
-        doctors.clear();
-        doctors.add(new Doctor("d1", "Dr. Mugisha Eric", "Cardiologist", selectedDepartment, "Mon-Fri 08:00-17:00"));
-        doctors.add(new Doctor("d2", "Dr. Uwase Claire", "Specialist", selectedDepartment, "Mon-Wed 09:00-15:00"));
-        if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+        doctorRepo.getByDepartment(selectedDepartment, new DoctorRepository.Callback<List<Doctor>>() {
+            @Override
+            public void onResult(List<Doctor> data) {
+                runOnUiThread(() -> {
+                    doctors.clear();
+                    doctors.addAll(data);
+                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+                });
+            }
+            
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void loadAppointments() {
@@ -125,12 +170,23 @@ public class AppointmentManagementActivity extends AppCompatActivity
             Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show();
             return;
         }
+        
+        if (selectedDate == null || selectedDate.trim().isEmpty()) {
+            Toast.makeText(this, "Please select a date first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        if (selectedTime == null || selectedTime.trim().isEmpty()) {
+            Toast.makeText(this, "Please select a time first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
         String uid = session.getUid();
         if (uid == null) return;
 
         Appointment appt = new Appointment(uid, selectedDoctor.getId(),
                 selectedDoctor.getName(), selectedDepartment,
-                "2025-08-01", "09:00");
+                selectedDate, selectedTime);
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override

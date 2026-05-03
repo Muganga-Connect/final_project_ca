@@ -28,6 +28,10 @@ public class Doctor {
     public float getRating() { return rating; }
 
     public void setId(String id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setSpecialty(String specialty) { this.specialty = specialty; }
+    public void setDepartment(String department) { this.department = department; }
+    public void setAvailability(String availability) { this.availability = availability; }
     public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
     public void setRating(float rating) { this.rating = rating; }
 }

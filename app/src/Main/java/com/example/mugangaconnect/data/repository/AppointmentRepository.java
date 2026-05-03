@@ -39,8 +39,10 @@ public class AppointmentRepository {
 
         remote.collection(COLLECTION).document(id).set(appointment)
               .addOnSuccessListener(v -> {
-                  executor.execute(() -> local.upsert(appointment));
-                  callback.onResult(appointment);
+                  executor.execute(() -> {
+                      local.upsert(appointment);
+                      callback.onResult(appointment);
+                  });
               })
               .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
@@ -57,8 +59,10 @@ public class AppointmentRepository {
                       a.setId(doc.getId());
                       list.add(a);
                   }
-                  executor.execute(() -> local.upsertAll(list));
-                  callback.onResult(list);
+                  executor.execute(() -> {
+                      local.upsertAll(list);
+                      callback.onResult(list);
+                  });
               })
               .addOnFailureListener(e -> {
                   // Fallback to local cache on network failure
@@ -73,10 +77,21 @@ public class AppointmentRepository {
     public void updateStatus(String appointmentId, String patientId,
                              String newStatus, Callback<Void> callback) {
         remote.collection(COLLECTION).document(appointmentId)
-              .update("status", newStatus)
-              .addOnSuccessListener(v -> {
-                  executor.execute(() -> local.updateStatus(appointmentId, newStatus));
-                  callback.onResult(null);
+              .get()
+              .addOnSuccessListener(snapshot -> {
+                  Appointment appointment = snapshot.toObject(Appointment.class);
+                  if (appointment == null || appointment.getPatientId() == null ||
+                          !appointment.getPatientId().equals(patientId)) {
+                      callback.onError("Unauthorized");
+                      return;
+                  }
+                  remote.collection(COLLECTION).document(appointmentId)
+                          .update("status", newStatus)
+                          .addOnSuccessListener(v -> executor.execute(() -> {
+                              local.updateStatus(appointmentId, newStatus);
+                              callback.onResult(null);
+                          }))
+                          .addOnFailureListener(e -> callback.onError(e.getMessage()));
               })
               .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
@@ -89,7 +104,8 @@ public class AppointmentRepository {
                       "status", Appointment.Status.UPCOMING.name())
               .addOnSuccessListener(v -> {
                   executor.execute(() -> {
-                      local.updateStatus(appointmentId, Appointment.Status.RESCHEDULED.name());
+                      local.updateDateAndTime(appointmentId, newDate, newTime);
+                      local.updateStatus(appointmentId, Appointment.Status.UPCOMING.name());
                   });
                   callback.onResult(null);
               })
