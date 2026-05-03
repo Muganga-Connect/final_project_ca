@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Profile Picture"
+        android:text="@string/photo_bottom_sheet_title"
         android:textColor="#1A1A2E"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Choose from where you want to upload"
+        android:text="@string/photo_bottom_sheet_subtitle"
         android:textColor="#888888"
         android:textSize="14sp" />
 
@@ -42,11 +42,12 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="📷"
-            android:textSize="24sp" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/photo_option_take_photo"
+            android:src="@drawable/ic_camera"
+            app:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -58,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Take Photo"
+                android:text="@string/photo_option_take_photo"
                 android:textColor="#1A1A2E"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -66,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Use your device camera"
+                android:text="@string/photo_option_take_photo_desc"
                 android:textColor="#888888"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -85,11 +86,12 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🖼️"
-            android:textSize="24sp" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/photo_option_gallery"
+            android:src="@drawable/ic_photo_gallery"
+            app:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -101,7 +103,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose from Gallery"
+                android:text="@string/photo_option_gallery"
                 android:textColor="#1A1A2E"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -109,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select from existing photos"
+                android:text="@string/photo_option_gallery_desc"
                 android:textColor="#888888"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -121,7 +123,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginTop="8dp"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textAllCaps="false"
         android:textColor="#1565C0"
         android:textSize="16sp" />

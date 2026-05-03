@@ -2,13 +2,12 @@ package com.example.mugangaconnect.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -20,7 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -45,10 +45,9 @@ import java.util.regex.Pattern;
 public class PersonalInformationActivity extends AppCompatActivity {
 
     // Request Codes
-    private static final int REQ_CAMERA = 101;
-    private static final int REQ_GALLERY = 102;
     private static final int PERM_CAMERA = 201;
     private static final int PERM_STORAGE = 202;
+    private static final int PERM_MEDIA = 203;
 
     // UI Components
     private ImageView imgProfile;
@@ -74,6 +73,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private AuthRepository authRepo;
     private SessionManager session;
     private UserDao userDao;
+    private ActivityResultLauncher<Void> cameraLauncher;
+    private ActivityResultLauncher<String> galleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +86,28 @@ public class PersonalInformationActivity extends AppCompatActivity {
         session  = new SessionManager(this);
         userDao = new UserDao(AppDatabase.getInstance(this));
 
+        registerPhotoLaunchers();
+
         initViews();
         setupFields();
         setupSpinners();
         loadSavedData();
         setupListeners();
+    }
+
+    private void registerPhotoLaunchers() {
+        cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), bitmap -> {
+            if (bitmap != null) {
+                imgProfile.setImageBitmap(bitmap);
+                markModified();
+            }
+        });
+        galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            if (uri != null) {
+                imgProfile.setImageURI(uri);
+                markModified();
+            }
+        });
     }
 
     private void initViews() {
@@ -370,37 +388,23 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_STORAGE);
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_IMAGES
+                : Manifest.permission.READ_EXTERNAL_STORAGE;
+        int requestCode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? PERM_MEDIA : PERM_STORAGE;
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
         } else {
             openGallery();
         }
     }
 
     private void openCamera() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, REQ_CAMERA);
+        cameraLauncher.launch(null);
     }
 
     private void openGallery() {
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto, REQ_GALLERY);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == REQ_CAMERA) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                imgProfile.setImageBitmap(image);
-                markModified();
-            } else if (requestCode == REQ_GALLERY) {
-                Uri selectedImage = data.getData();
-                imgProfile.setImageURI(selectedImage);
-                markModified();
-            }
-        }
+        galleryLauncher.launch("image/*");
     }
 
     private void validateAndSave() {
@@ -444,6 +448,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         }
 
         if (dob.isEmpty()) {
+            tvErrorDob.setText("Date of birth is required");
             tvErrorDob.setVisibility(View.VISIBLE);
             isValid = false;
         }
@@ -534,7 +539,16 @@ public class PersonalInformationActivity extends AppCompatActivity {
             authRepo.updatePersonalInformation(uid, personalInfo, new AuthRepository.SimpleCallback() {
                 @Override
                 public void onSuccess() {
-                    session.saveSession(uid, fullName, email, phone);
+                    authRepo.updateProfile(uid, fullName, phone,
+                            new AuthRepository.ProfileCallback() {
+                                @Override public void onSuccess(com.example.mugangaconnect.data.model.User u) {
+                                    session.saveSession(uid, fullName, email, phone);
+                                }
+                                @Override public void onError(String message) {
+                                    runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this,
+                                            "Saved locally, profile sync failed: " + message, Toast.LENGTH_LONG).show());
+                                }
+                            });
                 }
 
                 @Override
@@ -543,14 +557,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
                             "Saved locally, cloud sync failed: " + message, Toast.LENGTH_LONG).show());
                 }
             });
-
-            authRepo.updateProfile(uid, fullName, phone,
-                    new AuthRepository.ProfileCallback() {
-                        @Override public void onSuccess(com.example.mugangaconnect.data.model.User u) {
-                            session.saveSession(uid, fullName, email, phone);
-                        }
-                        @Override public void onError(String message) {}
-                    });
         }
 
         // Lock fields again
@@ -575,7 +581,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (requestCode == PERM_CAMERA) openCamera();
-            if (requestCode == PERM_STORAGE) openGallery();
+            if (requestCode == PERM_STORAGE || requestCode == PERM_MEDIA) openGallery();
         } else {
             Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }

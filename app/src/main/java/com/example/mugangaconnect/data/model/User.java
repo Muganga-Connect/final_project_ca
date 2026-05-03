@@ -3,15 +3,15 @@ package com.example.mugangaconnect.data.model;
 public class User {
     private String uid;
     private String fullName;
-    private String email;
-    private String phone;
+    private transient String email;
+    private transient String phone;
     private String fcmToken;
-    private String dob;
+    private transient String dob;
     private String gender;
-    private String bloodType;
-    private String insuranceId;
-    private String allergies;
-    private String emergencyContact;
+    private transient String bloodType;
+    private transient String insuranceId;
+    private transient String allergies;
+    private transient String emergencyContact;
 
     public User() {}
 
@@ -45,4 +45,9 @@ public class User {
     public void setInsuranceId(String insuranceId) { this.insuranceId = insuranceId; }
     public void setAllergies(String allergies) { this.allergies = allergies; }
     public void setEmergencyContact(String emergencyContact) { this.emergencyContact = emergencyContact; }
+
+    @Override
+    public String toString() {
+        return "User{uid='" + uid + "', fullName='" + (fullName == null ? "" : fullName) + "'}";
+    }
 }

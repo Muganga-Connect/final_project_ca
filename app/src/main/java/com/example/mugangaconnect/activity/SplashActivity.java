@@ -9,6 +9,16 @@ import com.example.mugangaconnect.R;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private final Handler splashHandler = new Handler(Looper.getMainLooper());
+    private final Runnable navigationRunnable = () -> {
+        com.example.mugangaconnect.data.repository.AuthRepository auth =
+                new com.example.mugangaconnect.data.repository.AuthRepository();
+        Class<?> dest = auth.isLoggedIn()
+                ? MainActivity.class : LoginActivity.class;
+        startActivity(new Intent(SplashActivity.this, dest));
+        finish();
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,16 +26,12 @@ public class SplashActivity extends AppCompatActivity {
         // Connects to your activity_splash.xml layout
         setContentView(R.layout.activity_splash);
 
-        // 3-second delay timer
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            com.example.mugangaconnect.utils.SessionManager session =
-                    new com.example.mugangaconnect.utils.SessionManager(SplashActivity.this);
-            com.example.mugangaconnect.data.repository.AuthRepository auth =
-                    new com.example.mugangaconnect.data.repository.AuthRepository();
-            Class<?> dest = (session.isLoggedIn() && auth.isLoggedIn())
-                    ? MainActivity.class : LoginActivity.class;
-            startActivity(new Intent(SplashActivity.this, dest));
-            finish();
-        }, 3000);
+        splashHandler.postDelayed(navigationRunnable, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        splashHandler.removeCallbacks(navigationRunnable);
+        super.onDestroy();
     }
 }

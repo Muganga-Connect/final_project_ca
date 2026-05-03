@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,22 +35,13 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     @Override
     public AppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_appointment, parent, false);
-        return new AppointmentViewHolder(view);
+        return new AppointmentViewHolder(view, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position) {
         Appointment appointment = appointmentList.get(position);
-        holder.txtDoctorName.setText(appointment.getDoctorName());
-        holder.txtSpecialty.setText(appointment.getDepartment());
-        holder.txtStatus.setText(appointment.getStatus());
-        holder.txtDateTime.setText(appointment.getDate() + " at " + appointment.getTime());
-
-        boolean isCancelled = "CANCELLED".equals(appointment.getStatus());
-        holder.layoutActions.setVisibility(isCancelled ? View.GONE : View.VISIBLE);
-
-        holder.btnReschedule.setOnClickListener(v -> listener.onReschedule(appointment));
-        holder.btnCancel.setOnClickListener(v -> listener.onCancel(appointment));
+        holder.bind(appointment);
     }
 
     @Override
@@ -62,8 +54,9 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         ImageView imgDoctor;
         MaterialButton btnReschedule, btnCancel;
         View layoutActions;
+        private Appointment currentAppointment;
 
-        AppointmentViewHolder(@NonNull View itemView) {
+        AppointmentViewHolder(@NonNull View itemView, OnAppointmentActionListener listener) {
             super(itemView);
             txtDoctorName = itemView.findViewById(R.id.txt_doctor_name);
             txtSpecialty  = itemView.findViewById(R.id.txt_specialty);
@@ -73,6 +66,34 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             btnReschedule = itemView.findViewById(R.id.btn_reschedule);
             btnCancel     = itemView.findViewById(R.id.btn_cancel);
             layoutActions = itemView.findViewById(R.id.layout_actions);
+            btnReschedule.setOnClickListener(v -> {
+                if (listener != null && currentAppointment != null) listener.onReschedule(currentAppointment);
+            });
+            btnCancel.setOnClickListener(v -> {
+                if (listener != null && currentAppointment != null) listener.onCancel(currentAppointment);
+            });
+        }
+
+        void bind(Appointment appointment) {
+            currentAppointment = appointment;
+            txtDoctorName.setText(safeText(appointment.getDoctorName()));
+            txtSpecialty.setText(safeText(appointment.getDepartment()));
+            txtStatus.setText(safeText(appointment.getStatusValue()));
+            txtDateTime.setText(formatDateTime(appointment.getDate(), appointment.getTime()));
+
+            boolean isCancelled = Appointment.Status.CANCELLED.equals(appointment.getStatus());
+            layoutActions.setVisibility(isCancelled ? View.GONE : View.VISIBLE);
+        }
+
+        private String safeText(String value) {
+            return TextUtils.isEmpty(value) ? "N/A" : value;
+        }
+
+        private String formatDateTime(String date, String time) {
+            if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) return "N/A";
+            if (TextUtils.isEmpty(date)) return time;
+            if (TextUtils.isEmpty(time)) return date;
+            return date + " at " + time;
         }
     }
 }

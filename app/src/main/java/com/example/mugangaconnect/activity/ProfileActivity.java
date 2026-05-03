@@ -1,8 +1,10 @@
 package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,14 +16,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.ImagePickerUtils;
+import com.example.mugangaconnect.utils.ImageUploadUtils;
 import com.example.mugangaconnect.utils.SessionManager;
 
-public class ProfileActivity extends AppCompatActivity {
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+public class ProfileActivity extends AppCompatActivity implements ImagePickerUtils.ImagePickerResultHandler {
 
     private AuthRepository authRepo;
     private SessionManager session;
+    private ImageView profilePicture;
+    private ImageUploadUtils imageUploadUtils;
+    private ImagePickerUtils.ImagePickerCallback pendingImageCallback;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +43,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         authRepo = new AuthRepository();
         session = new SessionManager(this);
+        imageUploadUtils = new ImageUploadUtils(this);
+        firestore = FirebaseFirestore.getInstance();
+
+        profilePicture = findViewById(R.id.profileImage);
+        profilePicture.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 2);
+        });
 
         View root = findViewById(R.id.main);
         View scroll = findViewById(R.id.profileScroll);
@@ -71,7 +92,13 @@ public class ProfileActivity extends AppCompatActivity {
         if (tvName != null && name != null && !name.isEmpty()) tvName.setText(name);
 
         TextView tvId = findViewById(R.id.patientId);
-        if (tvId != null && uid != null) tvId.setText("PN-" + uid.substring(0, 6).toUpperCase());
+        if (tvId != null) {
+            String safeUidPart = "";
+            if (uid != null && !uid.isEmpty()) {
+                safeUidPart = uid.substring(0, Math.min(uid.length(), 6)).toUpperCase();
+            }
+            tvId.setText(safeUidPart.isEmpty() ? "PN-N/A" : "PN-" + safeUidPart);
+        }
 
         // Load extra fields from Firestore
         if (uid != null) {
@@ -80,13 +107,57 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onSuccess(com.example.mugangaconnect.data.model.User user) {
                     runOnUiThread(() -> {
                         if (tvName != null && user.getFullName() != null) tvName.setText(user.getFullName());
-                        session.saveSession(uid, user.getFullName(), user.getEmail(),
+                        String email = user.getEmail() != null ? user.getEmail() : session.getEmail();
+                        session.saveSession(uid, user.getFullName(), email,
                                 user.getPhone() != null ? user.getPhone() : "");
                     });
                 }
                 @Override public void onError(String message) {}
             });
+            
+            // Load profile image
+            loadProfileImage(uid);
         }
+    }
+
+    private void loadProfileImage(String uid) {
+        // First try to load from user's main document (most reliable)
+        firestore.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("profilePicture");
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(ProfileActivity.this).load(profileImageUrl).into(profilePicture);
+                        } else {
+                            // Fallback to user_images collection
+                            loadProfileImageFromUserImages(uid);
+                        }
+                    } else {
+                        // Fallback to user_images collection
+                        loadProfileImageFromUserImages(uid);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Fallback to user_images collection on error
+                    loadProfileImageFromUserImages(uid);
+                });
+    }
+    
+    private void loadProfileImageFromUserImages(String uid) {
+        firestore.collection("user_images")
+                .whereEqualTo("userId", uid)
+                .whereEqualTo("folder", "profile_images")
+                .orderBy("uploadedAt", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        String imageUrl = task.getResult().getDocuments().get(0).getString("imageUrl");
+                        if (imageUrl != null) {
+                            Glide.with(ProfileActivity.this).load(imageUrl).into(profilePicture);
+                        }
+                    }
+                });
     }
 
     private void setupAccountSettings() {
@@ -136,5 +207,44 @@ public class ProfileActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void uploadProfileImage(Uri imageUri) {
+        imageUploadUtils.uploadProfileImage(imageUri, new ImageUploadUtils.UploadCallback() {
+            @Override
+            public void onSuccess(String imageUrl) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ProfileActivity.this, "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
+                    Glide.with(ProfileActivity.this).load(imageUrl).into(profilePicture);
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ProfileActivity.this, "Upload failed: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    @Override
+    public void setPendingImageCallback(ImagePickerUtils.ImagePickerCallback callback) {
+        this.pendingImageCallback = callback;
+    }
+
+    @Override
+    public ImagePickerUtils.ImagePickerCallback getPendingImageCallback() {
+        return pendingImageCallback;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == 2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            uploadProfileImage(imageUri);
+        }
     }
 }

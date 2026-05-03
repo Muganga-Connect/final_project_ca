@@ -33,6 +33,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@android:drawable/ic_menu_compass"
+                    android:contentDescription="@string/heart_rate_icon_description"
                     app:tint="#E95C5C" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,6 +60,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@android:drawable/ic_menu_my_calendar"
+                    android:contentDescription="@string/calendar_icon_description"
                     app:tint="#F39C12" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,6 +87,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@android:drawable/ic_menu_info_details"
+                    android:contentDescription="@string/care_status"
                     app:tint="#2ECC71" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,6 +129,7 @@
                     android:layout_height="match_parent"
                     android:padding="16dp"
                     android:src="@android:drawable/ic_menu_info_details"
+                    android:contentDescription="@string/ai_avatar_description"
                     app:tint="#0C4DA1" />
             </androidx.cardview.widget.CardView>
 
@@ -324,6 +328,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_add"
+                android:contentDescription="@string/add_attachment"
                 app:tint="#7E8A96" />
 
             <EditText
@@ -334,9 +339,20 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="Type your message..."
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:textColor="#112236"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/uploadButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/upload_button_description"
+                app:tint="#7E8A96"
+                android:clickable="true"
+                android:focusable="true" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/sendButtonContainer"
@@ -351,6 +367,7 @@
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     android:src="@android:drawable/ic_menu_send"
+                    android:contentDescription="@string/send_button_description"
                     app:tint="#FFFFFF"
                     android:clickable="true"
                     android:focusable="true" />

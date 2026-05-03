@@ -30,7 +30,7 @@ public class DoctorRepository {
               }
               callback.onResult(list);
           })
-          .addOnFailureListener(e -> callback.onError(e.getMessage()));
+          .addOnFailureListener(e -> callback.onError(safeMessage(e)));
     }
 
     public void getAll(Callback<List<Doctor>> callback) {
@@ -44,6 +44,10 @@ public class DoctorRepository {
               }
               callback.onResult(list);
           })
-          .addOnFailureListener(e -> callback.onError(e.getMessage()));
+          .addOnFailureListener(e -> callback.onError(safeMessage(e)));
+    }
+
+    private String safeMessage(Exception e) {
+        return e.getMessage() != null ? e.getMessage() : "Unknown error";
     }
 }

@@ -3,17 +3,21 @@ package com.example.mugangaconnect.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.utils.NoShowPredictor;
 import com.example.mugangaconnect.utils.SessionManager;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -21,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SessionManager session;
     private AppointmentRepository appointmentRepo;
+    private FirebaseFirestore firestore;
+    private ImageView dashboardProfileImage;
     private TextView tvWelcomeName;
     private TextView tvSmartAlertBody;
     private TextView tvUpcomingDoctor;
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         session = new SessionManager(this);
         appointmentRepo = new AppointmentRepository(this);
+        firestore = FirebaseFirestore.getInstance();
         bindViews();
 
         bindUserName();
@@ -48,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        dashboardProfileImage = findViewById(R.id.dashboardProfileImage);
         tvWelcomeName = findViewById(R.id.tvWelcomeName);
         tvSmartAlertBody = findViewById(R.id.tvSmartAlertBody);
         tvUpcomingDoctor = findViewById(R.id.tvUpcomingDoctor);
@@ -63,6 +71,28 @@ public class MainActivity extends AppCompatActivity {
         if (tvWelcomeName != null && name != null && !name.isEmpty()) {
             tvWelcomeName.setText(name);
         }
+        
+        // Load profile image
+        loadProfileImage();
+    }
+    
+    private void loadProfileImage() {
+        String uid = session.getUid();
+        if (uid == null) return;
+        
+        firestore.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("profilePicture");
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(this).load(profileImageUrl).into(dashboardProfileImage);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Log error but don't show to user
+                    android.util.Log.e("MainActivity", "Error loading profile image", e);
+                });
     }
 
     private void loadDashboardData() {
@@ -75,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 // Find next upcoming appointment
                 Appointment next = null;
                 for (Appointment a : data) {
-                    if (Appointment.Status.UPCOMING.name().equals(a.getStatus())) {
+                    if (Appointment.Status.UPCOMING.equals(a.getStatus())) {
                         if (next == null || a.getDate().compareTo(next.getDate()) < 0) next = a;
                     }
                 }
@@ -99,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         if (upcoming != null) {
             if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText(upcoming.getDoctorName());
             if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
-            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatus());
+            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatusValue());
         } else {
             if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText("No upcoming appointment");
             if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText("Book one from Schedule");
@@ -116,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void wireButtons() {
-        findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
-                startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+        // findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
+        //         startActivity(new Intent(this, AppointmentHistoryActivity.class)));
 
         if (btnReschedule != null) {
             btnReschedule.setOnClickListener(v ->

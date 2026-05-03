@@ -21,6 +21,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@android:drawable/ic_menu_gallery"
+            android:contentDescription="@string/doctor_image"
             app:shapeAppearanceOverlay="@style/CircleImage"
             android:scaleType="centerCrop"
             android:background="@color/white"/>
@@ -36,7 +37,7 @@
                 android:id="@+id/txt_doctor_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dr. Sarah Chen"
+                android:text="@string/doctor_name_placeholder"
                 android:textStyle="bold"
                 android:textColor="@color/primary_dark" />
 
@@ -44,7 +45,7 @@
                 android:id="@+id/txt_doctor_specialty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Neurologist"
+                android:text="@string/doctor_specialty_placeholder"
                 android:textSize="12sp"
                 android:textColor="@color/text_secondary" />
 
@@ -52,8 +53,8 @@
                 android:id="@+id/txt_doctor_availability"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Available Today"
-                android:textSize="10sp"
+                android:text="@string/doctor_availability_placeholder"
+                android:textSize="12sp"
                 android:textColor="@color/primary_blue" />
         </LinearLayout>
 
@@ -62,6 +63,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@android:drawable/checkbox_on_background"
+            android:contentDescription="@string/doctor_selected"
             app:tint="@color/primary_blue"
             android:visibility="gone"/>
 
