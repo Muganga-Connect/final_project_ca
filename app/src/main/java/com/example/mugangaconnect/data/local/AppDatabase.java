@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AppDatabase extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "muganga.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 4;
 
     // Appointments table
     public static final String TABLE_APPOINTMENTS = "appointments";
@@ -22,6 +22,27 @@ public class AppDatabase extends SQLiteOpenHelper {
     public static final String COL_RISK_LEVEL = "risk_level";
     public static final String COL_CREATED_AT = "created_at";
 
+    // Users table
+    public static final String TABLE_USERS = "users";
+    public static final String COL_USER_UID = "uid";
+    public static final String COL_USER_FULL_NAME = "full_name";
+    public static final String COL_USER_EMAIL = "email";
+    public static final String COL_USER_PHONE = "phone";
+    public static final String COL_USER_DOB = "dob";
+    public static final String COL_USER_GENDER = "gender";
+    public static final String COL_USER_BLOOD_TYPE = "blood_type";
+    public static final String COL_USER_INSURANCE_ID = "insurance_id";
+    public static final String COL_USER_ALLERGIES = "allergies";
+    public static final String COL_USER_EMERGENCY_CONTACT = "emergency_contact";
+
+    // Chat messages table
+    public static final String TABLE_CHAT = "chat_messages";
+    public static final String COL_CHAT_ID = "id";
+    public static final String COL_CHAT_PID = "patient_id";
+    public static final String COL_CHAT_ROLE = "role";
+    public static final String COL_CHAT_TEXT = "content";
+    public static final String COL_CHAT_TIME = "timestamp";
+
     private static final String CREATE_APPOINTMENTS =
             "CREATE TABLE " + TABLE_APPOINTMENTS + " (" +
             COL_ID + " TEXT PRIMARY KEY, " +
@@ -33,7 +54,31 @@ public class AppDatabase extends SQLiteOpenHelper {
             COL_TIME + " TEXT, " +
             COL_STATUS + " TEXT DEFAULT 'UPCOMING', " +
             COL_RISK_LEVEL + " TEXT DEFAULT 'LOW', " +
-            COL_CREATED_AT + " INTEGER)";
+            COL_CREATED_AT + " INTEGER, " +
+            "FOREIGN KEY(" + COL_PATIENT_ID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_UID + "), " +
+            "FOREIGN KEY(" + COL_DOCTOR_ID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_UID + "))";
+
+    private static final String CREATE_USERS =
+            "CREATE TABLE " + TABLE_USERS + " (" +
+                    COL_USER_UID + " TEXT PRIMARY KEY, " +
+                    COL_USER_FULL_NAME + " TEXT, " +
+                    COL_USER_EMAIL + " TEXT, " +
+                    COL_USER_PHONE + " TEXT, " +
+                    COL_USER_DOB + " TEXT, " +
+                    COL_USER_GENDER + " TEXT, " +
+                    COL_USER_BLOOD_TYPE + " TEXT, " +
+                    COL_USER_INSURANCE_ID + " TEXT, " +
+                    COL_USER_ALLERGIES + " TEXT, " +
+                    COL_USER_EMERGENCY_CONTACT + " TEXT)";
+
+    private static final String CREATE_CHAT =
+            "CREATE TABLE " + TABLE_CHAT + " (" +
+                    COL_CHAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_CHAT_PID + " TEXT NOT NULL, " +
+                    COL_CHAT_ROLE + " TEXT NOT NULL, " +
+                    COL_CHAT_TEXT + " TEXT NOT NULL, " +
+                    COL_CHAT_TIME + " INTEGER NOT NULL, " +
+                    "FOREIGN KEY(" + COL_CHAT_PID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_UID + "))";
 
     private static AppDatabase instance;
 
@@ -50,12 +95,37 @@ public class AppDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_USERS);
         db.execSQL(CREATE_APPOINTMENTS);
+        db.execSQL(CREATE_CHAT);
+        createIndexes(db);
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_APPOINTMENTS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL(CREATE_CHAT);
+        }
+        if (oldVersion < 3) {
+            db.execSQL(CREATE_USERS);
+        }
+        if (oldVersion < 4) {
+            createIndexes(db);
+        }
+    }
+
+    private void createIndexes(SQLiteDatabase db) {
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_appointments_patient ON " +
+                TABLE_APPOINTMENTS + "(" + COL_PATIENT_ID + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_appointments_doctor ON " +
+                TABLE_APPOINTMENTS + "(" + COL_DOCTOR_ID + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_chat_patient ON " +
+                TABLE_CHAT + "(" + COL_CHAT_PID + ")");
     }
 }

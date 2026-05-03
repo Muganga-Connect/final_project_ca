@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.SessionManager;
 
@@ -81,12 +82,15 @@ public class LoginActivity extends AppCompatActivity {
                     authRepo.getProfile(user.getUid(), new AuthRepository.ProfileCallback() {
                         @Override
                         public void onSuccess(com.example.mugangaconnect.data.model.User profile) {
-                            session.saveSession(user.getUid(), profile.getFullName(), profile.getEmail());
+                            String profileEmail = profile.getEmail() != null ? profile.getEmail() : email;
+                            session.saveSession(user.getUid(), profile.getFullName(), profileEmail,
+                                    profile.getPhone() != null ? profile.getPhone() : "");
                             goToDashboard();
                         }
                         @Override
                         public void onError(String message) {
-                            session.saveSession(user.getUid(), "", email);
+                            String authoritativeEmail = user.getEmail() != null ? user.getEmail() : email;
+                            session.saveSession(user.getUid(), "", authoritativeEmail, "");
                             goToDashboard();
                         }
                     });

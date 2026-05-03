@@ -45,8 +45,11 @@ public class AppointmentDao {
                 AppDatabase.COL_PATIENT_ID + "=?",
                 new String[]{patientId}, null, null,
                 AppDatabase.COL_DATE + " ASC");
-        while (c.moveToNext()) list.add(fromCursor(c));
-        c.close();
+        try {
+            while (c.moveToNext()) list.add(fromCursor(c));
+        } finally {
+            c.close();
+        }
         return list;
     }
 
@@ -57,8 +60,11 @@ public class AppointmentDao {
                 AppDatabase.COL_PATIENT_ID + "=? AND " + AppDatabase.COL_STATUS + "=?",
                 new String[]{patientId, status}, null, null,
                 AppDatabase.COL_DATE + " ASC");
-        while (c.moveToNext()) list.add(fromCursor(c));
-        c.close();
+        try {
+            while (c.moveToNext()) list.add(fromCursor(c));
+        } finally {
+            c.close();
+        }
         return list;
     }
 
@@ -68,9 +74,11 @@ public class AppointmentDao {
                 " WHERE " + AppDatabase.COL_PATIENT_ID + "=? AND " +
                 AppDatabase.COL_STATUS + "='MISSED'",
                 new String[]{patientId});
-        int count = c.moveToFirst() ? c.getInt(0) : 0;
-        c.close();
-        return count;
+        try {
+            return c.moveToFirst() ? c.getInt(0) : 0;
+        } finally {
+            c.close();
+        }
     }
 
     public int countTotal(String patientId) {
@@ -78,9 +86,11 @@ public class AppointmentDao {
                 "SELECT COUNT(*) FROM " + AppDatabase.TABLE_APPOINTMENTS +
                 " WHERE " + AppDatabase.COL_PATIENT_ID + "=?",
                 new String[]{patientId});
-        int count = c.moveToFirst() ? c.getInt(0) : 0;
-        c.close();
-        return count;
+        try {
+            return c.moveToFirst() ? c.getInt(0) : 0;
+        } finally {
+            c.close();
+        }
     }
 
     public void updateStatus(String appointmentId, String status) {
@@ -112,8 +122,8 @@ public class AppointmentDao {
         cv.put(AppDatabase.COL_DEPARTMENT, a.getDepartment());
         cv.put(AppDatabase.COL_DATE, a.getDate());
         cv.put(AppDatabase.COL_TIME, a.getTime());
-        cv.put(AppDatabase.COL_STATUS, a.getStatus());
-        cv.put(AppDatabase.COL_RISK_LEVEL, a.getRiskLevel());
+        cv.put(AppDatabase.COL_STATUS, a.getStatusValue());
+        cv.put(AppDatabase.COL_RISK_LEVEL, a.getRiskLevelValue());
         cv.put(AppDatabase.COL_CREATED_AT, a.getCreatedAt());
         return cv;
     }

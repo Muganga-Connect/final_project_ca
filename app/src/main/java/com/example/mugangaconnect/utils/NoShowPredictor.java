@@ -15,17 +15,21 @@ import com.example.mugangaconnect.data.model.Appointment;
 public class NoShowPredictor {
 
     public static String predict(int missedCount, int totalCount) {
+        if (missedCount < 0 || totalCount < 0 || missedCount > totalCount) {
+            throw new IllegalArgumentException("missedCount and totalCount must be non-negative, and missedCount must not exceed totalCount");
+        }
         if (totalCount < 3) return Appointment.RiskLevel.LOW.name();
 
         float ratio = (float) missedCount / totalCount;
 
         if (ratio > 0.50f) return Appointment.RiskLevel.HIGH.name();
-        if (ratio > 0.20f) return Appointment.RiskLevel.MEDIUM.name();
+        if (ratio >= 0.20f) return Appointment.RiskLevel.MEDIUM.name();
         return Appointment.RiskLevel.LOW.name();
     }
 
     /** Returns how many hours before the appointment the reminder should fire. */
     public static int getReminderLeadHours(String riskLevel) {
+        if (riskLevel == null) return 3;
         switch (riskLevel) {
             case "HIGH":   return 48;   // 2 days before
             case "MEDIUM": return 24;   // 1 day before
