@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/timeSlotButton"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:layout_margin="4dp"
+    android:text="09:00"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    app:cornerRadius="24dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#EEF2F7"
+    android:textColor="#6B7280"
+    android:backgroundTint="#FFFFFF"/>
