@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MugangaConnect+</string>
+
+    <!-- Language -->
+    <string name="language_label">FR ▼</string>
+    <string name="select_language">Choisir la langue</string>
+    <string name="lang_english">English</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_kinyarwanda">Kinyarwanda</string>
+    <string name="language_changed">Langue changée en Français</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profil</string>
+    <string name="patient_id_label">ID Patient :</string>
+    <string name="edit_btn">Modifier</string>
+    <string name="health_snapshot">Aperçu Santé</string>
+    <string name="weight_label">POIDS</string>
+    <string name="blood_type_label">GROUPE SANGUIN</string>
+    <string name="emergency_label">URGENCE</string>
+    <string name="account_settings">Paramètres du Compte</string>
+    <string name="personal_information">Informations Personnelles</string>
+    <string name="security_pin">Sécurité &amp; PIN</string>
+    <string name="notification_preferences">Préférences de Notification</string>
+    <string name="manage_reminders">Gérer les Rappels</string>
+    <string name="enable_biometrics">Activer la Biométrie</string>
+    <string name="support">Assistance</string>
+    <string name="help_center">Centre d\'Aide</string>
+    <string name="privacy_policy">Politique de Confidentialité</string>
+    <string name="terms_of_service">Conditions d\'Utilisation</string>
+    <string name="log_out">🚪  Se Déconnecter</string>
+    <string name="logout_title">Se Déconnecter</string>
+    <string name="logout_message">Êtes-vous sûr de vouloir vous déconnecter ?</string>
+    <string name="logout_confirm">Se Déconnecter</string>
+    <string name="cancel">Annuler</string>
+    <string name="biometrics_enabled">Biométrie activée</string>
+    <string name="biometrics_disabled">Biométrie désactivée</string>
+    <string name="coming_soon">Bientôt disponible</string>
+
+    <!-- Appointments -->
+    <string name="book_appointment">Prendre Rendez-vous</string>
+    <string name="select_session">Choisir une Session</string>
+    <string name="reschedule">Reprogrammer</string>
+    <string name="confirm_presence">Confirmer la Présence</string>
+    <string name="your_care_hub">Votre Espace Santé</string>
+    <string name="upcoming">À Venir</string>
+    <string name="rescheduled">Reprogrammé</string>
+    <string name="cancelled">Annulé</string>
+    <string name="department">Département</string>
+    <string name="specialist">Spécialiste</string>
+    <string name="time_slot">Créneau Horaire</string>
+    <string name="next_checkup">PROCHAIN CONTRÔLE</string>
+    <string name="health_score">SCORE SANTÉ</string>
+
+    <!-- Login / Signup -->
+    <string name="login">Connexion</string>
+    <string name="sign_up">S\'inscrire</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="full_name_hint">Nom complet</string>
+    <string name="phone_hint">Numéro de téléphone</string>
+    <string name="forgot_password">Mot de passe oublié ?</string>
+    <string name="already_have_account">Vous avez déjà un compte ?</string>
+    <string name="dont_have_account">Vous n\'avez pas de compte ?</string>
+    <string name="tagline">L\'accès aux soins de santé, unifié.</string>
+    <string name="phone_or_email_label">TÉLÉPHONE OU E-MAIL</string>
+    <string name="password_label">MOT DE PASSE</string>
+    <string name="enter_phone_or_email">Entrez téléphone ou e-mail</string>
+    <string name="enter_password">Entrez le mot de passe</string>
+    <string name="login_arrow">Connexion →</string>
+    <string name="secure_access">ACCÈS SÉCURISÉ</string>
+    <string name="use_biometrics">Utiliser la Biométrie</string>
+    <string name="sign_up_link"> S\'inscrire</string>
+    <string name="sign_in_link"> Se connecter</string>
+    <string name="create_account">Créer votre compte</string>
+    <string name="full_name_label">NOM COMPLET</string>
+    <string name="create_password_label">CRÉER UN MOT DE PASSE</string>
+    <string name="enter_full_name">Entrez votre nom complet</string>
+    <string name="sign_up_arrow">S\'inscrire →</string>
+    <string name="password_strength_label">FORCE DU MOT DE PASSE</string>
+
+    <!-- Dashboard -->
+    <string name="good_morning">Bonjour</string>
+    <string name="view_history">Voir l\'Historique</string>
+    <string name="enable_reminder">Activer le Rappel Anticipé</string>
+    <string name="appointment_history">Historique des Rendez-vous</string>
+    <string name="welcome_back">BIENVENUE,</string>
+    <string name="smart_alert">Alerte Intelligente</string>
+    <string name="smart_alert_msg">Vous risquez de manquer votre rendez-vous — 2 des 3 derniers ont été manqués.</string>
+    <string name="upcoming_appointment">Prochain Rendez-vous</string>
+    <string name="reminders">Rappels</string>
+    <string name="view_appointment_history">Voir l\'Historique des Rendez-vous</string>
+    <string name="height_label">TAILLE</string>
+    <string name="score_label">SCORE</string>
+
+    <!-- Scheduler -->
+    <string name="recent_hospital">Hôpital Récent</string>
+    <string name="search_hint">Rechercher un hôpital ou une clinique</string>
+    <string name="choose_specialty">Choisir la spécialité clinique</string>
+    <string name="select_provider">Sélectionner le prestataire préféré</string>
+    <string name="finalize_visit">Finaliser votre visite</string>
+    <string name="dept_cardiology">Cardiologie</string>
+    <string name="dept_neurology">Neurologie</string>
+    <string name="dept_dentistry">Dentisterie</string>
+
+    <!-- AI Assistant -->
+    <string name="ai_greeting">Comment puis-je vous aider aujourd\'hui ?</string>
+    <string name="ai_subtitle">Posez-moi n\'importe quelle question</string>
+    <string name="ai_can_help">Je peux vous aider à :</string>
+    <string name="ai_help_1">Analyser votre historique de rendez-vous et prédire si vous risquez de manquer votre prochain rendez-vous.</string>
+    <string name="ai_help_2">Définir un rappel anticipé pour réduire le risque de manquer votre rendez-vous.</string>
+    <string name="check_risk">Vérifier le Risque</string>
+    <string name="reschedule_appointment">Reprogrammer le Rendez-vous</string>
+    <string name="type_message">Tapez votre message…</string>
+    <string name="active_care">Soins Actifs</string>
+
+    <!-- AI Responses -->
+    <string name="ai_check_risk_question">Pouvez-vous vérifier mon risque de manquer le prochain rendez-vous ?</string>
+    <string name="ai_risk_high">D\'après votre historique (%1$d rendez-vous manqués récemment), votre risque est ÉLEVÉ. Je recommande de définir un rappel anticipé.</string>
+    <string name="ai_risk_medium">Votre risque est MODÉRÉ. Vous avez manqué 1 rendez-vous récemment. Essayez d\'arriver 15 minutes plus tôt.</string>
+    <string name="ai_risk_low">Votre risque est FAIBLE. Vous avez un excellent bilan de présence à vos rendez-vous !</string>
+    <string name="ai_error">Je suis désolé, je n\'ai pas pu accéder à votre historique pour le moment.</string>
+    <string name="ai_hello_response">Bonjour ! Comment puis-je vous aider avec votre planning de santé aujourd\'hui ?</string>
+    <string name="ai_reschedule_response">Bien sûr ! Je vous amène au planificateur de rendez-vous.</string>
+    <string name="ai_reminder_response">J\'ai noté cela. Pensez à activer les rappels anticipés depuis votre tableau de bord !</string>
+    <string name="ai_default_response">Je suis là pour vous aider avec vos rendez-vous et rappels de santé. Essayez de demander votre risque ou tapez \'reprogrammer\'.</string>
+    <string name="ai_kw_risk">risque</string>
+    <string name="ai_kw_hello">bonjour</string>
+    <string name="ai_kw_hi">salut</string>
+    <string name="ai_kw_reschedule">reprogrammer</string>
+    <string name="ai_kw_reminder">rappel</string>
+</resources>
