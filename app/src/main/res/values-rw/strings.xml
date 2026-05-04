@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MugangaConnect+</string>
+
+    <!-- Language -->
+    <string name="language_label">RW ▼</string>
+    <string name="select_language">Hitamo Ururimi</string>
+    <string name="lang_english">English</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_kinyarwanda">Kinyarwanda</string>
+    <string name="language_changed">Ururimi rwahinduwe mu Kinyarwanda</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Umwirondoro</string>
+    <string name="patient_id_label">Indangamuntu y\'Umurwayi:</string>
+    <string name="edit_btn">Hindura</string>
+    <string name="health_snapshot">Incamake y\'Ubuzima</string>
+    <string name="weight_label">IBIRO</string>
+    <string name="blood_type_label">UBWOKO BW\'AMARASO</string>
+    <string name="emergency_label">IHUTIRWA</string>
+    <string name="account_settings">Igenamiterere ry\'Konti</string>
+    <string name="personal_information">Amakuru Bwite</string>
+    <string name="security_pin">Umutekano &amp; PIN</string>
+    <string name="notification_preferences">Ibyo Kwamamazwa</string>
+    <string name="manage_reminders">Gucunga Ibibutso</string>
+    <string name="enable_biometrics">Gufungura Biometrike</string>
+    <string name="support">Ubufasha</string>
+    <string name="help_center">Ikigo cy\'Ubufasha</string>
+    <string name="privacy_policy">Politiki y\'Ibanga</string>
+    <string name="terms_of_service">Amategeko y\'Serivisi</string>
+    <string name="log_out">🚪  Sohoka</string>
+    <string name="logout_title">Sohoka</string>
+    <string name="logout_message">Urashaka gusohoka?</string>
+    <string name="logout_confirm">Sohoka</string>
+    <string name="cancel">Reka</string>
+    <string name="biometrics_enabled">Biometrike yafunguwe</string>
+    <string name="biometrics_disabled">Biometrike yafunzwe</string>
+    <string name="coming_soon">Bizaza vuba</string>
+
+    <!-- Appointments -->
+    <string name="book_appointment">Fata Gahunda</string>
+    <string name="select_session">Hitamo Igihe</string>
+    <string name="reschedule">Hindura Igihe</string>
+    <string name="confirm_presence">Emeza Kuzaza</string>
+    <string name="your_care_hub">Ikigo Cyawe cy\'Ubuzima</string>
+    <string name="upcoming">Izaza</string>
+    <string name="rescheduled">Yahinduwe</string>
+    <string name="cancelled">Ihagaritswe</string>
+    <string name="department">Ishami</string>
+    <string name="specialist">Inzobere</string>
+    <string name="time_slot">Igihe Cyagenwe</string>
+    <string name="next_checkup">ISUZUMA RIKURIKIRA</string>
+    <string name="health_score">AMANOTA Y\'UBUZIMA</string>
+
+    <!-- Login / Signup -->
+    <string name="login">Injira</string>
+    <string name="sign_up">Iyandikishe</string>
+    <string name="email_hint">Imeyili</string>
+    <string name="password_hint">Ijambo ry\'ibanga</string>
+    <string name="full_name_hint">Amazina yose</string>
+    <string name="phone_hint">Numero ya telefoni</string>
+    <string name="forgot_password">Wibagiwe ijambo ry\'ibanga?</string>
+    <string name="already_have_account">Usanzwe ufite konti?</string>
+    <string name="dont_have_account">Nta konti ufite?</string>
+    <string name="tagline">Ubuvuzi bwizewe, hamwe.</string>
+    <string name="phone_or_email_label">TELEFONI CYANGWA IMEYILI</string>
+    <string name="password_label">IJAMBO RY\'IBANGA</string>
+    <string name="enter_phone_or_email">Injiza telefoni cyangwa imeyili</string>
+    <string name="enter_password">Injiza ijambo ry\'ibanga</string>
+    <string name="login_arrow">Injira →</string>
+    <string name="secure_access">KWINJIRA BIRINZWE</string>
+    <string name="use_biometrics">Koresha Biometrike</string>
+    <string name="sign_up_link"> Iyandikishe</string>
+    <string name="sign_in_link"> Injira</string>
+    <string name="create_account">Fungura konti yawe</string>
+    <string name="full_name_label">AMAZINA YOSE</string>
+    <string name="create_password_label">SHYIRAHO IJAMBO RY\'IBANGA</string>
+    <string name="enter_full_name">Injiza amazina yawe yose</string>
+    <string name="sign_up_arrow">Iyandikishe →</string>
+    <string name="password_strength_label">IMBARAGA Z\'IJAMBO RY\'IBANGA</string>
+
+    <!-- Dashboard -->
+    <string name="good_morning">Mwaramutse</string>
+    <string name="view_history">Reba Amateka</string>
+    <string name="enable_reminder">Gufungura Ibibutso Bya Kare</string>
+    <string name="appointment_history">Amateka ya Gahunda</string>
+    <string name="welcome_back">MURAKAZA NEZA,</string>
+    <string name="smart_alert">Imenyesha Ryihuse</string>
+    <string name="smart_alert_msg">Ushobora gusiba gahunda yawe — 2 mu 3 za nyuma zasibwe.</string>
+    <string name="upcoming_appointment">Gahunda Izaza</string>
+    <string name="reminders">Ibibutso</string>
+    <string name="view_appointment_history">Reba Amateka ya Gahunda</string>
+    <string name="height_label">UBUREBURE</string>
+    <string name="score_label">AMANOTA</string>
+
+    <!-- Scheduler -->
+    <string name="recent_hospital">Ibitaro Byashyizweho Vuba</string>
+    <string name="search_hint">Shakisha ibitaro cyangwa kiliniki</string>
+    <string name="choose_specialty">Hitamo inzobere y\'ubuvuzi</string>
+    <string name="select_provider">Hitamo inzobere uhitamo</string>
+    <string name="finalize_visit">Soza gahunda yawe</string>
+    <string name="dept_cardiology">Indwara z\'Umutima</string>
+    <string name="dept_neurology">Indwara z\'Ubwonko</string>
+    <string name="dept_dentistry">Inyo</string>
+
+    <!-- AI Assistant -->
+    <string name="ai_greeting">Nakugirira iki uyu munsi?</string>
+    <string name="ai_subtitle">Baza ikibazo icyo aricyo cyose</string>
+    <string name="ai_can_help">Nshobora kukufasha:</string>
+    <string name="ai_help_1">Gusesengura amateka yawe ya gahunda no guhanura niba ushobora gusiba gahunda izaza.</string>
+    <string name="ai_help_2">Gushyiraho ikibutso cya kare kugirango ugabanye inzira yo gusiba gahunda yawe.</string>
+    <string name="check_risk">Reba Inzira</string>
+    <string name="reschedule_appointment">Hindura Igihe cya Gahunda</string>
+    <string name="type_message">Andika ubutumwa bwawe…</string>
+    <string name="active_care">Ubuvuzi Bukomeje</string>
+
+    <!-- AI Responses -->
+    <string name="ai_check_risk_question">Ushobora kureba inzira yanjye yo gusiba gahunda izaza?</string>
+    <string name="ai_risk_high">Hashingiwe ku mateka yawe (wasibye %1$d gahunda vuba), inzira yawe ni IKABIJE. Ngira ngo ushyireho ikibutso cya kare.</string>
+    <string name="ai_risk_medium">Inzira yawe ni HAGATI. Wasibye gahunda 1 vuba. Gerageza kugera iminota 15 mbere y\'igihe.</string>
+    <string name="ai_risk_low">Inzira yawe ni YOROHEJE. Ufite amateka meza yo kuzaza ku gahunda zawe!</string>
+    <string name="ai_error">Mbabarira, ntashoboye kugera ku mateka yawe ubu.</string>
+    <string name="ai_hello_response">Muraho! Nakugirira iki ku gahunda yawe y\'ubuzima uyu munsi?</string>
+    <string name="ai_reschedule_response">Neza! Ngukurikirana kuri sisitemu yo guhindura igihe cya gahunda.</string>
+    <string name="ai_reminder_response">Nabibonye. Wibuke gufungura ibibutso bya kare kuva ku dashboard yawe!</string>
+    <string name="ai_default_response">Ndi hano kugufasha mu gahunda no gusubiza ibibutso by\'ubuzima. Gerageza kubaza inzira yawe cyangwa andika \'hindura igihe\'.</string>
+    <string name="ai_kw_risk">inzira</string>
+    <string name="ai_kw_hello">muraho</string>
+    <string name="ai_kw_hi">mwaramutse</string>
+    <string name="ai_kw_reschedule">hindura</string>
+    <string name="ai_kw_reminder">ikibutso</string>
+</resources>
