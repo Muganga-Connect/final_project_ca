@@ -27,7 +27,7 @@
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MugangaConnect+"
+                android:text="@string/app_name"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="#001F3F"
@@ -41,7 +41,7 @@
                 android:id="@+id/tvTagline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Healthcare access, unified."
+                android:text="@string/tagline"
                 android:textSize="16sp"
                 android:textColor="#555555"
                 android:layout_marginTop="4dp"
@@ -70,7 +70,7 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!--Tab Switcher -->
+                    <!-- Tab Switcher -->
                     <LinearLayout
                         android:id="@+id/tabContainer"
                         android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Login"
+                                android:text="@string/login"
                                 android:textSize="13sp"
                                 android:textColor="#555555"/>
                         </LinearLayout>
@@ -118,17 +118,18 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sign Up"
+                                android:text="@string/sign_up"
                                 android:textSize="13sp"
                                 android:textColor="#0056b3"
                                 android:textStyle="bold"/>
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Create account heading -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Create your account"
+                        android:text="@string/create_account"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -136,11 +137,11 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Full Name -->
+                    <!-- Full Name label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="FULL NAME"
+                        android:text="@string/full_name_label"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -168,7 +169,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="Enter your full name"
+                            android:hint="@string/enter_full_name"
                             android:textColorHint="#888888"
                             android:textColor="@color/black"
                             android:textSize="15sp"
@@ -176,11 +177,11 @@
                             android:singleLine="true"/>
                     </LinearLayout>
 
-                    <!-- Phone or Email -->
+                    <!-- Phone or Email label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PHONE OR EMAIL"
+                        android:text="@string/phone_or_email_label"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -208,7 +209,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="Enter phone or email"
+                            android:hint="@string/enter_phone_or_email"
                             android:textColorHint="#888888"
                             android:textColor="@color/black"
                             android:textSize="15sp"
@@ -216,11 +217,11 @@
                             android:singleLine="true"/>
                     </LinearLayout>
 
-                    <!-- Create a Password -->
+                    <!-- Create a Password label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="CREATE A PASSWORD"
+                        android:text="@string/create_password_label"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -248,7 +249,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:hint="Enter password"
+                            android:hint="@string/enter_password"
                             android:textColorHint="#888888"
                             android:textColor="@color/black"
                             android:textSize="15sp"
@@ -280,7 +281,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="PASSWORD STRENGTH"
+                                android:text="@string/password_strength_label"
                                 android:textSize="10sp"
                                 android:textColor="#555555"/>
                             <TextView
@@ -317,7 +318,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="  SECURE ACCESS  "
+                            android:text="@string/secure_access"
                             android:textSize="11sp"
                             android:textColor="#888888"
                             android:letterSpacing="0.1"/>
@@ -333,7 +334,7 @@
                         android:id="@+id/btnSignUp"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="Sign up →"
+                        android:text="@string/sign_up_arrow"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -361,12 +362,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Use Biometrics"
+                            android:text="@string/use_biometrics"
                             android:textColor="#333333"
                             android:textStyle="bold"
                             android:textSize="14sp"/>
                     </LinearLayout>
 
+                    <!-- Already have an account? -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -375,14 +377,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Already have an account?"
+                            android:text="@string/already_have_account"
                             android:textSize="13sp"
                             android:textColor="#555555"/>
                         <TextView
                             android:id="@+id/tvLoginLink"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=" Sign In"
+                            android:text="@string/sign_in_link"
                             android:textSize="13sp"
                             android:textColor="#0056b3"
                             android:textStyle="bold"

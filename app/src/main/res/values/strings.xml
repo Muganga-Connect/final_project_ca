@@ -1,3 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Appointment_Schedule</string>
+    <string name="app_name">MugangaConnect+</string>
+
+    <!-- Language -->
+    <string name="language_label">EN ▼</string>
+    <string name="select_language">Select Language</string>
+    <string name="lang_english">English</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_kinyarwanda">Kinyarwanda</string>
+    <string name="language_changed">Language changed to English</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="patient_id_label">Patient ID:</string>
+    <string name="edit_btn">Edit</string>
+    <string name="health_snapshot">Health Snapshot</string>
+    <string name="weight_label">WEIGHT</string>
+    <string name="blood_type_label">BLOOD TYPE</string>
+    <string name="emergency_label">EMERGENCY</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="security_pin">Security &amp; PIN</string>
+    <string name="notification_preferences">Notification Preferences</string>
+    <string name="manage_reminders">Manage Reminders</string>
+    <string name="enable_biometrics">Enable Biometrics</string>
+    <string name="support">Support</string>
+    <string name="help_center">Help Center</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="log_out">🚪  Log Out</string>
+    <string name="logout_title">Log Out</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
+    <string name="logout_confirm">Log Out</string>
+    <string name="cancel">Cancel</string>
+    <string name="biometrics_enabled">Biometrics enabled</string>
+    <string name="biometrics_disabled">Biometrics disabled</string>
+    <string name="coming_soon">Coming soon</string>
+
+    <!-- Appointments -->
+    <string name="book_appointment">Book Appointment</string>
+    <string name="select_session">Select Session</string>
+    <string name="reschedule">Reschedule</string>
+    <string name="confirm_presence">Confirm Presence</string>
+    <string name="your_care_hub">Your Care Hub</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="rescheduled">Rescheduled</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="department">Department</string>
+    <string name="specialist">Specialist</string>
+    <string name="time_slot">Time Slot</string>
+    <string name="next_checkup">NEXT CHECKUP</string>
+    <string name="health_score">HEALTH SCORE</string>
+
+    <!-- Login / Signup -->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="tagline">Healthcare access, unified.</string>
+    <string name="phone_or_email_label">PHONE OR EMAIL</string>
+    <string name="password_label">PASSWORD</string>
+    <string name="enter_phone_or_email">Enter phone or email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="login_arrow">Login →</string>
+    <string name="secure_access">SECURE ACCESS</string>
+    <string name="use_biometrics">Use Biometrics</string>
+    <string name="sign_up_link"> Sign up</string>
+    <string name="sign_in_link"> Sign In</string>
+    <string name="create_account">Create your account</string>
+    <string name="full_name_label">FULL NAME</string>
+    <string name="create_password_label">CREATE A PASSWORD</string>
+    <string name="enter_full_name">Enter your full name</string>
+    <string name="sign_up_arrow">Sign up →</string>
+    <string name="password_strength_label">PASSWORD STRENGTH</string>
+
+    <!-- Dashboard -->
+    <string name="good_morning">Good Morning</string>
+    <string name="view_history">View History</string>
+    <string name="enable_reminder">Enable Early Reminder</string>
+    <string name="appointment_history">Appointment History</string>
+    <string name="welcome_back">WELCOME BACK,</string>
+    <string name="smart_alert">Smart Alert</string>
+    <string name="smart_alert_msg">You may miss your appointment — 2 of last 3 were missed.</string>
+    <string name="upcoming_appointment">Upcoming Appointment</string>
+    <string name="reminders">Reminders</string>
+    <string name="view_appointment_history">View Appointment History</string>
+    <string name="height_label">HEIGHT</string>
+    <string name="score_label">SCORE</string>
+
+    <!-- Scheduler -->
+    <string name="recent_hospital">Recent Hospital</string>
+    <string name="search_hint">Search for hospital or clinic</string>
+    <string name="choose_specialty">Choose clinical specialty</string>
+    <string name="select_provider">Select preferred provider</string>
+    <string name="finalize_visit">Finalize your visit</string>
+    <string name="dept_cardiology">Cardiology</string>
+    <string name="dept_neurology">Neurology</string>
+    <string name="dept_dentistry">Dentistry</string>
+
+    <!-- AI Assistant -->
+    <string name="ai_greeting">How can I help you today?</string>
+    <string name="ai_subtitle">Ask me anything</string>
+    <string name="ai_can_help">I can help you:</string>
+    <string name="ai_help_1">Analyze your appointment history and predict if you are likely to miss your upcoming appointment.</string>
+    <string name="ai_help_2">Set an early reminder to reduce the risk of missing your appointment.</string>
+    <string name="check_risk">Check Risk</string>
+    <string name="reschedule_appointment">Reschedule Appointment</string>
+    <string name="type_message">Type your message\u2026</string>
+    <string name="active_care">Active Care</string>
+
+    <!-- AI Responses -->
+    <string name="ai_check_risk_question">Can you check my risk of missing the next appointment?</string>
+    <string name="ai_risk_high">Based on your history (missed %1$d recent appointments), your risk is HIGH. I recommend setting an early reminder.</string>
+    <string name="ai_risk_medium">Your risk is MODERATE. You missed 1 appointment recently. Try to arrive 15 minutes early.</string>
+    <string name="ai_risk_low">Your risk is LOW. You have a great track record of attending your appointments!</string>
+    <string name="ai_error">I\'m sorry, I couldn\'t access your history right now.</string>
+    <string name="ai_hello_response">Hello! How can I assist you with your health schedule today?</string>
+    <string name="ai_reschedule_response">Sure! Let me take you to the appointment scheduler.</string>
+    <string name="ai_reminder_response">I\'ve noted that. Make sure to enable early reminders from your dashboard!</string>
+    <string name="ai_default_response">I\'m here to help with your appointments and health reminders. Try asking about your appointment risk or type \'reschedule\'.</string>
+    <!-- Keywords the AI listens for (keep lowercase) -->
+    <string name="ai_kw_risk">risk</string>
+    <string name="ai_kw_hello">hello</string>
+    <string name="ai_kw_hi">hi</string>
+    <string name="ai_kw_reschedule">reschedule</string>
+    <string name="ai_kw_reminder">reminder</string>
 </resources>

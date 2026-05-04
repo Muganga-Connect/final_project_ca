@@ -1,4 +1,4 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,11 +8,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class NotificationPreferencesActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     // UI elements
     private ImageButton btnBack;

@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -29,6 +30,11 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private AuthRepository authRepo;
     private SessionManager session;
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

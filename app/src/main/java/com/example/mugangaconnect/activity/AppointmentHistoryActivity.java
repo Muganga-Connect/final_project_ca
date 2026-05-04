@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.card.MaterialCardView;
 
@@ -18,6 +19,11 @@ import java.util.List;
 
 public class AppointmentHistoryActivity extends AppCompatActivity
         implements AppointmentAdapter.OnAppointmentActionListener {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     private AppointmentRepository appointmentRepo;
     private SessionManager session;

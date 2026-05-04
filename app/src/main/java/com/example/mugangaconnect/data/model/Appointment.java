@@ -1,7 +1,7 @@
 package com.example.mugangaconnect.data.model;
 
 public class Appointment {
-    public enum Status { UPCOMING, ATTENDED, MISSED, CANCELLED, RESCHEDULED }
+    public enum Status { UPCOMING, CONFIRMED, ATTENDED, MISSED, CANCELLED, RESCHEDULED }
     public enum RiskLevel { LOW, MEDIUM, HIGH }
 
     private String id;

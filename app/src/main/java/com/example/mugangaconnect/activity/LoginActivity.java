@@ -1,5 +1,6 @@
 package com.example.mugangaconnect;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 
 public class LoginActivity extends AppCompatActivity {
@@ -25,6 +27,11 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private AuthRepository authRepo;
     private SessionManager session;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

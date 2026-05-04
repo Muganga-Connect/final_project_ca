@@ -55,15 +55,13 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginStart="12dp">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="NEXT CHECKUP"
+                            android:text="@string/next_checkup"
                             android:textSize="10sp"
                             android:textStyle="bold"
                             android:textColor="#8AA6C7"/>
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -78,15 +76,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="end">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="HEALTH SCORE"
+                            android:text="@string/health_score"
                             android:textSize="10sp"
                             android:textStyle="bold"
                             android:textColor="#8AA6C7"/>
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -103,14 +99,14 @@
                 android:id="@+id/searchCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search for hospital or clinic"
-                android:layout_marginBottom="20dp" />
+                android:hint="@string/search_hint"
+                android:layout_marginBottom="20dp"/>
 
             <!-- Recent Hospital -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recent Hospital"
+                android:text="@string/recent_hospital"
                 android:textStyle="bold"
                 android:textColor="#1A4C91"
                 android:layout_marginBottom="12dp"/>
@@ -124,7 +120,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:singleLine="true">
-
                     <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalCityGeneral"
                         style="@style/Widget.Material3.Chip.Suggestion"
@@ -132,7 +127,6 @@
                         android:layout_height="wrap_content"
                         android:text="City General Hospital"
                         android:layout_marginEnd="8dp"/>
-
                     <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalMayo"
                         style="@style/Widget.Material3.Chip.Suggestion"
@@ -140,13 +134,12 @@
                         android:layout_height="wrap_content"
                         android:text="Mayo Clinic"
                         android:layout_marginEnd="8dp"/>
-
                     <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalStMarys"
                         style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="St. Mary's"/>
+                        android:text="St. Mary\'s"/>
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
@@ -188,7 +181,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Department"
+                        android:text="@string/department"
                         android:textStyle="bold"
                         android:textColor="#1A4C91"
                         android:textSize="18sp"
@@ -197,7 +190,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Choose clinical specialty"
+                        android:text="@string/choose_specialty"
                         android:textColor="#8AA6C7"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
@@ -206,7 +199,7 @@
                         android:id="@+id/deptCardiology"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cardiology"
+                        android:text="@string/dept_cardiology"
                         android:padding="12dp"
                         android:background="#F5F9FD"
                         android:textColor="#1A4C91"
@@ -216,7 +209,7 @@
                         android:id="@+id/deptNeurology"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Neurology"
+                        android:text="@string/dept_neurology"
                         android:padding="12dp"
                         android:background="#1E88E5"
                         android:textColor="#FFFFFF"
@@ -226,7 +219,7 @@
                         android:id="@+id/deptDentistry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dentistry"
+                        android:text="@string/dept_dentistry"
                         android:padding="12dp"
                         android:background="#F5F9FD"
                         android:textColor="#1A4C91"/>
@@ -270,7 +263,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Specialist"
+                        android:text="@string/specialist"
                         android:textStyle="bold"
                         android:textColor="#1A4C91"
                         android:textSize="18sp"
@@ -279,7 +272,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select preferred provider"
+                        android:text="@string/select_provider"
                         android:textColor="#8AA6C7"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
@@ -371,7 +364,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time Slot"
+                        android:text="@string/time_slot"
                         android:textStyle="bold"
                         android:textColor="#1A4C91"
                         android:textSize="18sp"
@@ -380,7 +373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="finalize your visit"
+                        android:text="@string/finalize_visit"
                         android:textColor="#8AA6C7"
                         android:textSize="12sp"
                         android:layout_marginBottom="16dp"/>
@@ -390,7 +383,7 @@
                         style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="Select Session"
+                        android:text="@string/select_session"
                         app:cornerRadius="12dp"
                         android:textAllCaps="false"
                         android:backgroundTint="#1E88E5"
@@ -401,7 +394,7 @@
                         style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="Book Appointment"
+                        android:text="@string/book_appointment"
                         app:cornerRadius="12dp"
                         android:textAllCaps="false"
                         android:backgroundTint="#4CAF50"/>
@@ -412,7 +405,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Care Hub"
+                android:text="@string/your_care_hub"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#1A4C91"
@@ -428,17 +421,17 @@
                     android:id="@+id/tabUpcoming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upcoming" />
+                    android:text="@string/upcoming"/>
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabRescheduled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rescheduled" />
+                    android:text="@string/rescheduled"/>
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabCancelledHub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cancelled" />
+                    android:text="@string/cancelled"/>
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -448,7 +441,7 @@
                 android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Appointment Card 1 -->
+            <!-- Static Appointment Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/appointmentCard1"
                 android:layout_width="match_parent"
@@ -477,25 +470,9 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="NOV"
-                                android:textSize="10sp"
-                                android:textColor="#1E88E5"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="24"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                android:textColor="#1A4C91"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="WED"
-                                android:textSize="10sp"
-                                android:textColor="#1A4C91"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOV" android:textSize="10sp" android:textColor="#1E88E5"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24" android:textSize="24sp" android:textStyle="bold" android:textColor="#1A4C91"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WED" android:textSize="10sp" android:textColor="#1A4C91"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -520,21 +497,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginBottom="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="10:30 AM"
-                            android:textColor="#1A4C91"
-                            android:textSize="12sp"
-                            android:drawablePadding="4dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Building B, Room 402"
-                            android:textColor="#1A4C91"
-                            android:textSize="12sp"
-                            android:layout_marginStart="16dp"
-                            android:drawablePadding="4dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:30 AM" android:textColor="#1A4C91" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Building B, Room 402" android:textColor="#1A4C91" android:textSize="12sp" android:layout_marginStart="16dp"/>
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -542,7 +506,7 @@
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Confirm Presence"
+                        android:text="@string/confirm_presence"
                         app:cornerRadius="8dp"
                         android:backgroundTint="#E8F5E9"
                         android:textColor="#4CAF50"
@@ -558,7 +522,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Reschedule"
+                            android:text="@string/reschedule"
                             app:cornerRadius="8dp"
                             android:backgroundTint="#FFF3E0"
                             android:textColor="#F57C00"
@@ -570,7 +534,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Cancel"
+                            android:text="@string/cancel"
                             app:cornerRadius="8dp"
                             android:backgroundTint="#FFEBEE"
                             android:textColor="#E53935"
@@ -590,6 +554,6 @@
         android:layout_marginBottom="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

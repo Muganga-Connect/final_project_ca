@@ -11,6 +11,7 @@ public class SessionManager {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PHONE = "phone";
     private static final String KEY_LOGGED_IN = "is_logged_in";
+    private static final String KEY_LANGUAGE = "app_language";
 
     private final SharedPreferences prefs;
 
@@ -42,6 +43,14 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn() { return prefs.getBoolean(KEY_LOGGED_IN, false); }
+
+    public void saveLanguage(String languageCode) {
+        prefs.edit().putString(KEY_LANGUAGE, languageCode).apply();
+    }
+
+    public String getLanguage() {
+        return prefs.getString(KEY_LANGUAGE, "en");
+    }
     public String getUid() { return prefs.getString(KEY_UID, null); }
     public String getFullName() { return prefs.getString(KEY_NAME, ""); }
     public String getEmail() { return prefs.getString(KEY_EMAIL, ""); }
