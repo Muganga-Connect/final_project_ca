@@ -1,7 +1,8 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
@@ -30,11 +32,6 @@ public class AppointmentManagementActivity extends AppCompatActivity
         implements AppointmentAdapter.OnAppointmentActionListener,
                    DoctorAdapter.OnDoctorSelectedListener {
 
-    @Override
-    protected void attachBaseContext(android.content.Context base) {
-        super.attachBaseContext(LocaleHelper.applyLocale(base));
-    }
-
     private AppointmentRepository appointmentRepo;
     private DoctorRepository doctorRepo;
     private SessionManager session;
@@ -47,8 +44,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private String selectedDepartment = "Cardiology";
     private Doctor selectedDoctor;
-    private Calendar selectedDateTime = Calendar.getInstance();
+    private final Calendar selectedDateTime = Calendar.getInstance();
     private boolean isDateTimeSelected = false;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,9 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setupButtons();
 
         loadAppointments();
-        loadDoctors(); // Initial load
+        loadDoctors();
 
-        com.example.mugangaconnect.BottomNavHelper.setup(this, com.example.mugangaconnect.BottomNavHelper.Screen.SCHEDULE);
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
     }
 
     private void setupDoctorList() {
@@ -87,9 +89,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void setupDepartmentTabs() {
-        int[] deptIds = {R.id.deptCardiology, R.id.deptNeurology, R.id.deptDentistry};
-        String[] deptNames = {"Cardiology", "Neurology", "Dentistry"};
-        
+        int[] deptIds   = {R.id.deptCardiology, R.id.deptNeurology, R.id.deptDentistry};
+        String[] deptNames = {
+            getString(R.string.dept_cardiology),
+            getString(R.string.dept_neurology),
+            getString(R.string.dept_dentistry)
+        };
+
         for (int i = 0; i < deptIds.length; i++) {
             TextView tv = findViewById(deptIds[i]);
             if (tv == null) continue;
@@ -107,8 +113,9 @@ public class AppointmentManagementActivity extends AppCompatActivity
         for (int id : deptIds) {
             TextView tv = findViewById(id);
             if (tv != null) {
-                tv.setBackgroundResource(id == selectedTab.getId() ? R.drawable.bg_tab_active : R.drawable.bg_tab_inactive);
-                tv.setTextColor(id == selectedTab.getId() ? getColor(android.R.color.white) : getColor(android.R.color.black));
+                boolean isSelected = id == selectedTab.getId();
+                tv.setBackgroundResource(isSelected ? R.drawable.bg_tab_active : R.drawable.bg_tab_inactive);
+                tv.setTextColor(getColor(isSelected ? android.R.color.white : android.R.color.black));
             }
         }
     }
@@ -127,30 +134,30 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private void showDateTimePicker(Appointment apptToReschedule) {
         final Calendar current = Calendar.getInstance();
-        DatePickerDialog datePicker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             selectedDateTime.set(Calendar.YEAR, year);
             selectedDateTime.set(Calendar.MONTH, month);
             selectedDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            TimePickerDialog timePicker = new TimePickerDialog(this, (view1, hourOfDay, minute) -> {
+            new TimePickerDialog(this, (view1, hourOfDay, minute) -> {
                 selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 selectedDateTime.set(Calendar.MINUTE, minute);
                 isDateTimeSelected = true;
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
                 String formatted = sdf.format(selectedDateTime.getTime());
-                
+                String[] parts   = formatted.split(" ");
+
                 if (apptToReschedule != null) {
-                    processReschedule(apptToReschedule, formatted.split(" ")[0], formatted.split(" ")[1]);
+                    processReschedule(apptToReschedule, parts[0], parts[1]);
                 } else {
                     Toast.makeText(this, "Selected: " + formatted, Toast.LENGTH_SHORT).show();
                     TextView btnText = findViewById(R.id.btn_select_session);
-                    if (btnText != null) ((TextView) btnText).setText("Session: " + formatted);
+                    if (btnText != null) btnText.setText("Session: " + formatted);
                 }
-            }, current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE), true);
-            timePicker.show();
-        }, current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH));
-        datePicker.show();
+            }, current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE), true).show();
+
+        }, current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void loadDoctors() {
@@ -161,7 +168,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                     doctors.clear();
                     if (data.isEmpty()) {
                         doctors.add(new Doctor("d1", "Dr. Mugisha Eric", "Cardiologist", selectedDepartment, "Mon-Fri 08:00-17:00"));
-                        doctors.add(new Doctor("d2", "Dr. Uwase Claire", "Specialist", selectedDepartment, "Mon-Wed 09:00-15:00"));
+                        doctors.add(new Doctor("d2", "Dr. Uwase Claire", "Specialist",   selectedDepartment, "Mon-Wed 09:00-15:00"));
                     } else {
                         doctors.addAll(data);
                     }
@@ -171,7 +178,8 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
             @Override
             public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                        "Error: " + message, Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -190,45 +198,49 @@ public class AppointmentManagementActivity extends AppCompatActivity
             }
             @Override
             public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                        message, Toast.LENGTH_SHORT).show());
             }
         });
     }
 
     private void bookAppointment() {
         if (selectedDoctor == null) {
-            Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.select_provider), Toast.LENGTH_SHORT).show();
             return;
         }
         if (!isDateTimeSelected) {
-            Toast.makeText(this, "Please select a session time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.select_session), Toast.LENGTH_SHORT).show();
             return;
         }
         String uid = session.getUid();
         if (uid == null) return;
 
         SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm",      Locale.getDefault());
 
-        Appointment appt = new Appointment(uid, selectedDoctor.getId(),
-                selectedDoctor.getName(), selectedDepartment,
-                dateSdf.format(selectedDateTime.getTime()), 
+        Appointment appt = new Appointment(
+                uid, selectedDoctor.getId(), selectedDoctor.getName(),
+                selectedDepartment,
+                dateSdf.format(selectedDateTime.getTime()),
                 timeSdf.format(selectedDateTime.getTime()));
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override
             public void onResult(Appointment data) {
                 runOnUiThread(() -> {
-                    Toast.makeText(AppointmentManagementActivity.this, "Appointment booked!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppointmentManagementActivity.this,
+                            getString(R.string.book_appointment), Toast.LENGTH_SHORT).show();
                     isDateTimeSelected = false;
                     TextView btnText = findViewById(R.id.btn_select_session);
-                    if (btnText != null) ((TextView) btnText).setText("Select Session");
+                    if (btnText != null) btnText.setText(getString(R.string.select_session));
                     loadAppointments();
                 });
             }
             @Override
             public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                        message, Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -236,7 +248,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     @Override
     public void onDoctorSelected(Doctor doctor) {
         selectedDoctor = doctor;
-        Toast.makeText(this, "Selected: " + doctor.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, doctor.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -249,29 +261,35 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 new AppointmentRepository.Callback<Void>() {
                     @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
-                            Toast.makeText(AppointmentManagementActivity.this, "Rescheduled to " + newDate + " " + newTime, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AppointmentManagementActivity.this,
+                                    getString(R.string.reschedule) + ": " + newDate + " " + newTime,
+                                    Toast.LENGTH_SHORT).show();
                             loadAppointments();
                         });
                     }
                     @Override public void onError(String message) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                                message, Toast.LENGTH_SHORT).show());
                     }
                 });
     }
 
     @Override
     public void onCancel(Appointment appointment) {
-        appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
+        appointmentRepo.updateStatus(
+                appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
                     @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
-                            Toast.makeText(AppointmentManagementActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AppointmentManagementActivity.this,
+                                    getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
                             loadAppointments();
                         });
                     }
                     @Override public void onError(String message) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                                message, Toast.LENGTH_SHORT).show());
                     }
                 });
     }
