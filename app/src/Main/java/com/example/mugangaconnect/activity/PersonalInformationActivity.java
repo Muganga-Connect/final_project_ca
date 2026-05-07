@@ -2,12 +2,13 @@ package com.example.mugangaconnect.activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -19,37 +20,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.mugangaconnect.R;
-import com.example.mugangaconnect.data.local.AppDatabase;
-import com.example.mugangaconnect.data.local.UserDao;
 import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.HashMap;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class PersonalInformationActivity extends AppCompatActivity {
 
-    // Request Codes
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
+
+    private static final int REQ_CAMERA = 101;
+    private static final int REQ_GALLERY = 102;
     private static final int PERM_CAMERA = 201;
     private static final int PERM_STORAGE = 202;
-    private static final int PERM_MEDIA = 203;
 
-    // UI Components
     private ImageView imgProfile;
     private MaterialButton btnEditPhoto, btnSave;
     private ImageButton btnBack;
@@ -65,46 +66,22 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private TextView tvErrorGender, tvErrorBlood;
 
     private boolean isModified = false;
-    private SharedPreferences prefs;
-    private static final String PREFS_NAME = "MugangaConnectPrefs";
     private AuthRepository authRepo;
     private SessionManager session;
-    private UserDao userDao;
-    private ActivityResultLauncher<Void> cameraLauncher;
-    private ActivityResultLauncher<String> galleryLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
 
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         authRepo = new AuthRepository();
-        session  = new SessionManager(this);
-        userDao = new UserDao(AppDatabase.getInstance(this));
-
-        registerPhotoLaunchers();
+        session = new SessionManager(this);
 
         initViews();
         setupFields();
         setupSpinners();
-        loadSavedData();
+        loadData();
         setupListeners();
-    }
-
-    private void registerPhotoLaunchers() {
-        cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(), bitmap -> {
-            if (bitmap != null) {
-                imgProfile.setImageBitmap(bitmap);
-                markModified();
-            }
-        });
-        galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            if (uri != null) {
-                imgProfile.setImageURI(uri);
-                markModified();
-            }
-        });
     }
 
     private void initViews() {
@@ -170,6 +147,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void setupFields() {
         etName.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         etEmail.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        etEmail.setEnabled(false); // Email usually not changeable for auth
         etPhone.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
         etDob.setFocusable(false);
         etDob.setClickable(false);
@@ -188,87 +166,32 @@ public class PersonalInformationActivity extends AppCompatActivity {
         spinnerBlood.setAdapter(bloodAdapter);
     }
 
-    private void loadSavedData() {
+    private void loadData() {
         String uid = session.getUid();
-        User localUser = uid == null ? null : userDao.getByUid(uid);
+        if (uid == null) return;
 
-        String savedName  = prefs.getString("profile_fullName", "");
-        String savedEmail = prefs.getString("profile_email", "");
-        String savedPhone = prefs.getString("profile_phone", "");
-        etName.setText(localUser != null && localUser.getFullName() != null
-                ? localUser.getFullName()
-                : (savedName.isEmpty() ? session.getFullName() : savedName));
-        etEmail.setText(localUser != null && localUser.getEmail() != null
-                ? localUser.getEmail()
-                : (savedEmail.isEmpty() ? session.getEmail() : savedEmail));
-        etPhone.setText(localUser != null && localUser.getPhone() != null
-                ? localUser.getPhone()
-                : (savedPhone.isEmpty() ? session.getPhone() : savedPhone));
-        etDob.setText(localUser != null && localUser.getDob() != null
-                ? localUser.getDob()
-                : prefs.getString("profile_dob", "15 / Jan / 2000"));
-        etInsurance.setText(localUser != null && localUser.getInsuranceId() != null
-                ? localUser.getInsuranceId()
-                : prefs.getString("profile_insuranceId", "INS-2024-001234"));
-        etAllergies.setText(localUser != null && localUser.getAllergies() != null
-                ? localUser.getAllergies()
-                : prefs.getString("profile_allergies", "None"));
-        etEmergency.setText(localUser != null && localUser.getEmergencyContact() != null
-                ? localUser.getEmergencyContact()
-                : prefs.getString("profile_emergencyContact", "+250788654321"));
+        authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> {
+                    etName.setText(user.getFullName());
+                    etEmail.setText(user.getEmail());
+                    etPhone.setText(user.getPhone());
+                    // If your User model doesn't have these, you might need to extend it or use a separate collection
+                    // For now, let's assume they are there or we use defaults
+                    tvDisplayName.setText(user.getFullName());
+                });
+            }
 
-        tvDisplayName.setText(etName.getText().toString());
-
-        setSelectionFromValue(spinnerGender, localUser != null && localUser.getGender() != null
-                ? localUser.getGender()
-                : prefs.getString("profile_gender", "Female"));
-        setSelectionFromValue(spinnerBlood, localUser != null && localUser.getBloodType() != null
-                ? localUser.getBloodType()
-                : prefs.getString("profile_bloodType", "O+"));
-
-        if (uid != null) {
-            authRepo.getPersonalInformation(uid, new AuthRepository.PersonalInfoCallback() {
-                @Override
-                public void onSuccess(Map<String, Object> personalInfo) {
-                    runOnUiThread(() -> applyRemotePersonalInformation(personalInfo));
-                }
-
-                @Override
-                public void onError(String message) {
-                    // Keep local fallback from SharedPreferences.
-                }
-            });
-        }
-    }
-
-    private void applyRemotePersonalInformation(Map<String, Object> personalInfo) {
-        if (personalInfo == null || personalInfo.isEmpty()) return;
-
-        setIfPresent(etName, personalInfo.get("fullName"));
-        setIfPresent(etEmail, personalInfo.get("email"));
-        setIfPresent(etPhone, personalInfo.get("phone"));
-        setIfPresent(etDob, personalInfo.get("dob"));
-        setIfPresent(etInsurance, personalInfo.get("insuranceId"));
-        setIfPresent(etAllergies, personalInfo.get("allergies"));
-        setIfPresent(etEmergency, personalInfo.get("emergencyContact"));
-        setSpinnerIfPresent(spinnerGender, personalInfo.get("gender"));
-        setSpinnerIfPresent(spinnerBlood, personalInfo.get("bloodType"));
-
-        tvDisplayName.setText(etName.getText().toString().trim());
-    }
-
-    private void setIfPresent(TextInputEditText field, Object value) {
-        if (field == null || value == null) return;
-        String text = String.valueOf(value).trim();
-        if (!text.isEmpty()) field.setText(text);
-    }
-
-    private void setSpinnerIfPresent(Spinner spinner, Object value) {
-        if (spinner == null || value == null) return;
-        setSelectionFromValue(spinner, String.valueOf(value));
+            @Override
+            public void onError(String message) {
+                Toast.makeText(PersonalInformationActivity.this, "Failed to load profile", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setSelectionFromValue(Spinner spinner, String value) {
+        if (value == null) return;
         for (int i = 0; i < spinner.getCount(); i++) {
             if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
                 spinner.setSelection(i);
@@ -279,11 +202,9 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
-
         btnEditPhoto.setOnClickListener(v -> showPhotoOptions());
 
         btnEditName.setOnClickListener(v -> enableEditing(etName));
-        btnEditEmail.setOnClickListener(v -> enableEditing(etEmail));
         btnEditPhone.setOnClickListener(v -> enableEditing(etPhone));
         btnEditInsurance.setOnClickListener(v -> enableEditing(etInsurance));
         btnEditAllergies.setOnClickListener(v -> enableEditing(etAllergies));
@@ -308,7 +229,6 @@ public class PersonalInformationActivity extends AppCompatActivity {
         };
 
         etName.addTextChangedListener(modificationWatcher);
-        etEmail.addTextChangedListener(modificationWatcher);
         etPhone.addTextChangedListener(modificationWatcher);
         etInsurance.addTextChangedListener(modificationWatcher);
         etAllergies.addTextChangedListener(modificationWatcher);
@@ -349,7 +269,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void showPhotoOptions() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.layout_photo_bottom_sheet, null);
-
+        
         view.findViewById(R.id.btn_take_photo).setOnClickListener(v -> {
             checkCameraPermission();
             bottomSheetDialog.dismiss();
@@ -375,183 +295,86 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void checkStoragePermission() {
-        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_IMAGES
-                : Manifest.permission.READ_EXTERNAL_STORAGE;
-        int requestCode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? PERM_MEDIA : PERM_STORAGE;
-        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_STORAGE);
         } else {
             openGallery();
         }
     }
 
     private void openCamera() {
-        cameraLauncher.launch(null);
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, REQ_CAMERA);
     }
 
     private void openGallery() {
-        galleryLauncher.launch("image/*");
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, REQ_GALLERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == REQ_CAMERA) {
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                imgProfile.setImageBitmap(image);
+                markModified();
+            } else if (requestCode == REQ_GALLERY) {
+                Uri selectedImage = data.getData();
+                imgProfile.setImageURI(selectedImage);
+                markModified();
+            }
+        }
     }
 
     private void validateAndSave() {
         boolean isValid = true;
 
-        tvErrorName.setVisibility(View.GONE);
-        tvErrorEmail.setVisibility(View.GONE);
-        tvErrorPhone.setVisibility(View.GONE);
-        tvErrorDob.setVisibility(View.GONE);
-        tvErrorGender.setVisibility(View.GONE);
-        tvErrorInsurance.setVisibility(View.GONE);
-        tvErrorBlood.setVisibility(View.GONE);
-        tvErrorAllergies.setVisibility(View.GONE);
-        tvErrorEmergency.setVisibility(View.GONE);
-
         String name = etName.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
-        String dob = etDob.getText().toString().trim();
-        String insurance = etInsurance.getText().toString().trim();
-        String allergies = etAllergies.getText().toString().trim();
-        String emergency = etEmergency.getText().toString().trim();
 
         if (name.length() < 3) {
-            tvErrorName.setText("Name must be at least 3 characters");
+            tvErrorName.setText("Name too short");
             tvErrorName.setVisibility(View.VISIBLE);
             isValid = false;
         }
 
-        if (!Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", email)) {
-            tvErrorEmail.setText("Invalid email format");
-            tvErrorEmail.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (!Pattern.matches("^\\+250\\d{9}$", phone)) {
-            tvErrorPhone.setText("Must be +250 format with 9 digits");
+        if (!Pattern.matches("^\\+?\\d{10,15}$", phone)) {
+            tvErrorPhone.setText("Invalid phone number");
             tvErrorPhone.setVisibility(View.VISIBLE);
             isValid = false;
         }
 
-        if (dob.isEmpty()) {
-            tvErrorDob.setText("Date of birth is required");
-            tvErrorDob.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (spinnerGender.getSelectedItemPosition() == 0) {
-            tvErrorGender.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (insurance.isEmpty()) {
-            tvErrorInsurance.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (spinnerBlood.getSelectedItemPosition() == 0) {
-            tvErrorBlood.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (allergies.isEmpty()) {
-            tvErrorAllergies.setText("Please specify allergies or write None");
-            tvErrorAllergies.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (!Pattern.matches("^\\+250\\d{9}$", emergency)) {
-            tvErrorEmergency.setText("Must be valid phone number");
-            tvErrorEmergency.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
         if (isValid) {
-            saveData();
-        } else {
-            Toast.makeText(this, "Please fix all errors", Toast.LENGTH_SHORT).show();
+            saveData(name, phone);
         }
     }
 
-    private void saveData() {
-        String fullName = etName.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-        String dob = etDob.getText().toString().trim();
-        String gender = spinnerGender.getSelectedItem().toString();
-        String insuranceId = etInsurance.getText().toString().trim();
-        String bloodType = spinnerBlood.getSelectedItem().toString();
-        String allergies = etAllergies.getText().toString().trim();
-        String emergencyContact = etEmergency.getText().toString().trim();
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("profile_fullName", fullName);
-        editor.putString("profile_email", email);
-        editor.putString("profile_phone", phone);
-        editor.putString("profile_dob", dob);
-        editor.putString("profile_gender", gender);
-        editor.putString("profile_insuranceId", insuranceId);
-        editor.putString("profile_bloodType", bloodType);
-        editor.putString("profile_allergies", allergies);
-        editor.putString("profile_emergencyContact", emergencyContact);
-        editor.apply();
-
-        tvDisplayName.setText(fullName);
-        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-
+    private void saveData(String name, String phone) {
         String uid = session.getUid();
-        if (uid != null) {
-            User userLocal = new User(uid, fullName, email, phone);
-            userLocal.setDob(dob);
-            userLocal.setGender(gender);
-            userLocal.setInsuranceId(insuranceId);
-            userLocal.setBloodType(bloodType);
-            userLocal.setAllergies(allergies);
-            userLocal.setEmergencyContact(emergencyContact);
-            userDao.upsert(userLocal);
+        authRepo.updateProfile(uid, name, phone, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                session.saveSession(uid, name, user.getEmail());
+                runOnUiThread(() -> {
+                    tvDisplayName.setText(name);
+                    Toast.makeText(PersonalInformationActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
+                    lockFields();
+                    isModified = false;
+                    btnSave.setEnabled(false);
+                });
+            }
 
-            Map<String, Object> personalInfo = new HashMap<>();
-            personalInfo.put("fullName", fullName);
-            personalInfo.put("email", email);
-            personalInfo.put("phone", phone);
-            personalInfo.put("dob", dob);
-            personalInfo.put("gender", gender);
-            personalInfo.put("insuranceId", insuranceId);
-            personalInfo.put("bloodType", bloodType);
-            personalInfo.put("allergies", allergies);
-            personalInfo.put("emergencyContact", emergencyContact);
-
-            authRepo.updatePersonalInformation(uid, personalInfo, new AuthRepository.SimpleCallback() {
-                @Override
-                public void onSuccess() {
-                    authRepo.updateProfile(uid, fullName, phone,
-                            new AuthRepository.ProfileCallback() {
-                                @Override public void onSuccess(com.example.mugangaconnect.data.model.User u) {
-                                    session.saveSession(uid, fullName, email, phone);
-                                }
-                                @Override public void onError(String message) {
-                                    runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this,
-                                            "Saved locally, profile sync failed: " + message, Toast.LENGTH_LONG).show());
-                                }
-                            });
-                }
-
-                @Override
-                public void onError(String message) {
-                    runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this,
-                            "Saved locally, cloud sync failed: " + message, Toast.LENGTH_LONG).show());
-                }
-            });
-        }
-
-        lockFields();
-        isModified = false;
-        btnSave.setEnabled(false);
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void lockFields() {
         etName.setEnabled(false);
-        etEmail.setEnabled(false);
         etPhone.setEnabled(false);
         etInsurance.setEnabled(false);
         etAllergies.setEnabled(false);
@@ -565,9 +388,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (requestCode == PERM_CAMERA) openCamera();
-            if (requestCode == PERM_STORAGE || requestCode == PERM_MEDIA) openGallery();
-        } else {
-            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            if (requestCode == PERM_STORAGE) openGallery();
         }
     }
 }
