@@ -1080,7 +1080,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/bg_btn_primary"
-            android:drawableEnd="@drawable/ic_arrow_right"
+            android:drawableEnd="@drawable/lucide_ic_arrow_right"
             android:gravity="center"
             android:text="Book Appointment"
             android:textColor="#FFFFFF"
