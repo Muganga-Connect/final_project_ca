@@ -86,7 +86,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@android:drawable/ic_menu_info_details"
+                    android:src="@drawable/lucide_ic_shield_check"
                     android:contentDescription="@string/care_status"
                     app:tint="#2ECC71" />
                 <TextView
@@ -128,7 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="16dp"
-                    android:src="@android:drawable/ic_menu_info_details"
+                    android:src="@drawable/lucide_ic_bot"
                     android:contentDescription="@string/ai_avatar_description"
                     app:tint="#0C4DA1" />
             </androidx.cardview.widget.CardView>
