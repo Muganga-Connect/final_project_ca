@@ -452,7 +452,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/lucide_ic_calendar_days_empty"
+                            android:src="@drawable/lucide_ic_calendar_x"
                             android:tint="#CBD5E0"
                             android:layout_marginBottom="12dp"/>
 
@@ -518,7 +518,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_droplets_pressure"
+                            android:src="@drawable/lucide_ic_activity"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -570,7 +570,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_heart_rate"
+                            android:src="@drawable/lucide_ic_heart_pulse"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -621,7 +621,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_droplets_sugar"
+                            android:src="@drawable/lucide_ic_droplet"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -749,7 +749,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_calendar_days_reminder"
+                            android:src="@drawable/lucide_ic_calendar_clock"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
