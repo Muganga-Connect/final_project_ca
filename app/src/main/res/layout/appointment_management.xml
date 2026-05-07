@@ -38,6 +38,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/lucide_ic_menu"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Menu" />
 
                 <TextView
@@ -121,6 +122,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/lucide_ic_search"
+                    android:tint="#9AA5B4"
                 android:contentDescription="Search" />
 
             <EditText
@@ -141,6 +143,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:src="@drawable/lucide_ic_sliders_horizontal"
+                    android:tint="#9AA5B4"
                 android:contentDescription="Filter" />
         </LinearLayout>
 
@@ -199,6 +202,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_building_2"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -226,6 +230,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_building_2"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -252,6 +257,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_building_2"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -403,6 +409,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/lucide_ic_heart_pulse"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Cardiology" />
 
                 <TextView
@@ -430,6 +437,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/lucide_ic_brain"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Neurology" />
 
                 <TextView
@@ -446,6 +454,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/lucide_ic_circle_check"
+                    android:tint="#FFFFFF"
                     android:contentDescription="Selected" />
             </LinearLayout>
 
@@ -465,6 +474,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/lucide_ic_smile"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Dentistry" />
 
                 <TextView
@@ -502,6 +512,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_circle_check_big"
+                    android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
                 <View
@@ -573,6 +584,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/lucide_ic_user_round"
+                    android:tint="#9AA5B4"
                     android:background="@drawable/bg_dot_green"
                     android:padding="2dp"
                     android:contentDescription="Doctor" />
@@ -635,6 +647,7 @@
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:src="@drawable/lucide_ic_star"
+                    android:tint="#F5A623"
                         android:contentDescription="Star" />
 
                     <TextView
@@ -672,6 +685,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/lucide_ic_chevron_right"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Navigate" />
             </LinearLayout>
         </LinearLayout>
@@ -700,6 +714,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_circle_check_big"
+                    android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
                 <View
@@ -712,6 +727,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/lucide_ic_circle_check_big"
+                    android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
                 <View
@@ -869,6 +885,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:src="@drawable/lucide_ic_calendar_days"
+                    android:tint="#9AA5B4"
                     android:contentDescription="Calendar" />
             </LinearLayout>
 
@@ -1035,6 +1052,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@drawable/lucide_ic_sparkles"
+                    android:tint="#3D7FE8"
                     android:contentDescription="AI" />
 
                 <TextView
