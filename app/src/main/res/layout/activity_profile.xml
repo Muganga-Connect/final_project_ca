@@ -59,7 +59,7 @@
                             android:id="@+id/profileImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/user"
+                            android:src="@drawable/lucide_ic_user_round"
                             android:scaleType="centerCrop"/>
                     </androidx.cardview.widget.CardView>
 
