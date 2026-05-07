@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.PathParser;
 
-final class LucideDrawable extends Drawable {
+public final class LucideDrawable extends Drawable {
     private static final float VIEWPORT_SIZE = 24f;
     private static final float DEFAULT_STROKE_WIDTH = 2f;
 
@@ -25,7 +25,7 @@ final class LucideDrawable extends Drawable {
     private int alpha = 255;
     private int color = Color.BLACK;
 
-    LucideDrawable(String iconName) {
+    public LucideDrawable(String iconName) {
         String[] pathData = LucideIcons.pathsFor(iconName);
         if (pathData == null) {
             pathData = new String[0];
@@ -40,6 +40,11 @@ final class LucideDrawable extends Drawable {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
         paint.setColor(color);
+    }
+
+    void setBaseColor(int color) {
+        this.color = color;
+        invalidateSelf();
     }
 
     @Override
