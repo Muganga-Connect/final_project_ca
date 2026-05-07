@@ -43,6 +43,7 @@ public class LucideIconView extends AppCompatImageView {
 
         if (iconName != null) {
             lucideDrawable = new LucideDrawable(iconName);
+            setWillNotDraw(false);
             ColorStateList tintList = getImageTintList();
             if (tintList != null) {
                 iconColor = tintList.getColorForState(getDrawableState(), tintList.getDefaultColor());
