@@ -55,6 +55,7 @@ dependencies {
     implementation libs.cardview
     implementation libs.recyclerview
     implementation libs.blurview
+    implementation libs.lucide.icons
 
     // Firebase BoM — manages all Firebase library versions
     implementation platform(libs.firebase.bom)
