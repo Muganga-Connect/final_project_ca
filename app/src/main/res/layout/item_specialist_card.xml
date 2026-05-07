@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_doctor_placeholder"/>
+                android:src="@drawable/lucide_ic_user_round"/>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Specialist Info -->
