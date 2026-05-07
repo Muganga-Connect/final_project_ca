@@ -32,7 +32,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@android:drawable/ic_menu_compass"
+                    android:src="@drawable/lucide_ic_heart_pulse"
                     android:contentDescription="@string/heart_rate_icon_description"
                     app:tint="#E95C5C" />
                 <TextView
@@ -59,7 +59,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@android:drawable/ic_menu_my_calendar"
+                    android:src="@drawable/lucide_ic_calendar_days"
                     android:contentDescription="@string/calendar_icon_description"
                     app:tint="#F39C12" />
                 <TextView
@@ -327,7 +327,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_add"
+                android:src="@drawable/lucide_ic_paperclip"
                 android:contentDescription="@string/add_attachment"
                 app:tint="#7E8A96" />
 
@@ -348,7 +348,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/lucide_ic_image"
                 android:contentDescription="@string/upload_button_description"
                 app:tint="#7E8A96"
                 android:clickable="true"
@@ -366,7 +366,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
-                    android:src="@android:drawable/ic_menu_send"
+                    android:src="@drawable/lucide_ic_send"
                     android:contentDescription="@string/send_button_description"
                     app:tint="#FFFFFF"
                     android:clickable="true"
