@@ -39,7 +39,7 @@
             android:id="@+id/selectedCheckmark"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_check"
+            android:src="@drawable/lucide_ic_check"
             android:tint="#FFFFFF"
             android:visibility="gone"/>
     </LinearLayout>
