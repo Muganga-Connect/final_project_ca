@@ -57,7 +57,7 @@ dependencies {
     implementation libs.blurview
 
     // Firebase BoM — manages all Firebase library versions
-    implementation libs.firebase.bom
+    implementation platform(libs.firebase.bom)
     implementation libs.google.firebase.auth
     implementation libs.google.firebase.firestore
     implementation libs.google.firebase.messaging
