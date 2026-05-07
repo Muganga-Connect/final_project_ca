@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.mugangaconnect'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.example.mugangaconnect"
@@ -15,9 +15,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        def geminiApiKey = project.findProperty("GEMINI_API_KEY") ?: System.getenv("GEMINI_API_KEY")
-        if (geminiApiKey == null || geminiApiKey.toString().trim().isEmpty()) {
-            throw new GradleException("GEMINI_API_KEY must be provided via local.properties or a CI environment secret.")
+        Properties properties = new Properties()
+        if (project.rootProject.file('local.properties').exists()) {
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        }
+
+        def geminiApiKey = properties.getProperty("GEMINI_API_KEY") ?: project.findProperty("GEMINI_API_KEY") ?: System.getenv("GEMINI_API_KEY") ?: ""
+        if (geminiApiKey.isEmpty()) {
+            logger.warn("GEMINI_API_KEY is missing. Generative AI features will not work.")
         }
         buildConfigField "String", "GEMINI_API_KEY", "\"${geminiApiKey}\""
     }
@@ -29,12 +34,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         buildConfig true
+        viewBinding true
     }
+    dependenciesInfo {
+        includeInApk true
+        includeInBundle true
+    }
+    buildToolsVersion '37.0.0'
+    compileSdkMinor 1
 }
 
 dependencies {
