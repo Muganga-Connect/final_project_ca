@@ -136,7 +136,7 @@
                         android:layout_height="24dp"
                 app:lucideIcon="weight"
                         android:importantForAccessibility="no"
-                        app:tint="@color/text_hint"/>
+                        android:tint="@color/text_hint"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                         android:layout_height="24dp"
                 app:lucideIcon="droplets"
                         android:importantForAccessibility="no"
-                        app:tint="@color/text_hint"/>
+                        android:tint="@color/text_hint"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                         android:layout_height="24dp"
                 app:lucideIcon="siren"
                         android:importantForAccessibility="no"
-                        app:tint="@color/text_hint"/>
+                        android:tint="@color/text_hint"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -274,7 +274,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="user_round"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -306,7 +306,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="shield"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -338,7 +338,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="bell"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -370,7 +370,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="clipboard_list"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -401,7 +401,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="fingerprint_pattern"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -442,7 +442,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="circle_help"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -468,7 +468,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="lock"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -494,7 +494,7 @@
                     android:layout_height="24dp"
                 app:lucideIcon="file_text"
                     android:importantForAccessibility="no"
-                    app:tint="@color/blue_primary"/>
+                    android:tint="@color/blue_primary"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

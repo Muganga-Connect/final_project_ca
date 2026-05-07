@@ -47,7 +47,7 @@
             android:layout_height="24dp"
             android:contentDescription="@string/photo_option_take_photo"
                 app:lucideIcon="camera"
-            app:tint="#1565C0" />
+            android:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -91,7 +91,7 @@
             android:layout_height="24dp"
             android:contentDescription="@string/photo_option_gallery"
                 app:lucideIcon="image"
-            app:tint="#1565C0" />
+            android:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"

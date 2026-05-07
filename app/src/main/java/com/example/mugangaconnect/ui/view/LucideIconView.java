@@ -52,20 +52,23 @@ public class LucideIconView extends AppCompatImageView {
             return;
         }
 
-        TypedArray lucideAttrs = context.obtainStyledAttributes(attrs, R.styleable.LucideIconView);
-        String iconName = lucideAttrs.getString(R.styleable.LucideIconView_lucideIcon);
-        lucideAttrs.recycle();
+        // Capture tint set by super (android:tint) before we clear it
+        ColorStateList imageTint = getSupportImageTintList();
+        if (imageTint == null) imageTint = getImageTintList();
+        if (imageTint != null) iconTint = imageTint;
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LucideIconView);
+        String iconName = a.getString(R.styleable.LucideIconView_lucideIcon);
+        if (a.hasValue(R.styleable.LucideIconView_lucideTint)) {
+            iconTint = a.getColorStateList(R.styleable.LucideIconView_lucideTint);
+        }
+        a.recycle();
+
+        // Clear super's tint so it doesn't interfere with our custom draw
+        super.setImageTintList(null);
 
         if (iconName != null) {
             setLucideIcon(iconName);
-        }
-
-        ColorStateList imageTint = getSupportImageTintList();
-        if (imageTint == null) {
-            imageTint = getImageTintList();
-        }
-        if (imageTint != null) {
-            setImageTintList(imageTint);
         }
     }
 
@@ -123,14 +126,12 @@ public class LucideIconView extends AppCompatImageView {
 
     @Override
     public void setImageTintList(@Nullable ColorStateList tint) {
-        super.setImageTintList(tint);
         iconTint = tint;
         invalidate();
     }
 
     @Override
     public void setSupportImageTintList(@Nullable ColorStateList tint) {
-        super.setSupportImageTintList(tint);
         iconTint = tint;
         invalidate();
     }

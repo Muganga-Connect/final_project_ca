@@ -22,7 +22,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back"
             android:contentDescription="@string/desc_back_button"
-            app:tint="#1A4C91"
+            android:tint="#1A4C91"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -54,7 +54,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_menu"
                 android:contentDescription="@string/menu"
-                app:tint="#1A4C91"/>
+                android:tint="#1A4C91"/>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -82,7 +82,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@android:drawable/ic_menu_search"
-                app:tint="#B0C4DE"/>
+                android:tint="#B0C4DE"/>
 
             <TextView
                 android:layout_width="wrap_content"

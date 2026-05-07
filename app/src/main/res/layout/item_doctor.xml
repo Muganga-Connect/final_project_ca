@@ -64,7 +64,7 @@
             android:layout_height="24dp"
             android:src="@android:drawable/checkbox_on_background"
             android:contentDescription="@string/doctor_selected"
-            app:tint="@color/primary_blue"
+            android:tint="@color/primary_blue"
             android:visibility="gone"/>
 
     </LinearLayout>

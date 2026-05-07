@@ -104,7 +104,7 @@
             android:src="@android:drawable/ic_menu_info_details"
             android:background="@drawable/circle_bg"
             android:padding="4dp"
-            app:tint="#3A7AFE"
+            android:tint="#3A7AFE"
             android:visibility="gone"/>
     </LinearLayout>
 

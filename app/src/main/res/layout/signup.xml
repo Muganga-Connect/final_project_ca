@@ -92,7 +92,7 @@
                                 android:contentDescription="@null"
                                 android:importantForAccessibility="no"
                 app:lucideIcon="log_in"
-                                app:tint="#555555"/>
+                                android:tint="#555555"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                                 android:contentDescription="@null"
                                 android:importantForAccessibility="no"
                 app:lucideIcon="user_plus"
-                                app:tint="#0056b3"/>
+                                android:tint="#0056b3"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
                 app:lucideIcon="user"
-                            app:tint="#0056b3"
+                            android:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etFullName"
@@ -203,7 +203,7 @@
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
                 app:lucideIcon="mail"
-                            app:tint="#0056b3"
+                            android:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etSignUpEmail"
@@ -244,7 +244,7 @@
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
                 app:lucideIcon="lock"
-                            app:tint="#0056b3"
+                            android:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etSignUpPassword"
@@ -264,7 +264,7 @@
                             android:layout_height="24dp"
                             android:contentDescription="@string/toggle_password_visibility"
                 app:lucideIcon="eye"
-                            app:tint="#555555"
+                            android:tint="#555555"
                             android:clickable="true"
                             android:focusable="true"/>
                     </LinearLayout>
@@ -360,7 +360,7 @@
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
                 app:lucideIcon="fingerprint_pattern"
-                            app:tint="#333333"
+                            android:tint="#333333"
                             android:layout_marginEnd="10dp"/>
                         <TextView
                             android:layout_width="wrap_content"
