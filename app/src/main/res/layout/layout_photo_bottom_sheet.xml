@@ -42,12 +42,12 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <ImageView
+        <com.example.mugangaconnect.ui.view.LucideIconView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="@string/photo_option_take_photo"
-            android:src="@drawable/ic_camera"
-            app:tint="#1565C0" />
+                app:lucideIcon="camera"
+            android:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -86,12 +86,12 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <ImageView
+        <com.example.mugangaconnect.ui.view.LucideIconView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="@string/photo_option_gallery"
-            android:src="@drawable/ic_photo_gallery"
-            app:tint="#1565C0" />
+                app:lucideIcon="image"
+            android:tint="#1565C0" />
 
         <LinearLayout
             android:layout_width="0dp"

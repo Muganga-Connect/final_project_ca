@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:paddingBottom="40dp">
 
-            <!-- App Title -->
             <TextView
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
@@ -49,7 +48,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardContainer"
                 android:layout_width="0dp"
@@ -70,7 +68,6 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!--Tab Switcher -->
                     <LinearLayout
                         android:id="@+id/tabContainer"
                         android:layout_width="match_parent"
@@ -87,11 +84,11 @@
                             android:orientation="vertical"
                             android:gravity="center"
                             android:background="@drawable/bg_tab_selected">
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/ic_login_arrow"
-                                app:tint="#0056b3"/>
+                app:lucideIcon="log_in"
+                                android:tint="#0056b3"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -111,11 +108,11 @@
                             android:background="@drawable/bg_tab_unselected"
                             android:clickable="true"
                             android:focusable="true">
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/ic_person_add"
-                                app:tint="#555555"/>
+                app:lucideIcon="user_plus"
+                                android:tint="#555555"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -125,7 +122,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Phone or Email -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -146,11 +142,11 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginBottom="16dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_person"
-                            app:tint="#0056b3"
+                app:lucideIcon="mail"
+                            android:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etLoginEmail"
@@ -166,7 +162,6 @@
                             android:singleLine="true"/>
                     </LinearLayout>
 
-                    <!-- Password Label Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -202,11 +197,11 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginBottom="24dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_lock"
-                            app:tint="#0056b3"
+                app:lucideIcon="lock"
+                            android:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etLoginPassword"
@@ -220,18 +215,17 @@
                             android:textSize="15sp"
                             android:inputType="textPassword"
                             android:singleLine="true"/>
-                        <ImageView
-                android:id="@+id/ivPasswordToggle"
-                android:contentDescription="@string/toggle_password_visibility"
+                        <com.example.mugangaconnect.ui.view.LucideIconView
+                            android:id="@+id/ivPasswordToggle"
+                            android:contentDescription="@string/toggle_password_visibility"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_eye"
-                            app:tint="#555555"
+                app:lucideIcon="eye"
+                            android:tint="#555555"
                             android:clickable="true"
                             android:focusable="true"/>
                     </LinearLayout>
 
-                    <!-- Login Button -->
                     <Button
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
@@ -245,7 +239,6 @@
                         android:textAllCaps="false"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Divider -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -271,7 +264,6 @@
                             android:background="#DDDDDD"/>
                     </LinearLayout>
 
-                    <!-- Biometrics -->
                     <LinearLayout
                         android:id="@+id/btnBiometric"
                         android:layout_width="match_parent"
@@ -282,10 +274,11 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:layout_marginBottom="20dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/fingerprint"
+                app:lucideIcon="fingerprint_pattern"
+                            android:tint="#333333"
                             android:layout_marginEnd="10dp"/>
                         <TextView
                             android:layout_width="wrap_content"
@@ -296,7 +289,6 @@
                             android:textSize="14sp"/>
                     </LinearLayout>
 
-                    <!-- Don't have an account? Sign up -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

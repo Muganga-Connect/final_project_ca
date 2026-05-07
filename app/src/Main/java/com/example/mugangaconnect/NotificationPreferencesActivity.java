@@ -20,8 +20,8 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_preferences);
 
-        switchAppointment = findViewById(R.id.switchAppointment);
-        switchPush = findViewById(R.id.switchPush);
+        switchAppointment = findViewById(R.id.switch_appointment);
+        switchPush = findViewById(R.id.switch_push);
         loadPreferences();
 
         switchAppointment.setOnCheckedChangeListener((b, isChecked) -> savePreference(KEY_APPOINTMENT_REMINDERS, isChecked));

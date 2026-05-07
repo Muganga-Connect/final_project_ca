@@ -26,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#1A1A2E" />
+            android:tint="#1A1A2E" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                             android:padding="4dp"
                             android:contentDescription="@string/content_desc_edit_photo"
                             android:src="@drawable/ic_photo_camera"
-                            app:tint="#FFFFFF" />
+                            android:tint="#FFFFFF" />
                     </FrameLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -229,7 +229,7 @@
                             android:background="@android:color/transparent"
                             android:contentDescription="@string/content_desc_edit_gender"
                             android:src="@drawable/ic_edit"
-                            app:tint="#1565C0" />
+                            android:tint="#1565C0" />
                     </LinearLayout>
 
                     <TextView
@@ -305,7 +305,7 @@
                             android:background="@android:color/transparent"
                             android:contentDescription="@string/content_desc_edit_blood_type"
                             android:src="@drawable/ic_edit"
-                            app:tint="#1565C0" />
+                            android:tint="#1565C0" />
                     </LinearLayout>
 
                     <TextView

@@ -40,7 +40,7 @@
                     android:src="@android:drawable/ic_menu_search"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:padding="4dp"
-                    app:tint="#6B7280"/>
+                    android:tint="#6B7280"/>
             </LinearLayout>
 
             <!-- Tabs -->
@@ -384,7 +384,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@android:drawable/ic_dialog_info"
-                            app:tint="#3A7AFE"/>
+                            android:tint="#3A7AFE"/>
 
                         <TextView
                             android:layout_width="wrap_content"
