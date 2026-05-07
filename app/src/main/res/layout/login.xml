@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:paddingBottom="40dp">
 
-            <!-- App Title -->
             <TextView
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
@@ -49,7 +48,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <!-- Card -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardContainer"
                 android:layout_width="0dp"
@@ -70,7 +68,6 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!--Tab Switcher -->
                     <LinearLayout
                         android:id="@+id/tabContainer"
                         android:layout_width="match_parent"
@@ -125,7 +122,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Phone or Email -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -149,7 +145,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_user"
+                            android:src="@drawable/lucide_ic_mail"
                             app:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
@@ -166,7 +162,6 @@
                             android:singleLine="true"/>
                     </LinearLayout>
 
-                    <!-- Password Label Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -221,8 +216,8 @@
                             android:inputType="textPassword"
                             android:singleLine="true"/>
                         <ImageView
-                android:id="@+id/ivPasswordToggle"
-                android:contentDescription="@string/toggle_password_visibility"
+                            android:id="@+id/ivPasswordToggle"
+                            android:contentDescription="@string/toggle_password_visibility"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/lucide_ic_eye"
@@ -231,7 +226,6 @@
                             android:focusable="true"/>
                     </LinearLayout>
 
-                    <!-- Login Button -->
                     <Button
                         android:id="@+id/btnLogin"
                         android:layout_width="match_parent"
@@ -245,7 +239,6 @@
                         android:textAllCaps="false"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Divider -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -271,7 +264,6 @@
                             android:background="#DDDDDD"/>
                     </LinearLayout>
 
-                    <!-- Biometrics -->
                     <LinearLayout
                         android:id="@+id/btnBiometric"
                         android:layout_width="match_parent"
@@ -297,7 +289,6 @@
                             android:textSize="14sp"/>
                     </LinearLayout>
 
-                    <!-- Don't have an account? Sign up -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
