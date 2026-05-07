@@ -50,8 +50,10 @@ public class Appointment {
     public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
     public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
     public void setDepartment(String department) { this.department = department; }
+    @Exclude
     public void setStatus(Status status) { this.status = status; }
     public void setStatus(String status) { this.status = statusFromString(status); }
+    @Exclude
     public void setRiskLevel(RiskLevel riskLevel) { this.riskLevel = riskLevel; }
     public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevelFromString(riskLevel); }
     public void setDate(String date) { this.date = date; }
