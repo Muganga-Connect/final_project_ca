@@ -22,7 +22,7 @@
     <color name="splash_background">#2176FF</color>
     <color name="splash_accent_orange">#BF360C</color>
 
-    <!-- Missing colors causing build failure -->
+    <!-- Shared UI color resources -->
     <color name="blue_field_bg">#D6EFFF</color>
     <color name="tab_selected_bg">#FFFFFF</color>
     <color name="tab_unselected_bg">#E8F2FF</color>

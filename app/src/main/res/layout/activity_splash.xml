@@ -21,6 +21,7 @@
             android:layout_height="100dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/ic_muganga_connect_logo"
+            android:contentDescription="@string/app_logo_description"
             android:scaleType="fitCenter" />
 
     </LinearLayout>
@@ -42,6 +43,7 @@
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/loading_pulse" />
 
         <ImageView
@@ -49,12 +51,14 @@
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/loading_pulse" />
 
         <ImageView
             android:id="@+id/loading_dot3"
             android:layout_width="12dp"
             android:layout_height="12dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/loading_pulse" />
 
     </LinearLayout>
@@ -66,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/loading_container"
         android:layout_centerHorizontal="true"
-        android:text="Loading..."
+        android:text="@string/loading_text"
         android:textColor="@color/text_hint"
         android:textSize="14sp"
         android:fontFamily="sans-serif"

@@ -28,7 +28,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="#000000" />
+            android:tint="#000000" />
 
         <TextView
             android:id="@+id/tvHeaderTitle"
@@ -88,7 +88,7 @@
                             android:layout_height="32dp"
                             android:src="@drawable/ic_lock"
                             android:contentDescription="Security key icon"
-                            app:tint="@color/black" />
+                            android:tint="@color/black" />
 
                         <TextView
                             android:id="@+id/tvPinSecurity"
