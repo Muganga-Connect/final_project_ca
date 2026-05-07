@@ -399,7 +399,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/lucide_ic_fingerprint"
+                    android:src="@drawable/lucide_ic_fingerprint_pattern"
                     android:importantForAccessibility="no"
                     app:tint="@color/blue_primary"/>
                 <TextView
