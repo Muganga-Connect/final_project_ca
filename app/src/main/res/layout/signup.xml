@@ -86,12 +86,12 @@
                             android:background="@drawable/bg_tab_unselected"
                             android:clickable="true"
                             android:focusable="true">
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:contentDescription="@null"
                                 android:importantForAccessibility="no"
-                                android:src="@drawable/lucide_ic_log_in"
+                app:lucideIcon="log_in"
                                 app:tint="#555555"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -109,12 +109,12 @@
                             android:orientation="vertical"
                             android:gravity="center"
                             android:background="@drawable/bg_tab_selected">
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:contentDescription="@null"
                                 android:importantForAccessibility="no"
-                                android:src="@drawable/lucide_ic_user_plus"
+                app:lucideIcon="user_plus"
                                 app:tint="#0056b3"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -156,12 +156,12 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginBottom="16dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/lucide_ic_user"
+                app:lucideIcon="user"
                             app:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
@@ -197,12 +197,12 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginBottom="16dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/lucide_ic_mail"
+                app:lucideIcon="mail"
                             app:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
@@ -238,12 +238,12 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginBottom="8dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/lucide_ic_lock"
+                app:lucideIcon="lock"
                             app:tint="#0056b3"
                             android:layout_marginEnd="12dp"/>
                         <EditText
@@ -258,12 +258,12 @@
                             android:textSize="15sp"
                             android:inputType="textPassword"
                             android:maxLines="1"/>
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:id="@+id/ivPasswordToggle"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:contentDescription="@string/toggle_password_visibility"
-                            android:src="@drawable/lucide_ic_eye"
+                app:lucideIcon="eye"
                             app:tint="#555555"
                             android:clickable="true"
                             android:focusable="true"/>
@@ -354,12 +354,12 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:layout_marginBottom="20dp">
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:contentDescription="@null"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/lucide_ic_fingerprint_pattern"
+                app:lucideIcon="fingerprint_pattern"
                             app:tint="#333333"
                             android:layout_marginEnd="10dp"/>
                         <TextView

@@ -81,11 +81,11 @@
                             app:cardCornerRadius="30dp"
                             app:cardElevation="4dp">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:id="@+id/dashboardProfileImage"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/lucide_ic_user_round"
+                app:lucideIcon="user_round"
                                 android:contentDescription="@string/dashboard_profile_image_description"
                                 android:scaleType="centerCrop"
                                 android:background="@drawable/circle_gradient_bg"/>
@@ -109,10 +109,10 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/lucide_ic_weight"
+                app:lucideIcon="weight"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -142,10 +142,10 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/lucide_ic_ruler"
+                app:lucideIcon="ruler"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -175,10 +175,10 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/lucide_ic_droplets"
+                app:lucideIcon="droplets"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -208,10 +208,10 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/lucide_ic_heart"
+                app:lucideIcon="heart"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -262,10 +262,10 @@
                         android:gravity="center_vertical"
                         android:layout_marginBottom="12dp">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_bell_ring"
+                app:lucideIcon="bell_ring"
                             android:tint="#EA580C"
                             android:layout_marginEnd="8dp"/>
 
@@ -369,10 +369,10 @@
                             android:gravity="center_vertical"
                             android:layout_marginBottom="12dp">
 
-                            <ImageView
+                            <com.example.mugangaconnect.ui.view.LucideIconView
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
-                                android:src="@drawable/lucide_ic_calendar_days"
+                app:lucideIcon="calendar_days"
                                 android:tint="#8B9DC3"
                                 android:layout_marginEnd="6dp"/>
 
@@ -449,10 +449,10 @@
                         android:padding="20dp"
                         android:visibility="gone">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/lucide_ic_calendar_x"
+                app:lucideIcon="calendar_x"
                             android:tint="#CBD5E0"
                             android:layout_marginBottom="12dp"/>
 
@@ -515,10 +515,10 @@
                         android:background="@drawable/bg_metric_item"
                         android:layout_marginBottom="8dp">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_activity"
+                app:lucideIcon="activity"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -567,10 +567,10 @@
                         android:background="@drawable/bg_metric_item"
                         android:layout_marginBottom="8dp">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_heart_pulse"
+                app:lucideIcon="heart_pulse"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -618,10 +618,10 @@
                         android:padding="12dp"
                         android:background="@drawable/bg_metric_item">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_droplet"
+                app:lucideIcon="droplet"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -698,10 +698,10 @@
                         android:background="@drawable/bg_reminder_item"
                         android:layout_marginBottom="8dp">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_pill"
+                app:lucideIcon="pill"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -746,10 +746,10 @@
                         android:padding="12dp"
                         android:background="@drawable/bg_reminder_item">
 
-                        <ImageView
+                        <com.example.mugangaconnect.ui.view.LucideIconView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/lucide_ic_calendar_clock"
+                app:lucideIcon="calendar_clock"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 

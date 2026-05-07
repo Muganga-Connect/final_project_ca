@@ -25,12 +25,12 @@
             app:cardCornerRadius="28dp"
             app:cardElevation="2dp">
 
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:id="@+id/doctorAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/lucide_ic_user_round"/>
+                app:lucideIcon="user_round"/>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Doctor Info -->

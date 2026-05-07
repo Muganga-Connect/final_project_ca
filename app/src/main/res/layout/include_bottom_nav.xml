@@ -25,11 +25,11 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="dashboard">
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="@string/dashboard"
-                android:src="@drawable/lucide_ic_layout_dashboard"
+                app:lucideIcon="layout_dashboard"
                 app:tint="#667A90"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -48,11 +48,11 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="schedule">
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="20dp"
                 android:layout_height="22dp"
                 android:contentDescription="@string/schedule"
-                android:src="@drawable/lucide_ic_calendar_days"
+                app:lucideIcon="calendar_days"
                 app:tint="#667A90"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -71,11 +71,11 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="ai_assistant">
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:contentDescription="@string/ai_assistant"
-                android:src="@drawable/lucide_ic_bot"
+                app:lucideIcon="bot"
                 app:tint="#667A90"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -94,11 +94,11 @@
             android:gravity="center"
             android:orientation="vertical"
             android:tag="profile">
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:contentDescription="@string/profile_nav"
-                android:src="@drawable/lucide_ic_user_round"
+                app:lucideIcon="user_round"
                 app:tint="#667A90"/>
             <TextView
                 android:layout_width="wrap_content"

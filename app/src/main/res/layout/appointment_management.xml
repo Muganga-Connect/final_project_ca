@@ -33,11 +33,11 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:id="@+id/ivMenu"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/lucide_ic_menu"
+                app:lucideIcon="menu"
                     android:tint="#9AA5B4"
                     android:contentDescription="Menu" />
 
@@ -118,10 +118,10 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp">
 
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/lucide_ic_search"
+                app:lucideIcon="search"
                     android:tint="#9AA5B4"
                 android:contentDescription="Search" />
 
@@ -139,10 +139,10 @@
                 android:importantForAutofill="no"
                 android:inputType="text" />
 
-            <ImageView
+            <com.example.mugangaconnect.ui.view.LucideIconView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/lucide_ic_sliders_horizontal"
+                app:lucideIcon="sliders_horizontal"
                     android:tint="#9AA5B4"
                 android:contentDescription="Filter" />
         </LinearLayout>
@@ -198,10 +198,10 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_building_2"
+                app:lucideIcon="building_2"
                     android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
@@ -226,10 +226,10 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_building_2"
+                app:lucideIcon="building_2"
                     android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
@@ -253,10 +253,10 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_building_2"
+                app:lucideIcon="building_2"
                     android:tint="#9AA5B4"
                     android:contentDescription="Hospital" />
 
@@ -405,10 +405,10 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/lucide_ic_heart_pulse"
+                app:lucideIcon="heart_pulse"
                     android:tint="#9AA5B4"
                     android:contentDescription="Cardiology" />
 
@@ -433,10 +433,10 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/lucide_ic_brain"
+                app:lucideIcon="brain"
                     android:tint="#9AA5B4"
                     android:contentDescription="Neurology" />
 
@@ -450,10 +450,10 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/lucide_ic_circle_check"
+                app:lucideIcon="circle_check"
                     android:tint="#FFFFFF"
                     android:contentDescription="Selected" />
             </LinearLayout>
@@ -470,10 +470,10 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/lucide_ic_smile"
+                app:lucideIcon="smile"
                     android:tint="#9AA5B4"
                     android:contentDescription="Dentistry" />
 
@@ -508,10 +508,10 @@
                 android:orientation="horizontal">
 
                 <!-- Step 1 completed -->
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_circle_check_big"
+                app:lucideIcon="circle_check_big"
                     android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
@@ -579,11 +579,11 @@
                 android:padding="12dp">
 
                 <!-- Doctor avatar -->
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:id="@+id/ivDoctorAvatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/lucide_ic_user_round"
+                app:lucideIcon="user_round"
                     android:tint="#9AA5B4"
                     android:background="@drawable/bg_dot_green"
                     android:padding="2dp"
@@ -643,10 +643,10 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <com.example.mugangaconnect.ui.view.LucideIconView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/lucide_ic_star"
+                app:lucideIcon="star"
                     android:tint="#F5A623"
                         android:contentDescription="Star" />
 
@@ -681,10 +681,10 @@
                     android:textColor="#9AA5B4"
                     android:textSize="13sp" />
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/lucide_ic_chevron_right"
+                app:lucideIcon="chevron_right"
                     android:tint="#9AA5B4"
                     android:contentDescription="Navigate" />
             </LinearLayout>
@@ -710,10 +710,10 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_circle_check_big"
+                app:lucideIcon="circle_check_big"
                     android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
@@ -723,10 +723,10 @@
                     android:layout_weight="1"
                     android:background="#3D7FE8" />
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/lucide_ic_circle_check_big"
+                app:lucideIcon="circle_check_big"
                     android:tint="#3D7FE8"
                     android:contentDescription="Completed" />
 
@@ -879,12 +879,12 @@
                 </LinearLayout>
 
                 <!-- Calendar icon -->
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:src="@drawable/lucide_ic_calendar_days"
+                app:lucideIcon="calendar_days"
                     android:tint="#9AA5B4"
                     android:contentDescription="Calendar" />
             </LinearLayout>
@@ -1048,10 +1048,10 @@
                 android:orientation="horizontal"
                 android:padding="12dp">
 
-                <ImageView
+                <com.example.mugangaconnect.ui.view.LucideIconView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/lucide_ic_sparkles"
+                app:lucideIcon="sparkles"
                     android:tint="#3D7FE8"
                     android:contentDescription="AI" />
 
@@ -1090,7 +1090,7 @@
         <!-- ============================================================ -->
         <!--  BOOK APPOINTMENT CTA BUTTON                                  -->
         <!-- ============================================================ -->
-        <Button
+        <com.example.mugangaconnect.ui.view.LucideButton
             android:id="@+id/btnBookAppointment"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -1098,12 +1098,12 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/bg_btn_primary"
-            android:drawableEnd="@drawable/lucide_ic_arrow_right"
             android:gravity="center"
             android:text="Book Appointment"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:lucideDrawableEnd="arrow_right" />
 
     </LinearLayout>
 </ScrollView>
