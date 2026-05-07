@@ -37,7 +37,7 @@
                     android:id="@+id/ivMenu"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu"
+                    android:src="@drawable/lucide_ic_menu"
                     android:contentDescription="Menu" />
 
                 <TextView
@@ -120,7 +120,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/ic_search"
+                android:src="@drawable/lucide_ic_search"
                 android:contentDescription="Search" />
 
             <EditText
@@ -140,7 +140,7 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:src="@drawable/ic_filter"
+                android:src="@drawable/lucide_ic_sliders_horizontal"
                 android:contentDescription="Filter" />
         </LinearLayout>
 
@@ -198,7 +198,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_hospital"
+                    android:src="@drawable/lucide_ic_building_2"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -225,7 +225,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_hospital"
+                    android:src="@drawable/lucide_ic_building_2"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -251,7 +251,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_hospital"
+                    android:src="@drawable/lucide_ic_building_2"
                     android:contentDescription="Hospital" />
 
                 <TextView
@@ -402,7 +402,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_cardiology"
+                    android:src="@drawable/lucide_ic_heart_pulse"
                     android:contentDescription="Cardiology" />
 
                 <TextView
@@ -429,7 +429,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_neurology"
+                    android:src="@drawable/lucide_ic_brain"
                     android:contentDescription="Neurology" />
 
                 <TextView
@@ -445,7 +445,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_check_circle"
+                    android:src="@drawable/lucide_ic_circle_check"
                     android:contentDescription="Selected" />
             </LinearLayout>
 
@@ -464,7 +464,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_dentistry"
+                    android:src="@drawable/lucide_ic_smile"
                     android:contentDescription="Dentistry" />
 
                 <TextView
@@ -501,7 +501,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_step_completed"
+                    android:src="@drawable/lucide_ic_circle_check_big"
                     android:contentDescription="Completed" />
 
                 <View
@@ -572,7 +572,7 @@
                     android:id="@+id/ivDoctorAvatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/img_doctor_sarah"
+                    android:src="@drawable/lucide_ic_user_round"
                     android:background="@drawable/bg_dot_green"
                     android:padding="2dp"
                     android:contentDescription="Doctor" />
@@ -634,7 +634,7 @@
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:src="@drawable/ic_star"
+                        android:src="@drawable/lucide_ic_star"
                         android:contentDescription="Star" />
 
                     <TextView
@@ -671,7 +671,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/ic_chevron_right"
+                    android:src="@drawable/lucide_ic_chevron_right"
                     android:contentDescription="Navigate" />
             </LinearLayout>
         </LinearLayout>
@@ -699,7 +699,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_step_completed"
+                    android:src="@drawable/lucide_ic_circle_check_big"
                     android:contentDescription="Completed" />
 
                 <View
@@ -711,7 +711,7 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/ic_step_completed"
+                    android:src="@drawable/lucide_ic_circle_check_big"
                     android:contentDescription="Completed" />
 
                 <View
@@ -868,7 +868,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_calendar_small"
+                    android:src="@drawable/lucide_ic_calendar_days"
                     android:contentDescription="Calendar" />
             </LinearLayout>
 
@@ -1034,7 +1034,7 @@
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/ic_ai_sparkle"
+                    android:src="@drawable/lucide_ic_sparkles"
                     android:contentDescription="AI" />
 
                 <TextView
