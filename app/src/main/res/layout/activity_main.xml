@@ -85,7 +85,7 @@
                                 android:id="@+id/dashboardProfileImage"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/user"
+                                android:src="@drawable/lucide_ic_user_round"
                                 android:contentDescription="@string/dashboard_profile_image_description"
                                 android:scaleType="centerCrop"
                                 android:background="@drawable/circle_gradient_bg"/>
@@ -112,7 +112,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_weight"
+                                android:src="@drawable/lucide_ic_weight"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -145,7 +145,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_height"
+                                android:src="@drawable/lucide_ic_ruler"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -178,7 +178,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_blood"
+                                android:src="@drawable/lucide_ic_droplets"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -211,7 +211,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_heart"
+                                android:src="@drawable/lucide_ic_heart"
                                 android:tint="#8B9DC3"
                                 android:layout_marginBottom="4dp"/>
 
@@ -265,7 +265,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_smart_alert"
+                            android:src="@drawable/lucide_ic_bell_ring"
                             android:tint="#EA580C"
                             android:layout_marginEnd="8dp"/>
 
@@ -372,7 +372,7 @@
                             <ImageView
                                 android:layout_width="16dp"
                                 android:layout_height="16dp"
-                                android:src="@drawable/ic_calendar"
+                                android:src="@drawable/lucide_ic_calendar_days"
                                 android:tint="#8B9DC3"
                                 android:layout_marginEnd="6dp"/>
 
@@ -452,7 +452,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/ic_calendar_empty"
+                            android:src="@drawable/lucide_ic_calendar_days_empty"
                             android:tint="#CBD5E0"
                             android:layout_marginBottom="12dp"/>
 
@@ -518,7 +518,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_blood_pressure"
+                            android:src="@drawable/lucide_ic_droplets_pressure"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -570,7 +570,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_heart_rate"
+                            android:src="@drawable/lucide_ic_heart_rate"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -621,7 +621,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_blood_sugar"
+                            android:src="@drawable/lucide_ic_droplets_sugar"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -701,7 +701,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_medication"
+                            android:src="@drawable/lucide_ic_pill"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
@@ -749,7 +749,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_calendar_reminder"
+                            android:src="@drawable/lucide_ic_calendar_days_reminder"
                             android:tint="#4A90E2"
                             android:layout_marginEnd="12dp"/>
 
