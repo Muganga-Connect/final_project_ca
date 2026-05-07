@@ -40,7 +40,7 @@ public class LucideButton extends AppCompatButton {
             icon.setTint(getCurrentTextColor());
             int iconSize = Math.round(24 * getResources().getDisplayMetrics().density);
             icon.setBounds(0, 0, iconSize, iconSize);
-            setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, icon, null);
+            setCompoundDrawablesRelative(null, null, icon, null);
         }
     }
 }
