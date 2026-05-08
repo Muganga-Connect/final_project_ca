@@ -20,6 +20,9 @@ public class User {
     public String insuranceId;
     public String allergies;
     public String emergencyContact;
+    public String profileImageUrl;
+    public String weight;
+    public String height;
     public long updatedAt;
 
     public User() {
@@ -47,6 +50,9 @@ public class User {
     public String getInsuranceId() { return insuranceId; }
     public String getAllergies() { return allergies; }
     public String getEmergencyContact() { return emergencyContact; }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public String getWeight() { return weight; }
+    public String getHeight() { return height; }
 
     // Setters
     public void setUid(@NonNull String uid) { this.uid = uid; }
@@ -60,4 +66,7 @@ public class User {
     public void setInsuranceId(String insuranceId) { this.insuranceId = insuranceId; }
     public void setAllergies(String allergies) { this.allergies = allergies; }
     public void setEmergencyContact(String emergencyContact) { this.emergencyContact = emergencyContact; }
+    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+    public void setWeight(String weight) { this.weight = weight; }
+    public void setHeight(String height) { this.height = height; }
 }
