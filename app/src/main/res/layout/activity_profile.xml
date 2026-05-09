@@ -36,18 +36,20 @@
                     android:padding="24dp"
                     android:gravity="center_horizontal">
 
-                    <!-- Language Selector -->
+                    <!-- Language Selector button — text set dynamically in ProfileActivity -->
                     <TextView
                         android:id="@+id/languageSelector"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="EN ▼"
+                        android:text="@string/language_label"
                         android:textSize="14sp"
                         android:textColor="@color/text_dark"
                         android:background="@drawable/bg_edittext"
                         android:padding="8dp"
                         android:layout_gravity="end"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
 
                     <!-- Profile Image -->
                     <androidx.cardview.widget.CardView
@@ -55,11 +57,11 @@
                         android:layout_height="100dp"
                         app:cardCornerRadius="50dp"
                         app:cardElevation="0dp">
-                        <com.example.mugangaconnect.ui.view.LucideIconView
+                        <ImageView
                             android:id="@+id/profileImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                app:lucideIcon="user_round"
+                            android:src="@drawable/user"
                             android:scaleType="centerCrop"/>
                     </androidx.cardview.widget.CardView>
 
@@ -74,11 +76,11 @@
                         android:textStyle="bold"
                         android:layout_marginTop="16dp"/>
 
-                    <!-- Patient ID -->
+                    <!-- Patient ID label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Patient ID:"
+                        android:text="@string/patient_id_label"
                         android:textSize="14sp"
                         android:textColor="@color/text_hint"
                         android:layout_marginTop="4dp"/>
@@ -97,13 +99,15 @@
                         android:id="@+id/editProfileBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Edit"
+                        android:text="@string/edit_btn"
                         android:textSize="14sp"
                         android:textColor="@color/blue_primary"
                         android:background="@drawable/bg_tab_selected"
                         android:paddingHorizontal="32dp"
                         android:paddingVertical="8dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -111,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Health Snapshot"
+                android:text="@string/health_snapshot"
                 android:textSize="18sp"
                 android:textColor="@color/text_dark"
                 android:textStyle="bold"
@@ -131,12 +135,12 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:gravity="center_vertical">
-                    <com.example.mugangaconnect.ui.view.LucideIconView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                app:lucideIcon="weight"
-                        android:importantForAccessibility="no"
-                        android:tint="@color/text_hint"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="⚖️"
+                        android:textSize="20sp"
+                        android:gravity="center"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -146,7 +150,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="WEIGHT"
+                            android:text="@string/weight_label"
                             android:textSize="11sp"
                             android:textColor="@color/text_hint"/>
                         <TextView
@@ -175,12 +179,12 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:gravity="center_vertical">
-                    <com.example.mugangaconnect.ui.view.LucideIconView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                app:lucideIcon="droplets"
-                        android:importantForAccessibility="no"
-                        android:tint="@color/text_hint"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="💧"
+                        android:textSize="20sp"
+                        android:gravity="center"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -190,7 +194,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="BLOOD TYPE"
+                            android:text="@string/blood_type_label"
                             android:textSize="11sp"
                             android:textColor="@color/text_hint"/>
                         <TextView
@@ -219,12 +223,12 @@
                     android:orientation="horizontal"
                     android:padding="16dp"
                     android:gravity="center_vertical">
-                    <com.example.mugangaconnect.ui.view.LucideIconView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                app:lucideIcon="siren"
-                        android:importantForAccessibility="no"
-                        android:tint="@color/text_hint"/>
+                    <TextView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:text="🚨"
+                        android:textSize="20sp"
+                        android:gravity="center"/>
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -234,7 +238,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="EMERGENCY"
+                            android:text="@string/emergency_label"
                             android:textSize="11sp"
                             android:textColor="@color/text_hint"/>
                         <TextView
@@ -253,7 +257,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Account Settings"
+                android:text="@string/account_settings"
                 android:textSize="18sp"
                 android:textColor="@color/text_dark"
                 android:textStyle="bold"
@@ -268,18 +272,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="user_round"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="👤"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Personal Information"
+                    android:text="@string/personal_information"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -300,18 +306,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="shield"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="🛡️"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Security &amp; PIN"
+                    android:text="@string/security_pin"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -332,18 +340,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="bell"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="🔔"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Notification Preferences"
+                    android:text="@string/notification_preferences"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -364,18 +374,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="clipboard_list"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="📋"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Manage Reminders"
+                    android:text="@string/manage_reminders"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -396,17 +408,17 @@
                 android:padding="16dp"
                 android:layout_marginBottom="24dp"
                 android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="fingerprint_pattern"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="🔒"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Enable Biometrics"
+                    android:text="@string/enable_biometrics"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -421,7 +433,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Support"
+                android:text="@string/support"
                 android:textSize="18sp"
                 android:textColor="@color/text_dark"
                 android:textStyle="bold"
@@ -436,18 +448,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="circle_help"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="❓"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Help Center"
+                    android:text="@string/help_center"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -462,18 +476,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="lock"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="🔐"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Privacy Policy"
+                    android:text="@string/privacy_policy"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -488,18 +504,20 @@
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:layout_marginBottom="24dp"
-                android:gravity="center_vertical">
-                <com.example.mugangaconnect.ui.view.LucideIconView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                app:lucideIcon="file_text"
-                    android:importantForAccessibility="no"
-                    android:tint="@color/blue_primary"/>
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="📄"
+                    android:textSize="20sp"
+                    android:gravity="center"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Terms of Service"
+                    android:text="@string/terms_of_service"
                     android:textSize="15sp"
                     android:textColor="@color/text_dark"
                     android:layout_marginStart="12dp"/>
@@ -510,14 +528,16 @@
                 android:id="@+id/logoutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log Out"
+                android:text="@string/log_out"
                 android:textSize="16sp"
                 android:textColor="#D32F2F"
                 android:textStyle="bold"
                 android:background="@drawable/bg_edittext"
                 android:padding="16dp"
                 android:gravity="center"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"/>
 
         </LinearLayout>
     </ScrollView>

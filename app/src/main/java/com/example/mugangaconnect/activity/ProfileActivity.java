@@ -1,43 +1,38 @@
 package com.example.mugangaconnect.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
-import com.example.mugangaconnect.utils.ImagePickerUtils;
-import com.example.mugangaconnect.utils.ImageUploadUtils;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-public class ProfileActivity extends AppCompatActivity implements ImagePickerUtils.ImagePickerResultHandler {
+public class ProfileActivity extends AppCompatActivity {
 
     private AuthRepository authRepo;
     private SessionManager session;
-    private ImageView profilePicture;
-    private ImageUploadUtils imageUploadUtils;
-    private ImagePickerUtils.ImagePickerCallback pendingImageCallback;
-    private FirebaseFirestore firestore;
+    private TextView tvName, tvPatientId, tvWeight, tvBloodType, tvEmergency;
+    private ImageView imgProfile;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,129 +40,129 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
         setContentView(R.layout.activity_profile);
 
         authRepo = new AuthRepository();
-        session = new SessionManager(this);
-        imageUploadUtils = new ImageUploadUtils(this);
-        firestore = FirebaseFirestore.getInstance();
+        session  = new SessionManager(this);
 
-        profilePicture = findViewById(R.id.profileImage);
-        profilePicture.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, 2);
+        initViews();
+        setupInsets();
+        loadUserProfile();
+
+        setupAccountSettings();
+        setupSupport();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.PROFILE);
+
+        findViewById(R.id.editProfileBtn).setOnClickListener(v ->
+                startActivity(new Intent(this, PersonalInformationActivity.class)));
+
+        updateLanguageButton();
+        findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
+
+        SwitchCompat biometricSwitch = findViewById(R.id.biometricSwitch);
+        biometricSwitch.setChecked(session.isBiometricEnabled());
+        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+            session.setBiometricEnabled(isChecked);
+            Toast.makeText(this,
+                    getString(isChecked ? R.string.biometrics_enabled : R.string.biometrics_disabled),
+                    Toast.LENGTH_SHORT).show();
         });
 
+        findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
+    }
+
+    private void initViews() {
+        tvName = findViewById(R.id.profileName);
+        tvPatientId = findViewById(R.id.patientId);
+        tvWeight = findViewById(R.id.weightValue);
+        tvBloodType = findViewById(R.id.bloodTypeValue);
+        tvEmergency = findViewById(R.id.emergencyValue);
+        imgProfile = findViewById(R.id.profileImage);
+    }
+
+    private void setupInsets() {
         View root = findViewById(R.id.main);
         View scroll = findViewById(R.id.profileScroll);
         View bottomBar = findViewById(R.id.bottomBar);
 
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            if (scroll != null) scroll.setPadding(0, systemBars.top, 0, 0);
-            if (bottomBar != null) bottomBar.setPadding(0, 0, 0, systemBars.bottom);
+            Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            if (scroll    != null) scroll.setPadding(0, sys.top, 0, 0);
+            if (bottomBar != null) bottomBar.setPadding(0, 0, 0, sys.bottom);
             return insets;
         });
+    }
 
-        loadProfileData();
-        setupAccountSettings();
-        setupSupport();
-        BottomNavHelper.setup(this, BottomNavHelper.Screen.PROFILE);
+    private void loadUserProfile() {
+        String uid = session.getUid();
+        if (uid == null) return;
 
-        // Edit profile button → Personal Information
-        findViewById(R.id.editProfileBtn).setOnClickListener(v ->
-                startActivity(new Intent(this, PersonalInformationActivity.class)));
+        // Load cached name first
+        if (tvName != null) tvName.setText(session.getFullName());
+        if (tvPatientId != null) tvPatientId.setText("PN-" + uid.substring(0, 5).toUpperCase());
 
-        // Language selector
-        findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
+        authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> {
+                    if (tvName != null) tvName.setText(user.getFullName());
+                    if (tvWeight != null) tvWeight.setText(user.getWeight() != null ? user.getWeight() + " kg" : "---");
+                    if (tvBloodType != null) tvBloodType.setText(user.getBloodType() != null ? user.getBloodType() : "---");
+                    if (tvEmergency != null) tvEmergency.setText(user.getEmergencyContact() != null ? user.getEmergencyContact() : "---");
+                    
+                    if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+                        Glide.with(ProfileActivity.this)
+                                .load(user.getProfileImageUrl())
+                                .placeholder(R.drawable.user)
+                                .into(imgProfile);
+                    }
+                });
+            }
 
-        // Biometric switch
-        SwitchCompat biometricSwitch = findViewById(R.id.biometricSwitch);
-        biometricSwitch.setChecked(session.isBiometricEnabled());
-        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
-            if (isChecked) {
-                checkBiometricAvailability(biometricSwitch);
-            } else {
-                session.setBiometricEnabled(false);
-                Toast.makeText(this, "Biometrics disabled", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onError(String message) {
+                // Keep default/session values
             }
         });
-
-        // Log out
-        findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }
 
-    private void loadProfileData() {
-        String name = session.getFullName();
-        String uid  = session.getUid();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserProfile(); // Refresh data when coming back from edit screen
+    }
 
-        TextView tvName = findViewById(R.id.profileName);
-        if (tvName != null && name != null && !name.isEmpty()) tvName.setText(name);
-
-        TextView tvId = findViewById(R.id.patientId);
-        if (tvId != null) {
-            String safeUidPart = "";
-            if (uid != null && !uid.isEmpty()) {
-                safeUidPart = uid.substring(0, Math.min(uid.length(), 6)).toUpperCase();
-            }
-            tvId.setText(safeUidPart.isEmpty() ? "PN-N/A" : "PN-" + safeUidPart);
-        }
-
-        // Load extra fields from Firestore
-        if (uid != null) {
-            authRepo.getProfile(uid, new com.example.mugangaconnect.data.repository.AuthRepository.ProfileCallback() {
-                @Override
-                public void onSuccess(com.example.mugangaconnect.data.model.User user) {
-                    runOnUiThread(() -> {
-                        if (tvName != null && user.getFullName() != null) tvName.setText(user.getFullName());
-                        String email = user.getEmail() != null ? user.getEmail() : session.getEmail();
-                        session.saveSession(uid, user.getFullName(), email,
-                                user.getPhone() != null ? user.getPhone() : "");
-                    });
-                }
-                @Override public void onError(String message) {}
-            });
-            
-            // Load profile image
-            loadProfileImage(uid);
+    private void updateLanguageButton() {
+        TextView btn = findViewById(R.id.languageSelector);
+        if (btn == null) return;
+        switch (session.getLanguage()) {
+            case LocaleHelper.LANG_FRENCH:      btn.setText("FR ▼"); break;
+            case LocaleHelper.LANG_KINYARWANDA: btn.setText("RW ▼"); break;
+            default:                            btn.setText("EN ▼"); break;
         }
     }
 
-    private void loadProfileImage(String uid) {
-        // First try to load from user's main document (most reliable)
-        firestore.collection("users").document(uid).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String profileImageUrl = documentSnapshot.getString("profilePicture");
-                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                            Glide.with(ProfileActivity.this).load(profileImageUrl).into(profilePicture);
-                        } else {
-                            // Fallback to user_images collection
-                            loadProfileImageFromUserImages(uid);
-                        }
-                    } else {
-                        // Fallback to user_images collection
-                        loadProfileImageFromUserImages(uid);
-                    }
+    private void showLanguageDialog() {
+        String[] labels = {"🇬🇧  English", "🇫🇷  Français", "🇷🇼  Kinyarwanda"};
+        String[] codes  = {LocaleHelper.LANG_ENGLISH, LocaleHelper.LANG_FRENCH, LocaleHelper.LANG_KINYARWANDA};
+
+        String current = session.getLanguage();
+        int checkedItem = 0;
+        for (int i = 0; i < codes.length; i++) {
+            if (codes[i].equals(current)) { checkedItem = i; break; }
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.select_language))
+                .setSingleChoiceItems(labels, checkedItem, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (codes[which].equals(current)) return;
+
+                    session.saveLanguage(codes[which]);
+                    Intent intent = new Intent(this, SplashActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                 })
-                .addOnFailureListener(e -> {
-                    // Fallback to user_images collection on error
-                    loadProfileImageFromUserImages(uid);
-                });
-    }
-    
-    private void loadProfileImageFromUserImages(String uid) {
-        firestore.collection("user_images")
-                .whereEqualTo("userId", uid)
-                .whereEqualTo("folder", "profile_images")
-                .orderBy("uploadedAt", Query.Direction.DESCENDING)
-                .limit(1)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        String imageUrl = task.getResult().getDocuments().get(0).getString("imageUrl");
-                        if (imageUrl != null) {
-                            Glide.with(ProfileActivity.this).load(imageUrl).into(profilePicture);
-                        }
-                    }
-                });
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
     }
 
     private void setupAccountSettings() {
@@ -181,140 +176,32 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
                 startActivity(new Intent(this, NotificationPreferencesActivity.class)));
 
         findViewById(R.id.remindersItem).setOnClickListener(v ->
-                Toast.makeText(this, "Manage Reminders coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
     }
 
     private void setupSupport() {
         findViewById(R.id.helpCenterItem).setOnClickListener(v ->
-                Toast.makeText(this, "Help Center coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
 
         findViewById(R.id.privacyPolicyItem).setOnClickListener(v ->
-                Toast.makeText(this, "Privacy Policy coming soon", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
 
         findViewById(R.id.termsItem).setOnClickListener(v ->
-                Toast.makeText(this, "Terms of Service coming soon", Toast.LENGTH_SHORT).show());
-    }
-
-    private void showLanguageDialog() {
-        String[] languages = {"English (EN)", "Français (FR)", "Kinyarwanda (RW)"};
-        new AlertDialog.Builder(this)
-                .setTitle("Select Language")
-                .setItems(languages, (dialog, which) ->
-                        Toast.makeText(this, languages[which] + " selected", Toast.LENGTH_SHORT).show())
-                .show();
+                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
     }
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Log Out")
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Log Out", (dialog, which) -> {
+                .setTitle(getString(R.string.logout_title))
+                .setMessage(getString(R.string.logout_message))
+                .setPositiveButton(getString(R.string.logout_confirm), (dialog, which) -> {
                     authRepo.logout();
                     session.clearSession();
                     Intent intent = new Intent(this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(getString(R.string.cancel), null)
                 .show();
-    }
-
-    private void checkBiometricAvailability(SwitchCompat biometricSwitch) {
-        BiometricManager biometricManager = BiometricManager.from(this);
-        int authenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
-        switch (biometricManager.canAuthenticate(authenticators)) {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                showBiometricPromptForEnabling(biometricSwitch);
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Toast.makeText(this, "No biometric features available on this device.", Toast.LENGTH_SHORT).show();
-                biometricSwitch.setChecked(false);
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                Toast.makeText(this, "Biometric features are currently unavailable.", Toast.LENGTH_SHORT).show();
-                biometricSwitch.setChecked(false);
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                Toast.makeText(this, "Please enroll a biometric (fingerprint/face) in your device settings.", Toast.LENGTH_LONG).show();
-                biometricSwitch.setChecked(false);
-                break;
-            default:
-                Toast.makeText(this, "Biometric authentication is not supported.", Toast.LENGTH_SHORT).show();
-                biometricSwitch.setChecked(false);
-                break;
-        }
-    }
-
-    private void showBiometricPromptForEnabling(SwitchCompat biometricSwitch) {
-        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Enable Biometric Login")
-                .setSubtitle("Confirm your identity to enable biometric login")
-                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-                .build();
-
-        BiometricPrompt biometricPrompt = new BiometricPrompt(this,
-                ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationSucceeded(@androidx.annotation.NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-                session.setBiometricEnabled(true);
-                Toast.makeText(ProfileActivity.this, "Biometric login enabled", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAuthenticationError(int errorCode, @androidx.annotation.NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-                biometricSwitch.setChecked(false);
-                Toast.makeText(ProfileActivity.this, "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
-                Toast.makeText(ProfileActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        biometricPrompt.authenticate(promptInfo);
-    }
-
-    private void uploadProfileImage(Uri imageUri) {
-        imageUploadUtils.uploadProfileImage(imageUri, new ImageUploadUtils.UploadCallback() {
-            @Override
-            public void onSuccess(String imageUrl) {
-                runOnUiThread(() -> {
-                    Toast.makeText(ProfileActivity.this, "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
-                    Glide.with(ProfileActivity.this).load(imageUrl).into(profilePicture);
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                runOnUiThread(() -> {
-                    Toast.makeText(ProfileActivity.this, "Upload failed: " + error, Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
-    }
-
-    @Override
-    public void setPendingImageCallback(ImagePickerUtils.ImagePickerCallback callback) {
-        this.pendingImageCallback = callback;
-    }
-
-    @Override
-    public ImagePickerUtils.ImagePickerCallback getPendingImageCallback() {
-        return pendingImageCallback;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        
-        if (requestCode == 2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            uploadProfileImage(imageUri);
-        }
     }
 }
