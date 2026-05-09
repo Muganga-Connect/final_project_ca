@@ -18,6 +18,7 @@ public class SessionManager {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_FCM_TOKEN = "fcm_token";
     private static final String KEY_LOGGED_IN = "is_logged_in";
+    private static final String KEY_BIOMETRIC_ENABLED = "biometric_enabled";
 
     private final SharedPreferences prefs;
 
@@ -71,6 +72,14 @@ public class SessionManager {
 
     public boolean isLoggedIn() { return prefs.getBoolean(KEY_LOGGED_IN, false); }
     public String getUid() { return prefs.getString(KEY_UID, null); }
+    
+    public void setBiometricEnabled(boolean enabled) {
+        prefs.edit().putBoolean(KEY_BIOMETRIC_ENABLED, enabled).apply();
+    }
+    
+    public boolean isBiometricEnabled() {
+        return prefs.getBoolean(KEY_BIOMETRIC_ENABLED, false);
+    }
     public String getFullName() { return prefs.getString(KEY_NAME, ""); }
     public String getEmail() { return prefs.getString(KEY_EMAIL, ""); }
     public String getPhone() { return prefs.getString(KEY_PHONE, ""); }
