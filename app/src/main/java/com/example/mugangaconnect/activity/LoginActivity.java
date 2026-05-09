@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session  = new SessionManager(this);
 
         // Skip login if already authenticated

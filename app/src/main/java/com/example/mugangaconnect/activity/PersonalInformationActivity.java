@@ -76,7 +76,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session = new SessionManager(this);
         imageUploadUtils = new ImageUploadUtils(this);
 

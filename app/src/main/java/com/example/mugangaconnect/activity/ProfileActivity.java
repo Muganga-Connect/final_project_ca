@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session  = new SessionManager(this);
 
         initViews();

@@ -4,6 +4,9 @@ import com.example.mugangaconnect.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.mugangaconnect.data.local.AppDatabase;
+import com.example.mugangaconnect.data.local.UserDao;
+import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +16,17 @@ public class AuthRepository {
 
     private final FirebaseAuth auth;
     private final FirebaseFirestore db;
+    private final UserDao userDao;
 
     public interface AuthCallback {
         void onSuccess(FirebaseUser user);
         void onError(String message);
     }
 
-    public AuthRepository() {
+    public AuthRepository(Context context) {
         this.auth = FirebaseAuth.getInstance();
         this.db = FirebaseFirestore.getInstance();
+        this.userDao = AppDatabase.getInstance(context).userDao();
     }
 
     public void register(String fullName, String email, String password, AuthCallback callback) {
@@ -34,7 +39,10 @@ public class AuthRepository {
                     db.collection(USERS_COLLECTION)
                             .document(firebaseUser.getUid())
                             .set(user)
-                            .addOnSuccessListener(v -> callback.onSuccess(firebaseUser))
+                            .addOnSuccessListener(v -> {
+                                new Thread(() -> userDao.upsert(user)).start();
+                                callback.onSuccess(firebaseUser);
+                            })
                             .addOnFailureListener(e -> callback.onError(e.getMessage()));
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
@@ -59,10 +67,22 @@ public class AuthRepository {
     }
 
     public void getProfile(String uid, ProfileCallback callback) {
+        // Try local Room first
+        new Thread(() -> {
+            User localUser = userDao.getByUid(uid);
+            if (localUser != null) {
+                callback.onSuccess(localUser);
+            }
+        }).start();
+
+        // Always fetch from Firestore to sync
         db.collection(USERS_COLLECTION).document(uid).get()
                 .addOnSuccessListener(doc -> {
                     User user = doc.toObject(User.class);
-                    if (user != null) callback.onSuccess(user);
+                    if (user != null) {
+                        new Thread(() -> userDao.upsert(user)).start();
+                        callback.onSuccess(user);
+                    }
                     else callback.onError("Profile not found");
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
@@ -95,7 +115,10 @@ public class AuthRepository {
     public void updateFullProfile(User user, ProfileCallback callback) {
         db.collection(USERS_COLLECTION).document(user.getUid())
                 .set(user)
-                .addOnSuccessListener(v -> callback.onSuccess(user))
+                .addOnSuccessListener(v -> {
+                    new Thread(() -> userDao.upsert(user)).start();
+                    callback.onSuccess(user);
+                })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
