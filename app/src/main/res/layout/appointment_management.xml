@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D7EDFF">
+    android:background="@color/background_main">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 android:layout_marginBottom="20dp">
 
                 <LinearLayout
@@ -40,13 +40,13 @@
                         android:layout_height="48dp"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="#E3F2FD">
+                        app:cardBackgroundColor="@color/field_background">
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_menu"
-                            app:tint="#1E88E5"/>
+                            app:tint="@color/primary_blue"/>
                     </com.google.android.material.card.MaterialCardView>
 
                     <LinearLayout
@@ -61,14 +61,14 @@
                             android:text="@string/next_checkup"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#8AA6C7"/>
+                            android:textColor="@color/text_hint"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Tomorrow, 10:30 AM"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#1A4C91"/>
+                            android:textColor="@color/text_blue"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -82,14 +82,14 @@
                             android:text="@string/health_score"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#8AA6C7"/>
+                            android:textColor="@color/text_hint"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="92/100"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="#F57C00"/>
+                            android:textColor="@color/warning_orange"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -100,7 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search_hint"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                app:backgroundTint="@color/card_background" />
 
             <!-- Recent Hospital -->
             <TextView
@@ -108,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/recent_hospital"
                 android:textStyle="bold"
-                android:textColor="#1A4C91"
+                android:textColor="@color/text_blue"
                 android:layout_marginBottom="12dp"/>
 
             <HorizontalScrollView
@@ -126,20 +127,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="City General Hospital"
-                        android:layout_marginEnd="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        app:chipBackgroundColor="@color/card_background"
+                        android:textColor="@color/text_primary"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalMayo"
                         style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mayo Clinic"
-                        android:layout_marginEnd="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        app:chipBackgroundColor="@color/card_background"
+                        android:textColor="@color/text_primary"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/hospitalStMarys"
                         style="@style/Widget.Material3.Chip.Suggestion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="St. Mary\'s"/>
+                        android:text="St. Mary\'s"
+                        app:chipBackgroundColor="@color/card_background"
+                        android:textColor="@color/text_primary"/>
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
@@ -150,7 +157,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="2dp"
-                app:strokeColor="#1E88E5"
+                app:strokeColor="@color/primary_blue"
+                app:cardBackgroundColor="@color/card_background"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -166,7 +174,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_menu"
-                            app:tint="#1E88E5"/>
+                            app:tint="@color/primary_blue"/>
                         <com.google.android.material.chip.Chip
                             style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
@@ -175,7 +183,9 @@
                             android:text="Step 01"
                             android:clickable="false"
                             android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            app:chipMinTouchTargetSize="0dp"
+                            app:chipBackgroundColor="@color/field_background"
+                            android:textColor="@color/text_primary"/>
                     </RelativeLayout>
 
                     <TextView
@@ -183,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/department"
                         android:textStyle="bold"
-                        android:textColor="#1A4C91"
+                        android:textColor="@color/text_blue"
                         android:textSize="18sp"
                         android:layout_marginTop="12dp"/>
 
@@ -191,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/choose_specialty"
-                        android:textColor="#8AA6C7"
+                        android:textColor="@color/text_hint"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
 
@@ -201,8 +211,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dept_cardiology"
                         android:padding="12dp"
-                        android:background="#F5F9FD"
-                        android:textColor="#1A4C91"
+                        android:background="@drawable/bg_edittext"
+                        android:textColor="@color/text_blue"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
@@ -211,9 +221,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dept_neurology"
                         android:padding="12dp"
-                        android:background="#1E88E5"
-                        android:textColor="#FFFFFF"
-                        android:layout_marginBottom="8dp"/>
+                        android:background="@drawable/bg_button_blue"
+                        android:textColor="@color/text_on_primary"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/deptDentistry"
@@ -221,8 +232,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dept_dentistry"
                         android:padding="12dp"
-                        android:background="#F5F9FD"
-                        android:textColor="#1A4C91"/>
+                        android:background="@drawable/bg_edittext"
+                        android:textColor="@color/text_blue"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -233,6 +244,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/card_background"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -248,7 +260,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_account"
-                            app:tint="#1E88E5"/>
+                            app:tint="@color/primary_blue"/>
                         <com.google.android.material.chip.Chip
                             style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
@@ -257,7 +269,9 @@
                             android:text="Step 02"
                             android:clickable="false"
                             android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            app:chipMinTouchTargetSize="0dp"
+                            app:chipBackgroundColor="@color/field_background"
+                            android:textColor="@color/text_primary"/>
                     </RelativeLayout>
 
                     <TextView
@@ -265,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/specialist"
                         android:textStyle="bold"
-                        android:textColor="#1A4C91"
+                        android:textColor="@color/text_blue"
                         android:textSize="18sp"
                         android:layout_marginTop="12dp"/>
 
@@ -273,7 +287,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/select_provider"
-                        android:textColor="#8AA6C7"
+                        android:textColor="@color/text_hint"
                         android:textSize="12sp"
                         android:layout_marginBottom="12dp"/>
 
@@ -290,7 +304,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="#E3F2FD">
+                        app:cardBackgroundColor="@color/field_background">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -301,7 +315,8 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@drawable/ic_account"
-                                app:shapeAppearanceOverlay="@style/CircleImage"/>
+                                app:shapeAppearanceOverlay="@style/CircleImage"
+                                app:tint="@color/text_hint"/>
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -312,13 +327,13 @@
                                     android:layout_height="wrap_content"
                                     android:text="Dr. Sarah Chen"
                                     android:textStyle="bold"
-                                    android:textColor="#1A4C91"
+                                    android:textColor="@color/text_blue"
                                     android:textSize="14sp"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Available Today"
-                                    android:textColor="#8AA6C7"
+                                    android:textColor="@color/text_hint"
                                     android:textSize="10sp"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -333,7 +348,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="2dp"
-                app:strokeColor="#F57C00"
+                app:strokeColor="@color/warning_orange"
+                app:cardBackgroundColor="@color/card_background"
                 android:layout_marginBottom="32dp">
 
                 <LinearLayout
@@ -349,7 +365,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_menu"
-                            app:tint="#F57C00"/>
+                            app:tint="@color/warning_orange"/>
                         <com.google.android.material.chip.Chip
                             style="@style/Widget.Material3.Chip.Assist"
                             android:layout_width="wrap_content"
@@ -358,7 +374,9 @@
                             android:text="Step 03"
                             android:clickable="false"
                             android:focusable="false"
-                            app:chipMinTouchTargetSize="0dp"/>
+                            app:chipMinTouchTargetSize="0dp"
+                            app:chipBackgroundColor="@color/field_background"
+                            android:textColor="@color/text_primary"/>
                     </RelativeLayout>
 
                     <TextView
@@ -366,7 +384,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/time_slot"
                         android:textStyle="bold"
-                        android:textColor="#1A4C91"
+                        android:textColor="@color/text_blue"
                         android:textSize="18sp"
                         android:layout_marginTop="12dp"/>
 
@@ -374,7 +392,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/finalize_visit"
-                        android:textColor="#8AA6C7"
+                        android:textColor="@color/text_hint"
                         android:textSize="12sp"
                         android:layout_marginBottom="16dp"/>
 
@@ -386,7 +404,8 @@
                         android:text="@string/select_session"
                         app:cornerRadius="12dp"
                         android:textAllCaps="false"
-                        android:backgroundTint="#1E88E5"
+                        android:backgroundTint="@color/primary_blue"
+                        android:textColor="@color/text_on_primary"
                         android:layout_marginBottom="8dp"/>
 
                     <com.google.android.material.button.MaterialButton
@@ -397,7 +416,8 @@
                         android:text="@string/book_appointment"
                         app:cornerRadius="12dp"
                         android:textAllCaps="false"
-                        android:backgroundTint="#4CAF50"/>
+                        android:backgroundTint="@color/success_green"
+                        android:textColor="@color/text_on_success"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -408,7 +428,7 @@
                 android:text="@string/your_care_hub"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#1A4C91"
+                android:textColor="@color/text_blue"
                 android:layout_marginBottom="16dp"/>
 
             <com.google.android.material.tabs.TabLayout
@@ -416,7 +436,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.Material3.TabLayout.Secondary"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                app:tabTextColor="@color/text_hint"
+                app:tabSelectedTextColor="@color/primary_blue"
+                app:tabIndicatorColor="@color/primary_blue"
+                android:background="@android:color/transparent">
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabUpcoming"
                     android:layout_width="wrap_content"
@@ -449,7 +473,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="4dp"
-                app:strokeColor="#1E88E5"
+                app:strokeColor="@color/primary_blue"
+                app:cardBackgroundColor="@color/card_background"
                 android:layout_marginBottom="20dp">
 
                 <LinearLayout
@@ -463,16 +488,16 @@
                         android:layout_height="80dp"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="#E3F2FD">
+                        app:cardBackgroundColor="@color/field_background">
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOV" android:textSize="10sp" android:textColor="#1E88E5"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24" android:textSize="24sp" android:textStyle="bold" android:textColor="#1A4C91"/>
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WED" android:textSize="10sp" android:textColor="#1A4C91"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOV" android:textSize="10sp" android:textColor="@color/primary_blue"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="24" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/text_blue"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WED" android:textSize="10sp" android:textColor="@color/text_blue"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -481,7 +506,7 @@
                         android:layout_height="wrap_content"
                         android:text="Neurological Follow-up"
                         android:textStyle="bold"
-                        android:textColor="#1A4C91"
+                        android:textColor="@color/text_blue"
                         android:textSize="18sp"
                         android:layout_marginTop="16dp"/>
 
@@ -489,7 +514,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dr. Sarah Chen"
-                        android:textColor="#8AA6C7"
+                        android:textColor="@color/text_hint"
                         android:layout_marginBottom="8dp"/>
 
                     <LinearLayout
@@ -497,8 +522,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginBottom="16dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:30 AM" android:textColor="#1A4C91" android:textSize="12sp"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Building B, Room 402" android:textColor="#1A4C91" android:textSize="12sp" android:layout_marginStart="16dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:30 AM" android:textColor="@color/text_blue" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Building B, Room 402" android:textColor="@color/text_blue" android:textSize="12sp" android:layout_marginStart="16dp"/>
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -508,8 +533,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/confirm_presence"
                         app:cornerRadius="8dp"
-                        android:backgroundTint="#E8F5E9"
-                        android:textColor="#4CAF50"
+                        android:backgroundTint="@color/success_green_light"
+                        android:textColor="@color/success_green"
                         android:textAllCaps="false"/>
 
                     <LinearLayout
@@ -524,10 +549,11 @@
                             android:layout_weight="1"
                             android:text="@string/reschedule"
                             app:cornerRadius="8dp"
-                            android:backgroundTint="#FFF3E0"
-                            android:textColor="#F57C00"
+                            android:backgroundTint="@color/warning_orange_light"
+                            android:textColor="@color/warning_orange"
                             android:textAllCaps="false"
-                            android:layout_marginEnd="8dp"/>
+                            android:layout_marginEnd="8dp"
+                            app:strokeWidth="0dp"/>
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCancel"
                             style="@style/Widget.Material3.Button.TextButton"
@@ -536,8 +562,8 @@
                             android:layout_weight="1"
                             android:text="@string/cancel"
                             app:cornerRadius="8dp"
-                            android:backgroundTint="#FFEBEE"
-                            android:textColor="#E53935"
+                            android:backgroundTint="@color/error_red_light"
+                            android:textColor="@color/error_red"
                             android:textAllCaps="false"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -551,7 +577,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
         android:layout_height="72dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
