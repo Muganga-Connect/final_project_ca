@@ -104,6 +104,42 @@ public class AppointmentRepository {
     }
     
     /**
+     * Fetches all appointments for a specific patient ID
+     * @param patientId The ID of the patient
+     * @param callback Callback to handle success or error
+     */
+    public void getForPatient(String patientId, Callback<java.util.List<Appointment>> callback) {
+        if (patientId == null || patientId.trim().isEmpty()) {
+            callback.onError("Patient ID cannot be null or empty");
+            return;
+        }
+
+        db.collection(COLLECTION_NAME)
+            .whereEqualTo("patientId", patientId)
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        java.util.List<Appointment> appointments = new java.util.ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult()) {
+                            appointments.add(documentToAppointment(document));
+                        }
+                        callback.onSuccess(appointments);
+                    } else {
+                        callback.onError("Failed to fetch appointments: " + task.getException().getMessage());
+                    }
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    callback.onError("Network error: " + e.getMessage());
+                }
+            });
+    }
+
+    /**
      * Callback interface for async operations
      */
     public interface Callback<T> {
