@@ -1,9 +1,10 @@
-package com.example.mugangaconnect;
+package com.example.mugangaconnect.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
@@ -22,6 +26,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private AuthRepository authRepo;
     private SessionManager session;
+    private TextView tvName, tvPatientId, tvWeight, tvBloodType, tvEmergency;
+    private ImageView imgProfile;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -36,21 +42,9 @@ public class ProfileActivity extends AppCompatActivity {
         authRepo = new AuthRepository();
         session  = new SessionManager(this);
 
-        View root      = findViewById(R.id.main);
-        View scroll    = findViewById(R.id.profileScroll);
-        View bottomBar = findViewById(R.id.bottomBar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            if (scroll    != null) scroll.setPadding(0, sys.top, 0, 0);
-            if (bottomBar != null) bottomBar.setPadding(0, 0, 0, sys.bottom);
-            return insets;
-        });
-
-        TextView tvName = findViewById(R.id.profileName);
-        if (tvName != null && session.getFullName() != null) {
-            tvName.setText(session.getFullName());
-        }
+        initViews();
+        setupInsets();
+        loadUserProfile();
 
         setupAccountSettings();
         setupSupport();
@@ -59,7 +53,6 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.editProfileBtn).setOnClickListener(v ->
                 startActivity(new Intent(this, PersonalInformationActivity.class)));
 
-        // Show the currently active language on the button
         updateLanguageButton();
         findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
 
@@ -72,9 +65,67 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }
 
-    // ── Language ──────────────────────────────────────────────────────────────
+    private void initViews() {
+        tvName = findViewById(R.id.profileName);
+        tvPatientId = findViewById(R.id.patientId);
+        tvWeight = findViewById(R.id.weightValue);
+        tvBloodType = findViewById(R.id.bloodTypeValue);
+        tvEmergency = findViewById(R.id.emergencyValue);
+        imgProfile = findViewById(R.id.profileImage);
+    }
 
-    /** Reflect the saved language on the selector button. */
+    private void setupInsets() {
+        View root = findViewById(R.id.main);
+        View scroll = findViewById(R.id.profileScroll);
+        View bottomBar = findViewById(R.id.bottomBar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            if (scroll    != null) scroll.setPadding(0, sys.top, 0, 0);
+            if (bottomBar != null) bottomBar.setPadding(0, 0, 0, sys.bottom);
+            return insets;
+        });
+    }
+
+    private void loadUserProfile() {
+        String uid = session.getUid();
+        if (uid == null) return;
+
+        // Load cached name first
+        if (tvName != null) tvName.setText(session.getFullName());
+        if (tvPatientId != null) tvPatientId.setText("PN-" + uid.substring(0, 5).toUpperCase());
+
+        authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> {
+                    if (tvName != null) tvName.setText(user.getFullName());
+                    if (tvWeight != null) tvWeight.setText(user.getWeight() != null ? user.getWeight() + " kg" : "---");
+                    if (tvBloodType != null) tvBloodType.setText(user.getBloodType() != null ? user.getBloodType() : "---");
+                    if (tvEmergency != null) tvEmergency.setText(user.getEmergencyContact() != null ? user.getEmergencyContact() : "---");
+                    
+                    if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+                        Glide.with(ProfileActivity.this)
+                                .load(user.getProfileImageUrl())
+                                .placeholder(R.drawable.user)
+                                .into(imgProfile);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                // Keep default/session values
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserProfile(); // Refresh data when coming back from edit screen
+    }
+
     private void updateLanguageButton() {
         TextView btn = findViewById(R.id.languageSelector);
         if (btn == null) return;
@@ -86,7 +137,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showLanguageDialog() {
-        // Always show language names in their own language so the user can recognise them
         String[] labels = {"🇬🇧  English", "🇫🇷  Français", "🇷🇼  Kinyarwanda"};
         String[] codes  = {LocaleHelper.LANG_ENGLISH, LocaleHelper.LANG_FRENCH, LocaleHelper.LANG_KINYARWANDA};
 
@@ -100,23 +150,17 @@ public class ProfileActivity extends AppCompatActivity {
                 .setTitle(getString(R.string.select_language))
                 .setSingleChoiceItems(labels, checkedItem, (dialog, which) -> {
                     dialog.dismiss();
-                    if (codes[which].equals(current)) return; // nothing changed
+                    if (codes[which].equals(current)) return;
 
-                    // 1. Persist the new language choice
                     session.saveLanguage(codes[which]);
-
-                    // 2. Fully restart the app — every Activity will call
-                    //    attachBaseContext → LocaleHelper.applyLocale → correct strings.xml
-                    Intent restart = new Intent(this, SplashActivity.class);
-                    restart.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(restart);
+                    Intent intent = new Intent(this, SplashActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     finish();
                 })
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show();
     }
-
-    // ── Account Settings ──────────────────────────────────────────────────────
 
     private void setupAccountSettings() {
         findViewById(R.id.personalInfoItem).setOnClickListener(v ->
@@ -132,8 +176,6 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
     }
 
-    // ── Support ───────────────────────────────────────────────────────────────
-
     private void setupSupport() {
         findViewById(R.id.helpCenterItem).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
@@ -144,8 +186,6 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.termsItem).setOnClickListener(v ->
                 Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
     }
-
-    // ── Logout ────────────────────────────────────────────────────────────────
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)

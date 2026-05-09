@@ -3,7 +3,6 @@ package com.example.mugangaconnect.activity;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,9 +24,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
+import com.example.mugangaconnect.utils.ImageUploadUtils;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -54,20 +55,21 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private ImageView imgProfile;
     private MaterialButton btnEditPhoto, btnSave;
     private ImageButton btnBack;
-    private TextView tvDisplayName;
+    private TextView tvDisplayName, tvPatientId;
 
-    private View fieldName, fieldEmail, fieldPhone, fieldDob, fieldInsurance, fieldAllergies, fieldEmergency;
-    private TextInputEditText etName, etEmail, etPhone, etDob, etInsurance, etAllergies, etEmergency;
-    private ImageButton btnEditName, btnEditEmail, btnEditPhone, btnEditDob, btnEditInsurance, btnEditAllergies, btnEditEmergency;
-    private TextView tvErrorName, tvErrorEmail, tvErrorPhone, tvErrorDob, tvErrorInsurance, tvErrorAllergies, tvErrorEmergency;
+    private TextInputEditText etName, etEmail, etPhone, etDob, etInsurance, etAllergies, etEmergency, etWeight, etHeight;
+    private ImageButton btnEditName, btnEditPhone, btnEditDob, btnEditInsurance, btnEditAllergies, btnEditEmergency, btnEditWeight, btnEditHeight;
+    private TextView tvErrorName, tvErrorPhone;
 
     private Spinner spinnerGender, spinnerBlood;
     private ImageButton btnEditGender, btnEditBlood;
-    private TextView tvErrorGender, tvErrorBlood;
 
     private boolean isModified = false;
     private AuthRepository authRepo;
     private SessionManager session;
+    private User currentUser;
+    private ImageUploadUtils imageUploadUtils;
+    private String newProfileImageUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
         authRepo = new AuthRepository();
         session = new SessionManager(this);
+        imageUploadUtils = new ImageUploadUtils(this);
 
         initViews();
         setupFields();
@@ -90,14 +93,17 @@ public class PersonalInformationActivity extends AppCompatActivity {
         btnEditPhoto = findViewById(R.id.btn_edit_photo);
         btnSave = findViewById(R.id.btn_save_changes);
         tvDisplayName = findViewById(R.id.tv_display_name);
+        tvPatientId = findViewById(R.id.tv_patient_id);
 
-        fieldName = findViewById(R.id.field_full_name);
-        fieldEmail = findViewById(R.id.field_email);
-        fieldPhone = findViewById(R.id.field_phone);
-        fieldDob = findViewById(R.id.field_dob);
-        fieldInsurance = findViewById(R.id.field_insurance);
-        fieldAllergies = findViewById(R.id.field_allergies);
-        fieldEmergency = findViewById(R.id.field_emergency);
+        View fieldName = findViewById(R.id.field_full_name);
+        View fieldEmail = findViewById(R.id.field_email);
+        View fieldPhone = findViewById(R.id.field_phone);
+        View fieldDob = findViewById(R.id.field_dob);
+        View fieldInsurance = findViewById(R.id.field_insurance);
+        View fieldAllergies = findViewById(R.id.field_allergies);
+        View fieldEmergency = findViewById(R.id.field_emergency);
+        View fieldWeight = findViewById(R.id.field_weight);
+        View fieldHeight = findViewById(R.id.field_height);
 
         setupFieldInternal(fieldName, "FULL NAME", "e.g. Alexandrine Mukamana");
         setupFieldInternal(fieldEmail, "EMAIL ADDRESS", "e.g. patient@example.com");
@@ -106,6 +112,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
         setupFieldInternal(fieldInsurance, "INSURANCE ID", "e.g. INS-2024-001234");
         setupFieldInternal(fieldAllergies, "MEDICAL ALLERGIES", "e.g. Penicillin, Peanuts or None");
         setupFieldInternal(fieldEmergency, "EMERGENCY CONTACT", "e.g. +250788654321");
+        setupFieldInternal(fieldWeight, "WEIGHT (KG)", "e.g. 68.4");
+        setupFieldInternal(fieldHeight, "HEIGHT (CM)", "e.g. 172");
 
         etName = fieldName.findViewById(R.id.et_input);
         etEmail = fieldEmail.findViewById(R.id.et_input);
@@ -114,29 +122,25 @@ public class PersonalInformationActivity extends AppCompatActivity {
         etInsurance = fieldInsurance.findViewById(R.id.et_input);
         etAllergies = fieldAllergies.findViewById(R.id.et_input);
         etEmergency = fieldEmergency.findViewById(R.id.et_input);
+        etWeight = fieldWeight.findViewById(R.id.et_input);
+        etHeight = fieldHeight.findViewById(R.id.et_input);
 
         btnEditName = fieldName.findViewById(R.id.btn_edit_field);
-        btnEditEmail = fieldEmail.findViewById(R.id.btn_edit_field);
         btnEditPhone = fieldPhone.findViewById(R.id.btn_edit_field);
         btnEditDob = fieldDob.findViewById(R.id.btn_edit_field);
         btnEditInsurance = fieldInsurance.findViewById(R.id.btn_edit_field);
         btnEditAllergies = fieldAllergies.findViewById(R.id.btn_edit_field);
         btnEditEmergency = fieldEmergency.findViewById(R.id.btn_edit_field);
+        btnEditWeight = fieldWeight.findViewById(R.id.btn_edit_field);
+        btnEditHeight = fieldHeight.findViewById(R.id.btn_edit_field);
 
         tvErrorName = fieldName.findViewById(R.id.tv_error);
-        tvErrorEmail = fieldEmail.findViewById(R.id.tv_error);
         tvErrorPhone = fieldPhone.findViewById(R.id.tv_error);
-        tvErrorDob = fieldDob.findViewById(R.id.tv_error);
-        tvErrorInsurance = fieldInsurance.findViewById(R.id.tv_error);
-        tvErrorAllergies = fieldAllergies.findViewById(R.id.tv_error);
-        tvErrorEmergency = fieldEmergency.findViewById(R.id.tv_error);
 
         spinnerGender = findViewById(R.id.spinner_gender);
         spinnerBlood = findViewById(R.id.spinner_blood);
         btnEditGender = findViewById(R.id.btn_edit_gender);
         btnEditBlood = findViewById(R.id.btn_edit_blood);
-        tvErrorGender = findViewById(R.id.tv_error_gender);
-        tvErrorBlood = findViewById(R.id.tv_error_blood);
     }
 
     private void setupFieldInternal(View field, String label, String hint) {
@@ -146,24 +150,20 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
     private void setupFields() {
         etName.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        etEmail.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        etEmail.setEnabled(false); // Email usually not changeable for auth
+        etEmail.setEnabled(false);
         etPhone.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
         etDob.setFocusable(false);
         etDob.setClickable(false);
-        etInsurance.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
-        etAllergies.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
-        etEmergency.setInputType(android.text.InputType.TYPE_CLASS_PHONE);
+        etWeight.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        etHeight.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
     }
 
     private void setupSpinners() {
-        String[] genders = {"Select gender", "Male", "Female", "Prefer not to say"};
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, genders);
-        spinnerGender.setAdapter(genderAdapter);
+        String[] genders = {"Select gender", "Male", "Female", "Other"};
+        spinnerGender.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, genders));
 
         String[] bloodTypes = {"Select blood type", "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"};
-        ArrayAdapter<String> bloodAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, bloodTypes);
-        spinnerBlood.setAdapter(bloodAdapter);
+        spinnerBlood.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, bloodTypes));
     }
 
     private void loadData() {
@@ -173,19 +173,29 @@ public class PersonalInformationActivity extends AppCompatActivity {
         authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
             @Override
             public void onSuccess(User user) {
+                currentUser = user;
                 runOnUiThread(() -> {
+                    tvDisplayName.setText(user.getFullName());
+                    tvPatientId.setText("PN-" + user.getUid().substring(0, 5).toUpperCase());
                     etName.setText(user.getFullName());
                     etEmail.setText(user.getEmail());
                     etPhone.setText(user.getPhone());
-                    // If your User model doesn't have these, you might need to extend it or use a separate collection
-                    // For now, let's assume they are there or we use defaults
-                    tvDisplayName.setText(user.getFullName());
+                    etDob.setText(user.getDob());
+                    etInsurance.setText(user.getInsuranceId());
+                    etAllergies.setText(user.getAllergies());
+                    etEmergency.setText(user.getEmergencyContact());
+                    etWeight.setText(user.getWeight());
+                    etHeight.setText(user.getHeight());
+                    setSelectionFromValue(spinnerGender, user.getGender());
+                    setSelectionFromValue(spinnerBlood, user.getBloodType());
+                    if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+                        Glide.with(PersonalInformationActivity.this).load(user.getProfileImageUrl()).placeholder(R.drawable.user).into(imgProfile);
+                    }
                 });
             }
-
             @Override
             public void onError(String message) {
-                Toast.makeText(PersonalInformationActivity.this, "Failed to load profile", Toast.LENGTH_SHORT).show();
+                runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this, "Failed to load profile", Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -203,36 +213,30 @@ public class PersonalInformationActivity extends AppCompatActivity {
     private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnEditPhoto.setOnClickListener(v -> showPhotoOptions());
-
         btnEditName.setOnClickListener(v -> enableEditing(etName));
         btnEditPhone.setOnClickListener(v -> enableEditing(etPhone));
+        btnEditDob.setOnClickListener(v -> showDatePicker());
         btnEditInsurance.setOnClickListener(v -> enableEditing(etInsurance));
         btnEditAllergies.setOnClickListener(v -> enableEditing(etAllergies));
         btnEditEmergency.setOnClickListener(v -> enableEditing(etEmergency));
+        btnEditWeight.setOnClickListener(v -> enableEditing(etWeight));
+        btnEditHeight.setOnClickListener(v -> enableEditing(etHeight));
 
-        btnEditDob.setOnClickListener(v -> showDatePicker());
-        btnEditGender.setOnClickListener(v -> {
-            spinnerGender.setEnabled(true);
-            spinnerGender.performClick();
-            markModified();
-        });
-        btnEditBlood.setOnClickListener(v -> {
-            spinnerBlood.setEnabled(true);
-            spinnerBlood.performClick();
-            markModified();
-        });
+        btnEditGender.setOnClickListener(v -> { spinnerGender.setEnabled(true); spinnerGender.performClick(); markModified(); });
+        btnEditBlood.setOnClickListener(v -> { spinnerBlood.setEnabled(true); spinnerBlood.performClick(); markModified(); });
 
-        TextWatcher modificationWatcher = new TextWatcher() {
+        TextWatcher watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) { markModified(); }
             @Override public void afterTextChanged(Editable s) {}
         };
-
-        etName.addTextChangedListener(modificationWatcher);
-        etPhone.addTextChangedListener(modificationWatcher);
-        etInsurance.addTextChangedListener(modificationWatcher);
-        etAllergies.addTextChangedListener(modificationWatcher);
-        etEmergency.addTextChangedListener(modificationWatcher);
+        etName.addTextChangedListener(watcher);
+        etPhone.addTextChangedListener(watcher);
+        etInsurance.addTextChangedListener(watcher);
+        etAllergies.addTextChangedListener(watcher);
+        etEmergency.addTextChangedListener(watcher);
+        etWeight.addTextChangedListener(watcher);
+        etHeight.addTextChangedListener(watcher);
 
         btnSave.setOnClickListener(v -> validateAndSave());
     }
@@ -251,136 +255,93 @@ public class PersonalInformationActivity extends AppCompatActivity {
     }
 
     private void showDatePicker() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
-            Calendar selectedDate = Calendar.getInstance();
-            selectedDate.set(year1, monthOfYear, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd / MMM / yyyy", Locale.getDefault());
-            etDob.setText(sdf.format(selectedDate.getTime()));
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, y, m, d) -> {
+            Calendar sel = Calendar.getInstance(); sel.set(y, m, d);
+            etDob.setText(new SimpleDateFormat("dd / MMM / yyyy", Locale.getDefault()).format(sel.getTime()));
             markModified();
-        }, year, month, day);
-        datePickerDialog.show();
+        }, c.get(Calendar.YEAR)-20, c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void showPhotoOptions() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.layout_photo_bottom_sheet, null);
-        
-        view.findViewById(R.id.btn_take_photo).setOnClickListener(v -> {
-            checkCameraPermission();
-            bottomSheetDialog.dismiss();
-        });
-
-        view.findViewById(R.id.btn_choose_gallery).setOnClickListener(v -> {
-            checkStoragePermission();
-            bottomSheetDialog.dismiss();
-        });
-
-        view.findViewById(R.id.btn_cancel).setOnClickListener(v -> bottomSheetDialog.dismiss());
-
-        bottomSheetDialog.setContentView(view);
-        bottomSheetDialog.show();
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View v = getLayoutInflater().inflate(R.layout.layout_photo_bottom_sheet, null);
+        v.findViewById(R.id.btn_take_photo).setOnClickListener(view -> { checkCameraPermission(); dialog.dismiss(); });
+        v.findViewById(R.id.btn_choose_gallery).setOnClickListener(view -> { checkStoragePermission(); dialog.dismiss(); });
+        v.findViewById(R.id.btn_cancel).setOnClickListener(view -> dialog.dismiss());
+        dialog.setContentView(v);
+        dialog.show();
     }
 
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
-        } else {
-            openCamera();
-        }
+        } else openCamera();
     }
 
     private void checkStoragePermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERM_STORAGE);
-        } else {
-            openGallery();
-        }
+        String perm = android.os.Build.VERSION.SDK_INT >= 33 ? Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE;
+        if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{perm}, PERM_STORAGE);
+        } else openGallery();
     }
 
-    private void openCamera() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, REQ_CAMERA);
-    }
-
-    private void openGallery() {
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto, REQ_GALLERY);
-    }
+    private void openCamera() { startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQ_CAMERA); }
+    private void openGallery() { startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), REQ_GALLERY); }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == REQ_CAMERA) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                imgProfile.setImageBitmap(image);
-                markModified();
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                imgProfile.setImageBitmap(bmp);
+                uploadImage(Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bmp, "temp", null)));
             } else if (requestCode == REQ_GALLERY) {
-                Uri selectedImage = data.getData();
-                imgProfile.setImageURI(selectedImage);
-                markModified();
+                imgProfile.setImageURI(data.getData());
+                uploadImage(data.getData());
             }
         }
     }
 
-    private void validateAndSave() {
-        boolean isValid = true;
-
-        String name = etName.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-
-        if (name.length() < 3) {
-            tvErrorName.setText("Name too short");
-            tvErrorName.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (!Pattern.matches("^\\+?\\d{10,15}$", phone)) {
-            tvErrorPhone.setText("Invalid phone number");
-            tvErrorPhone.setVisibility(View.VISIBLE);
-            isValid = false;
-        }
-
-        if (isValid) {
-            saveData(name, phone);
-        }
-    }
-
-    private void saveData(String name, String phone) {
-        String uid = session.getUid();
-        authRepo.updateProfile(uid, name, phone, new AuthRepository.ProfileCallback() {
-            @Override
-            public void onSuccess(User user) {
-                session.saveSession(uid, name, user.getEmail());
-                runOnUiThread(() -> {
-                    tvDisplayName.setText(name);
-                    Toast.makeText(PersonalInformationActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
-                    lockFields();
-                    isModified = false;
-                    btnSave.setEnabled(false);
-                });
-            }
-
-            @Override
-            public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
-            }
+    private void uploadImage(Uri uri) {
+        imageUploadUtils.uploadProfileImage(uri, new ImageUploadUtils.UploadCallback() {
+            @Override public void onSuccess(String url) { newProfileImageUrl = url; runOnUiThread(() -> markModified()); }
+            @Override public void onError(String err) { runOnUiThread(() -> Toast.makeText(PersonalInformationActivity.this, err, Toast.LENGTH_SHORT).show()); }
         });
     }
 
-    private void lockFields() {
-        etName.setEnabled(false);
-        etPhone.setEnabled(false);
-        etInsurance.setEnabled(false);
-        etAllergies.setEnabled(false);
-        etEmergency.setEnabled(false);
-        spinnerGender.setEnabled(false);
-        spinnerBlood.setEnabled(false);
+    private void validateAndSave() {
+        if (currentUser == null) return;
+        String name = etName.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        if (name.isEmpty() || phone.isEmpty()) return;
+
+        currentUser.setFullName(name);
+        currentUser.setPhone(phone);
+        currentUser.setDob(etDob.getText().toString().trim());
+        currentUser.setInsuranceId(etInsurance.getText().toString().trim());
+        currentUser.setAllergies(etAllergies.getText().toString().trim());
+        currentUser.setEmergencyContact(etEmergency.getText().toString().trim());
+        currentUser.setWeight(etWeight.getText().toString().trim());
+        currentUser.setHeight(etHeight.getText().toString().trim());
+        if (spinnerGender.getSelectedItemPosition() > 0) currentUser.setGender(spinnerGender.getSelectedItem().toString());
+        if (spinnerBlood.getSelectedItemPosition() > 0) currentUser.setBloodType(spinnerBlood.getSelectedItem().toString());
+        if (newProfileImageUrl != null) currentUser.setProfileImageUrl(newProfileImageUrl);
+
+        btnSave.setEnabled(false);
+        authRepo.updateFullProfile(currentUser, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                session.saveSession(user.uid, user.fullName, user.email, user.phone);
+                runOnUiThread(() -> {
+                    tvDisplayName.setText(user.fullName);
+                    Toast.makeText(PersonalInformationActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            }
+            @Override public void onError(String msg) { runOnUiThread(() -> { btnSave.setEnabled(true); Toast.makeText(PersonalInformationActivity.this, msg, Toast.LENGTH_SHORT).show(); }); }
+        });
     }
 
     @Override
