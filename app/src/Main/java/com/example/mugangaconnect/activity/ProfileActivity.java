@@ -57,10 +57,15 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
 
         SwitchCompat biometricSwitch = findViewById(R.id.biometricSwitch);
-        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) ->
+        if (biometricSwitch != null) {
+            biometricSwitch.setChecked(session.isBiometricEnabled());
+            biometricSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+                session.setBiometricEnabled(isChecked);
                 Toast.makeText(this,
                         getString(isChecked ? R.string.biometrics_enabled : R.string.biometrics_disabled),
-                        Toast.LENGTH_SHORT).show());
+                        Toast.LENGTH_SHORT).show();
+            });
+        }
 
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }
