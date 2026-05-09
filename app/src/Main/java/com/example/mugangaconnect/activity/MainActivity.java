@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
+    }
+
     private void setupUI() {
         // Set User Name
         TextView tvUserName = findViewById(R.id.tvUserName);
