@@ -73,6 +73,10 @@ dependencies {
     // Glide for image loading
     implementation libs.glide
     annotationProcessor libs.compiler
+
+    // Room
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
     
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
