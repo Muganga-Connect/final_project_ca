@@ -58,7 +58,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setContentView(R.layout.appointment_management);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
         doctorRepo      = new DoctorRepository();
 
         setupDoctorList();
@@ -163,7 +163,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     private void loadDoctors() {
         doctorRepo.getByDepartment(selectedDepartment, new DoctorRepository.Callback<List<Doctor>>() {
             @Override
-            public void onResult(List<Doctor> data) {
+            public void onSuccess(List<Doctor> data) {
                 runOnUiThread(() -> {
                     doctors.clear();
                     if (data.isEmpty()) {
@@ -189,7 +189,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         if (uid == null) return;
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onResult(List<Appointment> data) {
+            public void onSuccess(List<Appointment> data) {
                 runOnUiThread(() -> {
                     appointments.clear();
                     appointments.addAll(data);
@@ -227,7 +227,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override
-            public void onResult(Appointment data) {
+            public void onSuccess(Appointment data) {
                 runOnUiThread(() -> {
                     Toast.makeText(AppointmentManagementActivity.this,
                             getString(R.string.book_appointment), Toast.LENGTH_SHORT).show();
@@ -259,7 +259,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     private void processReschedule(Appointment appointment, String newDate, String newTime) {
         appointmentRepo.reschedule(appointment.getId(), newDate, newTime,
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
+                    @Override public void onSuccess(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.reschedule) + ": " + newDate + " " + newTime,
@@ -280,7 +280,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
+                    @Override public void onSuccess(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
