@@ -5,15 +5,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.mugangaconnect.data.model.User;
+import com.example.mugangaconnect.data.model.ChatMessage;
 
 @Database(
-    entities = {User.class},
+    entities = {User.class, ChatMessage.class},
     version = 1,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
     
     public abstract UserDao userDao();
+    public abstract ChatDao chatDao();
     
     private static volatile AppDatabase INSTANCE;
     
