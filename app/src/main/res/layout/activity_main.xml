@@ -403,38 +403,78 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:orientation="vertical">
 
-                            <Button
-                                android:id="@+id/btnReschedule"
-                                android:layout_width="0dp"
-                                android:layout_height="44dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="8dp"
-                                android:text="Reschedule"
-                                android:textColor="#4A90E2"
-                                android:backgroundTint="#EBF8FF"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                app:cornerRadius="22dp"
-                                app:strokeWidth="1dp"
-                                app:strokeColor="#4A90E2"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2"
+                                android:layout_marginBottom="8dp">
 
-                            <Button
-                                android:id="@+id/btnCancelAppointment"
-                                android:layout_width="0dp"
-                                android:layout_height="44dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="8dp"
-                                android:text="Cancel"
-                                android:textColor="#E53E3E"
-                                android:backgroundTint="#FFF5F5"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                app:cornerRadius="22dp"
-                                app:strokeWidth="1dp"
-                                app:strokeColor="#E53E3E"/>
+                                <Button
+                                    android:id="@+id/btnReschedule"
+                                    android:layout_width="0dp"
+                                    android:layout_height="44dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="Reschedule"
+                                    android:textColor="#4A90E2"
+                                    android:backgroundTint="#EBF8FF"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="22dp"
+                                    app:strokeWidth="1dp"
+                                    app:strokeColor="#4A90E2"/>
+
+                                <Button
+                                    android:id="@+id/btnCancelAppointment"
+                                    android:layout_width="0dp"
+                                    android:layout_height="44dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Cancel"
+                                    android:textColor="#E53E3E"
+                                    android:backgroundTint="#FFF5F5"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="22dp"
+                                    app:strokeWidth="1dp"
+                                    app:strokeColor="#E53E3E"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <Button
+                                    android:id="@+id/btnMarkAttended"
+                                    android:layout_width="0dp"
+                                    android:layout_height="44dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="Attended"
+                                    android:textColor="#FFFFFF"
+                                    android:backgroundTint="#38A169"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="22dp"/>
+
+                                <Button
+                                    android:id="@+id/btnMarkMissed"
+                                    android:layout_width="0dp"
+                                    android:layout_height="44dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:text="Missed"
+                                    android:textColor="#FFFFFF"
+                                    android:backgroundTint="#718096"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="22dp"/>
+                            </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>
