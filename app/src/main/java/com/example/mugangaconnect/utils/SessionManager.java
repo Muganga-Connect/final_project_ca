@@ -12,6 +12,7 @@ public class SessionManager {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_LOGGED_IN = "is_logged_in";
     private static final String KEY_LANGUAGE = "app_language";
+    private static final String KEY_DARK_MODE = "dark_mode";
 
     private final SharedPreferences prefs;
 
@@ -51,6 +52,15 @@ public class SessionManager {
     public String getLanguage() {
         return prefs.getString(KEY_LANGUAGE, "en");
     }
+
+    public void setDarkMode(boolean isEnabled) {
+        prefs.edit().putBoolean(KEY_DARK_MODE, isEnabled).apply();
+    }
+
+    public boolean isDarkMode() {
+        return prefs.getBoolean(KEY_DARK_MODE, false);
+    }
+
     public String getUid() { return prefs.getString(KEY_UID, null); }
     public String getFullName() { return prefs.getString(KEY_NAME, ""); }
     public String getEmail() { return prefs.getString(KEY_EMAIL, ""); }

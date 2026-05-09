@@ -3,8 +3,11 @@
     <style name="Base.Theme.Appointment_Schedule" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primary_blue</item>
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/background_main</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/background_main</item>
+        <item name="colorSurface">@color/card_background</item>
+        <item name="colorOnSurface">@color/text_primary</item>
     </style>
 
     <style name="Theme.Appointment_Schedule" parent="Base.Theme.Appointment_Schedule" />

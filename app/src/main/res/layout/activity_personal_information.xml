@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EAF4FB"
+    android:background="@color/background_main"
     tools:context=".activity.PersonalInformationActivity">
 
     <!-- HEADER -->
@@ -12,7 +12,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFF"
+        android:background="@color/card_background"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
@@ -26,13 +26,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="#1A1A2E" />
+            app:tint="@color/text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/personal_information"
-            android:textColor="#1A1A2E"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E0E0E0"
+            android:background="@color/divider_color"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -94,11 +94,11 @@
                             android:layout_height="24dp"
                             android:layout_gravity="bottom|end"
                             android:background="@drawable/circle_profile_bg"
-                            android:backgroundTint="#1565C0"
+                            android:backgroundTint="@color/primary_blue"
                             android:padding="4dp"
                             android:contentDescription="@string/edit_btn"
                             android:src="@drawable/ic_photo_camera"
-                            android:tint="#FFFFFF" />
+                            app:tint="@color/text_on_primary" />
                     </FrameLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -109,11 +109,11 @@
                         android:layout_marginTop="8dp"
                         android:text="@string/edit_btn"
                         android:textAllCaps="false"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/primary_blue"
                         app:cornerRadius="8dp"
                         app:icon="@drawable/ic_photo_camera"
-                        app:iconTint="#1565C0"
-                        app:strokeColor="#1565C0" />
+                        app:iconTint="@color/primary_blue"
+                        app:strokeColor="@color/primary_blue" />
 
                     <TextView
                         android:id="@+id/tv_display_name"
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         tools:text="Alexandrine Mukamana"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="PN-10293"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -180,7 +180,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -199,7 +199,7 @@
                         android:layout_marginBottom="8dp"
                         android:letterSpacing="0.05"
                         android:text="GENDER"
-                        android:textColor="#1A237E"
+                        android:textColor="@color/primary_blue"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -224,7 +224,7 @@
                             android:layout_marginStart="8dp"
                             android:background="@android:color/transparent"
                             android:src="@drawable/ic_edit"
-                            android:tint="#1565C0" />
+                            app:tint="@color/primary_blue" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -271,7 +271,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -290,7 +290,7 @@
                         android:layout_marginBottom="8dp"
                         android:letterSpacing="0.05"
                         android:text="BLOOD TYPE"
-                        android:textColor="#1A237E"
+                        android:textColor="@color/primary_blue"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -315,7 +315,7 @@
                             android:layout_marginStart="8dp"
                             android:background="@android:color/transparent"
                             android:src="@drawable/ic_edit"
-                            android:tint="#1565C0" />
+                            app:tint="@color/primary_blue" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -347,11 +347,11 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_margin="16dp"
-        android:backgroundTint="#1565C0"
+        android:backgroundTint="@color/primary_blue"
         android:enabled="false"
         android:text="Save Changes"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_on_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"

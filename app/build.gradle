@@ -41,10 +41,6 @@ android {
         buildConfig true
         viewBinding true
     }
-    dependenciesInfo {
-        includeInApk true
-        includeInBundle true
-    }
 }
 
 dependencies {
@@ -57,7 +53,12 @@ dependencies {
     implementation libs.blurview
     implementation libs.lucide.icons
 
-    // Firebase BoM — manages all Firebase library versions
+    // Room
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    annotationProcessor libs.room.compiler
+
+    // Firebase
     implementation platform(libs.firebase.bom)
     implementation libs.google.firebase.auth
     implementation libs.google.firebase.firestore
@@ -65,11 +66,11 @@ dependencies {
     implementation libs.generativeai
     implementation libs.security.crypto
     
-    // Cloudinary for image upload
+    // Cloudinary
     implementation libs.cloudinary.android
     implementation libs.cloudinary.core
     
-    // Glide for image loading
+    // Glide
     implementation libs.glide
     annotationProcessor libs.compiler
     
