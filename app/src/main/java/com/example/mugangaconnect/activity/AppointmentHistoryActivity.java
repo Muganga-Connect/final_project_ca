@@ -2,6 +2,7 @@ package com.example.mugangaconnect.activity;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,6 +73,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
 
     private void setupTabs() {
         int[] tabIds   = {R.id.tabCompleted, R.id.tabCancelled, R.id.tabMissed};
+        int[] textIds  = {R.id.textCompleted, R.id.textCancelled, R.id.textMissed};
         String[] statuses = {
             Appointment.Status.ATTENDED.name(),
             Appointment.Status.CANCELLED.name(),
@@ -80,11 +82,31 @@ public class AppointmentHistoryActivity extends AppCompatActivity
         for (int i = 0; i < tabIds.length; i++) {
             MaterialCardView tab = findViewById(tabIds[i]);
             if (tab == null) continue;
-            String status = statuses[i];
+            int index = i;
             tab.setOnClickListener(v -> {
-                activeStatus = status;
-                loadByStatus(status);
+                activeStatus = statuses[index];
+                updateTabUI(tabIds, textIds, index);
+                loadByStatus(activeStatus);
             });
+        }
+        updateTabUI(tabIds, textIds, 0); // Default to first tab
+    }
+
+    private void updateTabUI(int[] tabIds, int[] textIds, int activeIndex) {
+        for (int i = 0; i < tabIds.length; i++) {
+            MaterialCardView tab = findViewById(tabIds[i]);
+            TextView text = findViewById(textIds[i]);
+            if (tab == null || text == null) continue;
+
+            if (i == activeIndex) {
+                tab.setCardBackgroundColor(android.graphics.Color.parseColor("#1A4C91"));
+                text.setTextColor(android.graphics.Color.WHITE);
+                text.setTypeface(null, android.graphics.Typeface.BOLD);
+            } else {
+                tab.setCardBackgroundColor(android.graphics.Color.WHITE);
+                text.setTextColor(android.graphics.Color.parseColor("#6C96C3"));
+                text.setTypeface(null, android.graphics.Typeface.NORMAL);
+            }
         }
     }
 
@@ -108,4 +130,26 @@ public class AppointmentHistoryActivity extends AppCompatActivity
 
     @Override public void onReschedule(Appointment appointment) { /* history is read-only */ }
     @Override public void onCancel(Appointment appointment)     { /* history is read-only */ }
+    @Override public void onMarkAttended(Appointment appointment) {
+        updateStatus(appointment, Appointment.Status.ATTENDED.name());
+    }
+    @Override public void onMarkMissed(Appointment appointment) {
+        updateStatus(appointment, Appointment.Status.MISSED.name());
+    }
+
+    private void updateStatus(Appointment appointment, String status) {
+        String uid = session.getUid();
+        appointmentRepo.updateStatus(appointment.getId(), uid, status, new AppointmentRepository.Callback<Void>() {
+            @Override
+            public void onResult(Void data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AppointmentHistoryActivity.this, "Status updated", Toast.LENGTH_SHORT).show();
+                    loadByStatus(activeStatus);
+                });
+            }
+            @Override public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentHistoryActivity.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
 }
