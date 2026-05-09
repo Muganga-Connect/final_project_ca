@@ -7,6 +7,7 @@ public class Doctor {
     private String department;
     private double rating;
     private String imageUrl;
+    private String availability;
 
     public Doctor() {}
 
@@ -16,6 +17,14 @@ public class Doctor {
         this.specialty = specialty;
         this.department = department;
         this.rating = rating;
+    }
+
+    public Doctor(String id, String name, String specialty, String department, String availability) {
+        this.id = id;
+        this.name = name;
+        this.specialty = specialty;
+        this.department = department;
+        this.availability = availability;
     }
 
     public String getId() { return id; }
@@ -30,4 +39,6 @@ public class Doctor {
     public void setRating(double rating) { this.rating = rating; }
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getAvailability() { return availability; }
+    public void setAvailability(String availability) { this.availability = availability; }
 }
