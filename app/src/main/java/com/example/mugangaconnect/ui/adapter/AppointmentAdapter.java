@@ -24,6 +24,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     public interface OnAppointmentActionListener {
         void onReschedule(Appointment appointment);
         void onCancel(Appointment appointment);
+        void onMarkAttended(Appointment appointment);
+        void onMarkMissed(Appointment appointment);
     }
 
     public AppointmentAdapter(List<Appointment> appointmentList, OnAppointmentActionListener listener) {
@@ -52,8 +54,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView txtDoctorName, txtSpecialty, txtStatus, txtDateTime;
         ImageView imgDoctor;
-        MaterialButton btnReschedule, btnCancel;
-        View layoutActions;
+        MaterialButton btnReschedule, btnCancel, btnMarkAttended, btnMarkMissed;
+        View layoutActions, layoutAdminActions;
         private Appointment currentAppointment;
 
         AppointmentViewHolder(@NonNull View itemView, OnAppointmentActionListener listener) {
@@ -65,12 +67,22 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             imgDoctor     = itemView.findViewById(R.id.img_doctor);
             btnReschedule = itemView.findViewById(R.id.btn_reschedule);
             btnCancel     = itemView.findViewById(R.id.btn_cancel);
+            btnMarkAttended = itemView.findViewById(R.id.btn_mark_attended);
+            btnMarkMissed   = itemView.findViewById(R.id.btn_mark_missed);
             layoutActions = itemView.findViewById(R.id.layout_actions);
+            layoutAdminActions = itemView.findViewById(R.id.layout_admin_actions);
+
             btnReschedule.setOnClickListener(v -> {
                 if (listener != null && currentAppointment != null) listener.onReschedule(currentAppointment);
             });
             btnCancel.setOnClickListener(v -> {
                 if (listener != null && currentAppointment != null) listener.onCancel(currentAppointment);
+            });
+            btnMarkAttended.setOnClickListener(v -> {
+                if (listener != null && currentAppointment != null) listener.onMarkAttended(currentAppointment);
+            });
+            btnMarkMissed.setOnClickListener(v -> {
+                if (listener != null && currentAppointment != null) listener.onMarkMissed(currentAppointment);
             });
         }
 
@@ -81,8 +93,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             txtStatus.setText(safeText(appointment.getStatusValue()));
             txtDateTime.setText(formatDateTime(appointment.getDate(), appointment.getTime()));
 
-            boolean isCancelled = Appointment.Status.CANCELLED.equals(appointment.getStatus());
-            layoutActions.setVisibility(isCancelled ? View.GONE : View.VISIBLE);
+            boolean isUpcoming = Appointment.Status.UPCOMING.equals(appointment.getStatus());
+            layoutActions.setVisibility(isUpcoming ? View.VISIBLE : View.GONE);
+            if (layoutAdminActions != null) {
+                layoutAdminActions.setVisibility(isUpcoming ? View.VISIBLE : View.GONE);
+            }
         }
 
         private String safeText(String value) {
