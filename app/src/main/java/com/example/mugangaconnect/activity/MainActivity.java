@@ -2,6 +2,7 @@ package com.example.mugangaconnect.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvUpcomingStatus;
     private Button btnReschedule;
     private Button btnCancelAppointment;
+    private Button btnMarkAttended;
+    private Button btnMarkMissed;
     private Button btnEnableReminder;
+    private Appointment currentUpcoming;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         tvUpcomingStatus = findViewById(R.id.tvUpcomingStatus);
         btnReschedule = findViewById(R.id.btnReschedule);
         btnCancelAppointment = findViewById(R.id.btnCancelAppointment);
+        btnMarkAttended = findViewById(R.id.btnMarkAttended);
+        btnMarkMissed = findViewById(R.id.btnMarkMissed);
         btnEnableReminder = findViewById(R.id.btnEnableReminder);
     }
 
@@ -109,14 +115,14 @@ public class MainActivity extends AppCompatActivity {
                         if (next == null || a.getDate().compareTo(next.getDate()) < 0) next = a;
                     }
                 }
-                final Appointment upcoming = next;
+                currentUpcoming = next;
 
                 // Compute risk from stats
                 appointmentRepo.getMissedStats(uid, new AppointmentRepository.Callback<int[]>() {
                     @Override
                     public void onResult(int[] stats) {
                         String risk = NoShowPredictor.predict(stats[0], stats[1]);
-                        runOnUiThread(() -> updateDashboardUI(upcoming, risk, stats[0], stats[1]));
+                        runOnUiThread(() -> updateDashboardUI(currentUpcoming, risk, stats[0], stats[1]));
                     }
                     @Override public void onError(String message) {}
                 });
@@ -126,16 +132,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDashboardUI(Appointment upcoming, String risk, int missed, int total) {
+        View content = findViewById(R.id.appointmentContent);
+        View empty = findViewById(R.id.emptyAppointmentState);
+
         if (upcoming != null) {
+            if (content != null) content.setVisibility(View.VISIBLE);
+            if (empty != null) empty.setVisibility(View.GONE);
+
             if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText(upcoming.getDoctorName());
             if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
             if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatusValue());
         } else {
-            if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText("No upcoming appointment");
-            if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText("Book one from Schedule");
-            if (tvUpcomingStatus != null) tvUpcomingStatus.setText("N/A");
+            if (content != null) content.setVisibility(View.GONE);
+            if (empty != null) empty.setVisibility(View.VISIBLE);
         }
-
+        
+        // Update smart alert based on prediction
         if (tvSmartAlertBody != null) {
             if (total >= 3 && missed > 0) {
                 tvSmartAlertBody.setText(missed + " of last " + total + " appointments were missed.");
@@ -146,8 +158,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void wireButtons() {
-        // findViewById(R.id.cardAppointmentHistory).setOnClickListener(v ->
-        //         startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+        if (findViewById(R.id.tvUpcomingStatus) != null) {
+            findViewById(R.id.tvUpcomingStatus).setOnClickListener(v ->
+                startActivity(new Intent(this, AppointmentHistoryActivity.class)));
+        }
 
         if (btnReschedule != null) {
             btnReschedule.setOnClickListener(v ->
@@ -155,13 +169,50 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (btnCancelAppointment != null) {
-            btnCancelAppointment.setOnClickListener(v ->
-                    startActivity(new Intent(this, AppointmentManagementActivity.class)));
+            btnCancelAppointment.setOnClickListener(v -> {
+                if (currentUpcoming != null) {
+                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.CANCELLED.name());
+                }
+            });
+        }
+
+        if (btnMarkAttended != null) {
+            btnMarkAttended.setOnClickListener(v -> {
+                if (currentUpcoming != null) {
+                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.ATTENDED.name());
+                }
+            });
+        }
+
+        if (btnMarkMissed != null) {
+            btnMarkMissed.setOnClickListener(v -> {
+                if (currentUpcoming != null) {
+                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.MISSED.name());
+                }
+            });
         }
 
         if (btnEnableReminder != null) {
             btnEnableReminder.setOnClickListener(v ->
                     Toast.makeText(this, "Early reminder enabled for upcoming appointments", Toast.LENGTH_SHORT).show());
         }
+    }
+
+    private void updateAppointmentStatus(String id, String status) {
+        String uid = session.getUid();
+        appointmentRepo.updateStatus(id, uid, status, new AppointmentRepository.Callback<Void>() {
+            @Override
+            public void onResult(Void data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "Appointment marked as " + status, Toast.LENGTH_SHORT).show();
+                    loadDashboardData();
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 }
