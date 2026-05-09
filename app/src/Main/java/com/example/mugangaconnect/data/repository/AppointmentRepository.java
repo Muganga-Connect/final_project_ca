@@ -11,6 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppointmentRepository {
     
@@ -30,30 +32,16 @@ public class AppointmentRepository {
         DocumentReference docRef = db.collection(COLLECTION_NAME).document(appointmentId);
         
         docRef.get()
-            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            try {
-                                Appointment appointment = documentToAppointment(document);
-                                callback.onSuccess(appointment);
-                            } catch (Exception e) {
-                                callback.onError("Error parsing appointment data: " + e.getMessage());
-                            }
-                        } else {
-                            callback.onError("Appointment not found");
-                        }
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        callback.onSuccess(documentToAppointment(document));
                     } else {
-                        callback.onError("Failed to fetch appointment: " + task.getException().getMessage());
+                        callback.onError("Appointment not found");
                     }
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(Exception e) {
-                    callback.onError("Network error: " + e.getMessage());
+                } else {
+                    callback.onError(task.getException().getMessage());
                 }
             });
     }
@@ -81,34 +69,54 @@ public class AppointmentRepository {
     }
     
     public void getForPatient(String patientId, Callback<List<Appointment>> callback) {
-        if (patientId == null || patientId.trim().isEmpty()) {
-            callback.onError("Patient ID cannot be null or empty");
-            return;
-        }
-
         db.collection(COLLECTION_NAME)
             .whereEqualTo("patientId", patientId)
             .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        List<Appointment> appointments = new ArrayList<>();
-                        for (DocumentSnapshot document : task.getResult()) {
-                            appointments.add(documentToAppointment(document));
-                        }
-                        callback.onSuccess(appointments);
-                    } else {
-                        callback.onError("Failed to fetch appointments: " + task.getException().getMessage());
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Appointment> appointments = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        appointments.add(documentToAppointment(document));
                     }
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(Exception e) {
-                    callback.onError("Network error: " + e.getMessage());
+                    callback.onSuccess(appointments);
+                } else {
+                    callback.onError(task.getException().getMessage());
                 }
             });
+    }
+
+    public void book(Appointment appointment, Callback<Appointment> callback) {
+        db.collection(COLLECTION_NAME)
+            .add(appointment)
+            .addOnSuccessListener(documentReference -> {
+                appointment.setId(documentReference.getId());
+                callback.onSuccess(appointment);
+            })
+            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    public void reschedule(String id, String date, String time, Callback<Void> callback) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("date", date);
+        updates.put("time", time);
+        updates.put("status", Appointment.Status.RESCHEDULED.name());
+
+        db.collection(COLLECTION_NAME).document(id)
+            .update(updates)
+            .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    public void updateStatus(String id, String userId, String status, Callback<Void> callback) {
+        db.collection(COLLECTION_NAME).document(id)
+            .update("status", status)
+            .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    public void getCachedByStatus(String uid, String status, Callback<List<Appointment>> callback) {
+        // Simple implementation that redirects to getForPatient for now
+        getForPatient(uid, callback);
     }
 
     public interface Callback<T> {

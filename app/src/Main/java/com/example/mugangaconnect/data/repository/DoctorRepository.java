@@ -32,6 +32,25 @@ public class DoctorRepository {
             });
     }
 
+    public void getByDepartment(String department, Callback<List<Doctor>> callback) {
+        db.collection(COLLECTION_NAME)
+            .whereEqualTo("department", department)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Doctor> doctors = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Doctor doctor = document.toObject(Doctor.class);
+                        doctor.setId(document.getId());
+                        doctors.add(doctor);
+                    }
+                    callback.onSuccess(doctors);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
+    }
+
     public interface Callback<T> {
         void onSuccess(T result);
         void onError(String errorMessage);
