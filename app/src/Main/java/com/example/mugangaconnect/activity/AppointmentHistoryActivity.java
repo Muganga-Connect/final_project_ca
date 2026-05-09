@@ -38,7 +38,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
         setContentView(R.layout.appointment_history);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
 
         RecyclerView rv = findViewById(R.id.rv_history);
         if (rv != null) {
@@ -65,7 +65,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onResult(List<Appointment> data) {
+            public void onSuccess(List<Appointment> data) {
                 loadByStatus(activeStatus);
             }
 
@@ -99,7 +99,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
         if (uid == null) return;
         appointmentRepo.getCachedByStatus(uid, status,
                 new AppointmentRepository.Callback<List<Appointment>>() {
-                    @Override public void onResult(List<Appointment> data) {
+                    @Override public void onSuccess(List<Appointment> data) {
                         runOnUiThread(() -> {
                             appointments.clear();
                             appointments.addAll(data);
