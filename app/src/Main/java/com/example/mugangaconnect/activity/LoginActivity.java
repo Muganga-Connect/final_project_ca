@@ -14,10 +14,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -117,14 +113,6 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(v -> goToSignUp());
         tabSignUp.setOnClickListener(v -> goToSignUp());
 
-        btnBio.setOnClickListener(v -> {
-            if (session.isBiometricEnabled()) {
-                authenticateWithBiometrics();
-            } else {
-                Toast.makeText(this, "Biometric login is not enabled. Please login with password and enable it in Profile settings.", Toast.LENGTH_LONG).show();
-            }
-        });
-
         // Forgot Password — sends a real reset email via Firebase
         tvForgot.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
@@ -146,6 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         });
+
+        btnBio.setOnClickListener(v ->
+                Toast.makeText(this, "Biometric login coming soon", Toast.LENGTH_SHORT).show());
     }
 
     private void goToDashboard() {
@@ -155,65 +146,5 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToSignUp() {
         startActivity(new Intent(this, SignUpActivity.class));
-    }
-
-    private void authenticateWithBiometrics() {
-        BiometricManager biometricManager = BiometricManager.from(this);
-        int authenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
-        switch (biometricManager.canAuthenticate(authenticators)) {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                performBiometricAuth(authenticators);
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Toast.makeText(this, "No biometric features available on this device.", Toast.LENGTH_SHORT).show();
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                Toast.makeText(this, "Biometric features are currently unavailable.", Toast.LENGTH_SHORT).show();
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                Toast.makeText(this, "No biometrics enrolled. Please check your device settings.", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                Toast.makeText(this, "Biometric authentication is not supported.", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    private void performBiometricAuth(int authenticators) {
-        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric Login")
-                .setSubtitle("Log in using your biometric credential")
-                .setAllowedAuthenticators(authenticators)
-                .build();
-
-        BiometricPrompt biometricPrompt = new BiometricPrompt(this,
-                ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-                // Biometric succeeded. If we have a stored session and Firebase is still active, go to dashboard.
-                if (session.isLoggedIn() && authRepo.isLoggedIn()) {
-                    goToDashboard();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Session expired. Please login with password.", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-                // Fallback to password is implicitly handled as the login screen remains visible
-                Toast.makeText(LoginActivity.this, "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
-                Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        biometricPrompt.authenticate(promptInfo);
     }
 }
