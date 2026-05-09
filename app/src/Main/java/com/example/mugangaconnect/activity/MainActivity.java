@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
 
         setupUI();
         loadData();
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupUI() {
         // Set User Name
         TextView tvUserName = findViewById(R.id.tvUserName);
-        if (tvUserName != null && session.getFullName() != null) {
-            tvUserName.setText(session.getFullName().replace(" ", "\n"));
+        if (tvUserName != null) {
+            tvUserName.setText("User"); // Simplified for now
         }
 
         // View History Button
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onResult(List<Appointment> data) {
+            public void onSuccess(List<Appointment> data) {
                 for (Appointment appt : data) {
                     if (Appointment.Status.CONFIRMED.name().equals(appt.getStatus())) {
                         upcomingAppointment = appt;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     private void cancelAppointment(Appointment appt) {
         appointmentRepo.updateStatus(appt.getId(), session.getUid(), Appointment.Status.CANCELLED.name(), new AppointmentRepository.Callback<Void>() {
             @Override
-            public void onResult(Void data) {
+            public void onSuccess(Void data) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Appointment cancelled", Toast.LENGTH_SHORT).show();
                     loadData(); // Refresh
