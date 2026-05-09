@@ -7,7 +7,7 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="@color/card_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/CircleImage"
-                android:background="@color/accent_blue_light" />
+                android:background="@color/field_background" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,7 +40,7 @@
                     android:id="@+id/txt_doctor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_dark"
+                    android:textColor="@color/text_primary"
                     android:textStyle="bold"
                     android:textSize="16sp" />
 
