@@ -18,6 +18,8 @@ public class SessionManager {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_FCM_TOKEN = "fcm_token";
     private static final String KEY_LOGGED_IN = "is_logged_in";
+    private static final String KEY_BIOMETRIC = "biometric_enabled";
+    private static final String KEY_LANGUAGE = "language";
 
     private final SharedPreferences prefs;
 
@@ -69,12 +71,32 @@ public class SessionManager {
         prefs.edit().putString(KEY_FCM_TOKEN, token).apply();
     }
 
+    public void updateFcmToken(String token) {
+        saveFcmToken(token);
+    }
+
     public boolean isLoggedIn() { return prefs.getBoolean(KEY_LOGGED_IN, false); }
     public String getUid() { return prefs.getString(KEY_UID, null); }
     public String getFullName() { return prefs.getString(KEY_NAME, ""); }
     public String getEmail() { return prefs.getString(KEY_EMAIL, ""); }
     public String getPhone() { return prefs.getString(KEY_PHONE, ""); }
     public String getFcmToken() { return prefs.getString(KEY_FCM_TOKEN, ""); }
+
+    public void setBiometricEnabled(boolean enabled) {
+        prefs.edit().putBoolean(KEY_BIOMETRIC, enabled).apply();
+    }
+
+    public boolean isBiometricEnabled() {
+        return prefs.getBoolean(KEY_BIOMETRIC, false);
+    }
+
+    public void saveLanguage(String lang) {
+        prefs.edit().putString(KEY_LANGUAGE, lang).apply();
+    }
+
+    public String getLanguage() {
+        return prefs.getString(KEY_LANGUAGE, "en");
+    }
 
     private void requireNonEmpty(String value, String name) {
         if (value == null || value.trim().isEmpty()) {
