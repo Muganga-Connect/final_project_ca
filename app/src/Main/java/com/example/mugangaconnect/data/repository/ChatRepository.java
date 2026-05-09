@@ -35,7 +35,7 @@ public class ChatRepository {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public ChatRepository(Context context) {
-        this.chatDao = new ChatDao(AppDatabase.getInstance(context));
+        this.chatDao = AppDatabase.getInstance(context).chatDao();
     }
 
     public void sendMessage(String patientId, String text, ChatCallback callback) {
