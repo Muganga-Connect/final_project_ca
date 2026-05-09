@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -77,8 +80,15 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
 
         // Biometric switch
         SwitchCompat biometricSwitch = findViewById(R.id.biometricSwitch);
-        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) ->
-                Toast.makeText(this, "Biometrics " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show());
+        biometricSwitch.setChecked(session.isBiometricEnabled());
+        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+            if (isChecked) {
+                checkBiometricAvailability(biometricSwitch);
+            } else {
+                session.setBiometricEnabled(false);
+                Toast.makeText(this, "Biometrics disabled", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Log out
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
@@ -207,6 +217,66 @@ public class ProfileActivity extends AppCompatActivity implements ImagePickerUti
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void checkBiometricAvailability(SwitchCompat biometricSwitch) {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        int authenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
+        switch (biometricManager.canAuthenticate(authenticators)) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                showBiometricPromptForEnabling(biometricSwitch);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Toast.makeText(this, "No biometric features available on this device.", Toast.LENGTH_SHORT).show();
+                biometricSwitch.setChecked(false);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                Toast.makeText(this, "Biometric features are currently unavailable.", Toast.LENGTH_SHORT).show();
+                biometricSwitch.setChecked(false);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                Toast.makeText(this, "Please enroll a biometric (fingerprint/face) in your device settings.", Toast.LENGTH_LONG).show();
+                biometricSwitch.setChecked(false);
+                break;
+            default:
+                Toast.makeText(this, "Biometric authentication is not supported.", Toast.LENGTH_SHORT).show();
+                biometricSwitch.setChecked(false);
+                break;
+        }
+    }
+
+    private void showBiometricPromptForEnabling(SwitchCompat biometricSwitch) {
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Enable Biometric Login")
+                .setSubtitle("Confirm your identity to enable biometric login")
+                .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                .build();
+
+        BiometricPrompt biometricPrompt = new BiometricPrompt(this,
+                ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@androidx.annotation.NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                session.setBiometricEnabled(true);
+                Toast.makeText(ProfileActivity.this, "Biometric login enabled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @androidx.annotation.NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                biometricSwitch.setChecked(false);
+                Toast.makeText(ProfileActivity.this, "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(ProfileActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        biometricPrompt.authenticate(promptInfo);
     }
 
     private void uploadProfileImage(Uri imageUri) {
