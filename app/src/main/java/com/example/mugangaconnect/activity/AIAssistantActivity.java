@@ -11,7 +11,7 @@ public class AIAssistantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ai_assistant);
+        setContentView(R.layout.fragment_ai_assistant);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
