@@ -88,16 +88,16 @@
                             android:gravity="center"
                             android:background="@drawable/bg_tab_selected">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:src="@drawable/ic_login_arrow"
-                                app:tint="@color/tab_selected"/>
+                                app:tint="@color/tab_active_content"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/login"
-                                android:textSize="13sp"
-                                android:textColor="@color/tab_selected"
+                                android:textSize="12sp"
+                                android:textColor="@color/tab_active_content"
                                 android:textStyle="bold"/>
                         </LinearLayout>
 
@@ -108,20 +108,20 @@
                             android:layout_weight="1"
                             android:orientation="vertical"
                             android:gravity="center"
-                            android:background="@drawable/bg_tab_unselected"
+                            android:background="@android:color/transparent"
                             android:clickable="true"
                             android:focusable="true">
                             <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:src="@drawable/ic_person_add"
-                                app:tint="@color/tab_unselected"/>
+                                app:tint="@color/tab_inactive_content"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/sign_up"
-                                android:textSize="13sp"
-                                android:textColor="@color/tab_unselected"/>
+                                android:textSize="12sp"
+                                android:textColor="@color/tab_inactive_content"/>
                         </LinearLayout>
                     </LinearLayout>
 
@@ -150,7 +150,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_person"
-                            app:tint="@color/text_blue"
+                            app:tint="@color/icon_primary"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etLoginEmail"
@@ -206,7 +206,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_lock"
-                            app:tint="@color/text_blue"
+                            app:tint="@color/icon_primary"
                             android:layout_marginEnd="12dp"/>
                         <EditText
                             android:id="@+id/etLoginPassword"
@@ -225,7 +225,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_eye"
-                            app:tint="@color/text_hint"
+                            app:tint="@color/icon_secondary"
                             android:clickable="true"
                             android:focusable="true"/>
                     </LinearLayout>
@@ -286,7 +286,7 @@
                             android:layout_height="20dp"
                             android:src="@drawable/fingerprint"
                             android:layout_marginEnd="10dp"
-                            app:tint="@color/text_primary"/>
+                            app:tint="@color/icon_on_background"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
