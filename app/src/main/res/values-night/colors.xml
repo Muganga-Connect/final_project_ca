@@ -22,8 +22,15 @@
 
     <color name="bottom_nav_bg">#1E1E1E</color>
     <color name="icon_tint">#90A4AE</color>
+    <color name="icon_primary">#FFFFFF</color>
+    <color name="icon_secondary">#90A4AE</color>
+    <color name="icon_on_background">#FFFFFF</color>
     <color name="tab_selected">#2176FF</color>
     <color name="tab_unselected">#B0BEC5</color>
+    <color name="tab_active_bg">#2176FF</color>
+    <color name="tab_active_content">#FFFFFF</color>
+    <color name="tab_inactive_bg">#2C2C2C</color>
+    <color name="tab_inactive_content">#90A4AE</color>
 
     <!-- UI State Colors (Night) -->
     <color name="success_color">#81C784</color>

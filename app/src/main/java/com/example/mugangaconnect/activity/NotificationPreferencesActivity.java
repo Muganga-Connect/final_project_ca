@@ -29,13 +29,21 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
     private MaterialButton btnSave;
 
     // SharedPreferences constants
-    private static final String PREFS_NAME = "MugangaConnectPrefs";
-    private static final String KEY_APPOINTMENT = "notification_appointmentReminders";
-    private static final String KEY_SMS = "notification_smsNotifications";
-    private static final String KEY_PUSH = "notification_pushNotifications";
-    private static final String KEY_ONE_DAY = "reminder_oneDayBefore";
-    private static final String KEY_TWO_HOURS = "reminder_twoHoursBefore";
-    private static final String KEY_THIRTY_MIN = "reminder_thirtyMinBefore";
+    public static final String PREFS_NAME = "MugangaConnectPrefs";
+    public static final String KEY_APPOINTMENT_REMINDERS = "notification_appointmentReminders";
+    public static final String KEY_SMS_NOTIFICATIONS = "notification_smsNotifications";
+    public static final String KEY_PUSH_NOTIFICATIONS = "notification_pushNotifications";
+    public static final String KEY_ONE_DAY_BEFORE = "reminder_oneDayBefore";
+    public static final String KEY_TWO_HOURS_BEFORE = "reminder_twoHoursBefore";
+    public static final String KEY_THIRTY_MIN_BEFORE = "reminder_thirtyMinBefore";
+
+    // Keep private aliases for internal use
+    private static final String KEY_APPOINTMENT = KEY_APPOINTMENT_REMINDERS;
+    private static final String KEY_SMS = KEY_SMS_NOTIFICATIONS;
+    private static final String KEY_PUSH = KEY_PUSH_NOTIFICATIONS;
+    private static final String KEY_ONE_DAY = KEY_ONE_DAY_BEFORE;
+    private static final String KEY_TWO_HOURS = KEY_TWO_HOURS_BEFORE;
+    private static final String KEY_THIRTY_MIN = KEY_THIRTY_MIN_BEFORE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

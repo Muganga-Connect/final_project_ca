@@ -99,9 +99,6 @@ public class ProfileActivity extends AppCompatActivity {
                 int targetMode = isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
                 if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
                     AppCompatDelegate.setDefaultNightMode(targetMode);
-                    
-                    // Small delay to allow the switch animation to finish before recreate
-                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(this::recreate, 150);
                 }
             });
         }

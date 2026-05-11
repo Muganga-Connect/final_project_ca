@@ -17,20 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.data.repository.DoctorRepository;
 import com.example.mugangaconnect.ui.adapter.DoctorAdapter;
-import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.example.mugangaconnect.activity.BottomNavHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class AppointmentManagementActivity extends AppCompatActivity
         implements DoctorAdapter.OnDoctorSelectedListener {
@@ -306,5 +302,32 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 runOnUiThread(() -> { Toast.makeText(AppointmentManagementActivity.this, "Booking failed: " + message, Toast.LENGTH_LONG).show(); if (bookBtn != null) bookBtn.setEnabled(true); });
             }
         });
+    }
+
+    @Override
+    public void onReschedule(Appointment appointment) {
+        appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
+                new AppointmentRepository.Callback<Void>() {
+                    @Override public void onResult(Void data) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, "Rescheduled", Toast.LENGTH_SHORT).show());
+                    }
+                    @Override public void onError(String message) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                    }
+                });
+    }
+
+    @Override
+    public void onCancel(Appointment appointment) {
+        appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
+                Appointment.Status.CANCELLED.name(),
+                new AppointmentRepository.Callback<Void>() {
+                    @Override public void onResult(Void data) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, "Cancelled", Toast.LENGTH_SHORT).show());
+                    }
+                    @Override public void onError(String message) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
+                    }
+                });
     }
 }

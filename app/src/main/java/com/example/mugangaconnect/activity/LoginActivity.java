@@ -43,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         authRepo = new AuthRepository();
         session  = new SessionManager(this);
 
-        if (session.isLoggedIn() && authRepo.isLoggedIn()) {
+        // Skip login if already authenticated
+        if (savedInstanceState == null && session.isLoggedIn() && authRepo.isLoggedIn()) {
             goToDashboard();
             return;
         }
