@@ -67,6 +67,7 @@ dependencies {
     implementation libs.google.firebase.firestore
     implementation libs.google.firebase.messaging
     implementation libs.generativeai
+    implementation libs.biometric
     implementation libs.security.crypto
     
     // Cloudinary for image upload

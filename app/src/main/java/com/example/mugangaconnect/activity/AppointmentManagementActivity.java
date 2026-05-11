@@ -59,7 +59,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setContentView(R.layout.appointment_management);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository();
+        appointmentRepo = new AppointmentRepository(this);
         doctorRepo      = new DoctorRepository();
 
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
@@ -133,88 +133,18 @@ public class AppointmentManagementActivity extends AppCompatActivity
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
             @Override
-            public void onSuccess(List<Doctor> data) {
-                runOnUiThread(() -> {
-                    doctors.clear();
-                    if (data.isEmpty()) {
-                        doctors.add(new Doctor("d1","Dr. Sarah Chen","Neurologist",department,"Mon-Fri 08:00-17:00"));
-                        doctors.add(new Doctor("d2","Dr. Mugisha Eric","Cardiologist",department,"Mon-Fri 09:00-16:00"));
-                        doctors.add(new Doctor("d3","Dr. Uwase Claire","Specialist",department,"Mon-Wed 09:00-15:00"));
-                        doctors.add(new Doctor("d4","Dr. Habimana Jean","Dentist",department,"Tue-Thu 08:00-14:00"));
-                    } else { doctors.addAll(data); }
-                    if (!doctors.isEmpty()) { updateDoctorCard(doctors.get(0)); selectedDoctor = doctors.get(0); }
-                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
-                });
-            }
-            @Override public void onError(String message) {
-                runOnUiThread(() -> {
-                    doctors.clear();
-                    doctors.add(new Doctor("d1","Dr. Sarah Chen","Neurologist",department,"Mon-Fri 08:00-17:00"));
-                    doctors.add(new Doctor("d2","Dr. Mugisha Eric","Cardiologist",department,"Mon-Fri 09:00-16:00"));
-                    if (!doctors.isEmpty()) { updateDoctorCard(doctors.get(0)); selectedDoctor = doctors.get(0); }
-                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
-                });
-            }
-        });
-    }
-
-    private void loadAppointments() {
-        String uid = session.getUid();
-        if (uid == null) return;
-        appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
-            @Override
-            public void onSuccess(List<Appointment> data) {
-                runOnUiThread(() -> {
-                    appointments.clear();
-                    appointments.addAll(data);
-                    if (appointmentAdapter != null) appointmentAdapter.notifyDataSetChanged();
-                });
-            }
-            @Override
-            public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
-                        message, Toast.LENGTH_SHORT).show());
-            }
-        });
-    }
-
-    private void bookAppointment() {
-        if (selectedDoctor == null) {
-            Toast.makeText(this, getString(R.string.select_provider), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!isDateTimeSelected) {
-            Toast.makeText(this, getString(R.string.select_session), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String uid = session.getUid();
-        if (uid == null) return;
-
-        SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm",      Locale.getDefault());
-
-        Appointment appt = new Appointment(
-                uid, selectedDoctor.getId(), selectedDoctor.getName(),
-                selectedDepartment,
-                dateSdf.format(selectedDateTime.getTime()),
-                timeSdf.format(selectedDateTime.getTime()));
-
-        appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
-            @Override
-            public void onSuccess(Appointment data) {
-                runOnUiThread(() -> {
-                    Toast.makeText(AppointmentManagementActivity.this,
-                            getString(R.string.book_appointment), Toast.LENGTH_SHORT).show();
-                    isDateTimeSelected = false;
-                    TextView btnText = findViewById(R.id.btn_select_session);
-                    if (btnText != null) btnText.setText(getString(R.string.select_session));
-                    loadAppointments();
-                });
-            }
-            @Override
-            public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
-                        message, Toast.LENGTH_SHORT).show());
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString().trim().toLowerCase();
+                if (query.isEmpty()) { loadDoctors(selectedDepartment); return; }
+                List<Doctor> filtered = new ArrayList<>();
+                for (Doctor d : doctors) {
+                    if (d.getName().toLowerCase().contains(query)
+                            || d.getSpecialty().toLowerCase().contains(query)
+                            || d.getDepartment().toLowerCase().contains(query))
+                        filtered.add(d);
+                }
+                if (!filtered.isEmpty()) { updateDoctorCard(filtered.get(0)); selectedDoctor = filtered.get(0); }
+                if (doctorAdapter != null) { doctors.clear(); doctors.addAll(filtered); doctorAdapter.notifyDataSetChanged(); }
             }
         });
     }
@@ -300,7 +230,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     public void onReschedule(Appointment appointment) {
         appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onSuccess(Void data) {
+                    @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.reschedule) + ": " + newDate + " " + newTime,
@@ -319,7 +249,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onSuccess(Void data) {
+                    @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.cancelled), Toast.LENGTH_SHORT).show();

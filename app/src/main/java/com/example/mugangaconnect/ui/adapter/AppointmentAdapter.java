@@ -16,7 +16,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
+public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder> {
     private List<Appointment> appointments;
     private OnAppointmentActionListener listener;
 
@@ -61,7 +61,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         notifyDataSetChanged();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class AppointmentViewHolder extends RecyclerView.ViewHolder {
         TextView txtDoctorName, txtSpecialty, txtDateTime, txtStatus;
         View btnReschedule, btnCancel;
 

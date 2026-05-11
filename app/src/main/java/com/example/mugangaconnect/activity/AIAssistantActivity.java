@@ -173,7 +173,7 @@ public class AIAssistantActivity extends AppCompatActivity {
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onSuccess(List<Appointment> data) {
+            public void onResult(List<Appointment> data) {
                 int missed = 0;
                 for (Appointment a : data) {
                     if (Appointment.Status.MISSED.name().equals(a.getStatus())) missed++;

@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onSuccess(List<Appointment> data) {
+            public void onResult(List<Appointment> data) {
                 for (Appointment appt : data) {
                     if (Appointment.Status.CONFIRMED.name().equals(appt.getStatus()) || 
                         Appointment.Status.UPCOMING.name().equals(appt.getStatus())) {
@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
+            }
 
             @Override
             public void onError(String message) {
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private void cancelAppointment(Appointment appt) {
         appointmentRepo.updateStatus(appt.getId(), session.getUid(), Appointment.Status.CANCELLED.name(), new AppointmentRepository.Callback<Void>() {
             @Override
-            public void onSuccess(Void data) {
+            public void onResult(Void data) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Appointment cancelled", Toast.LENGTH_SHORT).show();
                     loadData();

@@ -65,7 +65,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onSuccess(List<Appointment> data) {
+            public void onResult(List<Appointment> data) {
                 loadByStatus(activeStatus);
             }
 
@@ -99,7 +99,7 @@ public class AppointmentHistoryActivity extends AppCompatActivity
         if (uid == null) return;
         appointmentRepo.getCachedByStatus(uid, status,
                 new AppointmentRepository.Callback<List<Appointment>>() {
-                    @Override public void onSuccess(List<Appointment> data) {
+                    @Override public void onResult(List<Appointment> data) {
                         runOnUiThread(() -> {
                             appointments.clear();
                             appointments.addAll(data);
