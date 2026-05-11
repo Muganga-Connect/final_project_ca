@@ -45,11 +45,11 @@ public class AppointmentDao {
     // ✅ Get all appointments for a patient
     public List<Appointment> getByPatient(String patientId) {
         List<Appointment> list = new ArrayList<>();
-        Cursor c = db.getReadableDatabase().query(
-                AppDatabase.TABLE_APPOINTMENTS, null,
-                AppDatabase.COL_PATIENT_ID + "=?",
-                new String[]{patientId}, null, null,
-                AppDatabase.COL_DATE + " ASC");
+        Cursor c = db.getReadableDatabase().rawQuery(
+                "SELECT * FROM " + AppDatabase.TABLE_APPOINTMENTS +
+                " WHERE " + AppDatabase.COL_PATIENT_ID + " = ?" +
+                " ORDER BY " + AppDatabase.COL_DATE + " ASC",
+                new String[]{patientId});
         try {
             while (c.moveToNext()) list.add(fromCursor(c));
         } finally {
@@ -61,11 +61,12 @@ public class AppointmentDao {
     // ✅ Get appointments by patient + status (for History tabs)
     public List<Appointment> getByStatus(String patientId, String status) {
         List<Appointment> list = new ArrayList<>();
-        Cursor c = db.getReadableDatabase().query(
-                AppDatabase.TABLE_APPOINTMENTS, null,
-                AppDatabase.COL_PATIENT_ID + "=? AND " + AppDatabase.COL_STATUS + "=?",
-                new String[]{patientId, status}, null, null,
-                AppDatabase.COL_DATE + " ASC");
+        Cursor c = db.getReadableDatabase().rawQuery(
+                "SELECT * FROM " + AppDatabase.TABLE_APPOINTMENTS +
+                " WHERE " + AppDatabase.COL_PATIENT_ID + " = ?" +
+                " AND " + AppDatabase.COL_STATUS + " = ?" +
+                " ORDER BY " + AppDatabase.COL_DATE + " ASC",
+                new String[]{patientId, status});
         try {
             while (c.moveToNext()) list.add(fromCursor(c));
         } finally {
