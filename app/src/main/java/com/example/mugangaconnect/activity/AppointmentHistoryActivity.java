@@ -91,7 +91,6 @@ public class AppointmentHistoryActivity extends AppCompatActivity
                 filterAndDisplay();
             });
         }
-        // Default highlight: Completed
         highlightTab(tabIds, textIds, 0);
     }
 
@@ -228,5 +227,27 @@ public class AppointmentHistoryActivity extends AppCompatActivity
     }
     @Override public void onCancel(Appointment appointment) {
         Toast.makeText(this, "Cannot cancel a past appointment", Toast.LENGTH_SHORT).show();
+    }
+    @Override public void onMarkAttended(Appointment appointment) {
+        updateStatus(appointment, Appointment.Status.ATTENDED.name());
+    }
+    @Override public void onMarkMissed(Appointment appointment) {
+        updateStatus(appointment, Appointment.Status.MISSED.name());
+    }
+
+    private void updateStatus(Appointment appointment, String status) {
+        String uid = session.getUid();
+        appointmentRepo.updateStatus(appointment.getId(), uid, status, new AppointmentRepository.Callback<Void>() {
+            @Override
+            public void onResult(Void data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AppointmentHistoryActivity.this, "Status updated", Toast.LENGTH_SHORT).show();
+                    syncAndLoad();
+                });
+            }
+            @Override public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentHistoryActivity.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 }

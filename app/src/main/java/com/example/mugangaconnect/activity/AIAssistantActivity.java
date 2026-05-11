@@ -66,8 +66,6 @@ public class AIAssistantActivity extends AppCompatActivity {
         BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
     }
 
-    // ── UI setup ──────────────────────────────────────────────────────────────
-
     private void setupQuickActions() {
         TextView checkRiskBtn  = findViewById(R.id.checkRiskButton);
         TextView rescheduleBtn = findViewById(R.id.rescheduleButton);

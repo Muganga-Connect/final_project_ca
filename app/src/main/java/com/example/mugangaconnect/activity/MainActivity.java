@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
-            }
 
             @Override
             public void onError(String message) {
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResult(Void data) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Appointment cancelled", Toast.LENGTH_SHORT).show();
-                    loadData(); // Refresh
+                    loadData();
                 });
             }
 
