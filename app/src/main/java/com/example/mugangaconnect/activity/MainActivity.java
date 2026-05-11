@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(this);
+        authRepo = new AuthRepository(this);
         appointmentRepo = new AppointmentRepository();
 
         checkNotificationPermission();
