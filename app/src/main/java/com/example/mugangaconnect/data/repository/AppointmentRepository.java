@@ -69,8 +69,15 @@ public class AppointmentRepository {
             try {
                 List<Appointment> list = dao.getByStatus(patientId, status);
                 callback.onResult(list);
+            } catch (NullPointerException e) {
+                Log.e("AppointmentRepository", "Null pointer in getCachedByStatus: patientId=" + patientId + ", status=" + status, e);
+                callback.onError("Invalid patient ID or status");
+            } catch (IllegalArgumentException e) {
+                Log.e("AppointmentRepository", "Invalid argument in getCachedByStatus: " + e.getMessage(), e);
+                callback.onError("Invalid parameter provided");
             } catch (Exception e) {
-                callback.onError("Local DB error: " + e.getMessage());
+                Log.e("AppointmentRepository", "Local DB error in getCachedByStatus: " + e.getMessage(), e);
+                callback.onError("Local DB error: " + e.getClass().getSimpleName());
             }
         }).start();
     }
@@ -146,23 +153,55 @@ public class AppointmentRepository {
     // ─────────────────────────────────────────────────────────────
     private Appointment documentToAppointment(DocumentSnapshot doc) {
         try {
-            Appointment a = new Appointment(
-                    doc.getString("patientId") != null ? doc.getString("patientId") : "",
-                    doc.getString("doctorId")  != null ? doc.getString("doctorId")  : "",
-                    doc.getString("doctorName")!= null ? doc.getString("doctorName"): "",
-                    doc.getString("department")!= null ? doc.getString("department"): "",
-                    doc.getString("date")      != null ? doc.getString("date")      : "",
-                    doc.getString("time")      != null ? doc.getString("time")      : ""
-            );
-            a.setId(doc.getId());
-            if (doc.getString("status") != null) a.setStatus(doc.getString("status"));
-            if (doc.getString("riskLevel") != null) a.setRiskLevel(doc.getString("riskLevel"));
-            Long createdAt = doc.getLong("createdAt");
-            a.setCreatedAt(createdAt != null ? createdAt : System.currentTimeMillis());
+            Appointment a = buildAppointment(doc);
+            populateOptionalFields(a, doc);
             return a;
         } catch (Exception e) {
             Log.e("AppointmentRepository", "Error converting document to appointment: " + e.getMessage(), e);
             return null;
+        }
+    }
+
+    private Appointment buildAppointment(DocumentSnapshot doc) {
+        Appointment a = new Appointment(
+                getString(doc, "patientId"),
+                getString(doc, "doctorId"),
+                getString(doc, "doctorName"),
+                getString(doc, "department"),
+                getString(doc, "date"),
+                getString(doc, "time")
+        );
+        a.setId(doc.getId());
+        return a;
+    }
+
+    private void populateOptionalFields(Appointment a, DocumentSnapshot doc) {
+        setStatusIfPresent(a, doc);
+        setRiskLevelIfPresent(a, doc);
+        a.setCreatedAt(getLongOrCurrentTime(doc, "createdAt"));
+    }
+
+    private String getString(DocumentSnapshot doc, String key) {
+        String value = doc.getString(key);
+        return value != null ? value : "";
+    }
+
+    private long getLongOrCurrentTime(DocumentSnapshot doc, String key) {
+        Long value = doc.getLong(key);
+        return value != null ? value : System.currentTimeMillis();
+    }
+
+    private void setStatusIfPresent(Appointment a, DocumentSnapshot doc) {
+        String status = doc.getString("status");
+        if (status != null) {
+            a.setStatus(status);
+        }
+    }
+
+    private void setRiskLevelIfPresent(Appointment a, DocumentSnapshot doc) {
+        String riskLevel = doc.getString("riskLevel");
+        if (riskLevel != null) {
+            a.setRiskLevel(riskLevel);
         }
     }
 
