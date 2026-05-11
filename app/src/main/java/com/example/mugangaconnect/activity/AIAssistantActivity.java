@@ -18,11 +18,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
-import com.example.mugangaconnect.data.repository.AppointmentRepository;
+import com.example.mugangaconnect.activity.AppointmentRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.example.mugangaconnect.BuildConfig;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AIAssistantActivity extends AppCompatActivity {
 
@@ -30,6 +40,8 @@ public class AIAssistantActivity extends AppCompatActivity {
     private SessionManager session;
     private LinearLayout chatContainer;
     private ScrollView chatScrollView;
+    private GenerativeModelFutures model;
+    private final Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -43,7 +55,7 @@ public class AIAssistantActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_ai_assistant);
 
         session = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 findViewById(R.id.topStatsBar), (v, insets) -> {
@@ -55,6 +67,7 @@ public class AIAssistantActivity extends AppCompatActivity {
         chatContainer  = findViewById(R.id.chatContainer);
         chatScrollView = findScrollViewParent();
 
+        initializeGemini();
         setupQuickActions();
         setupSendButton();
         BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
@@ -64,6 +77,13 @@ public class AIAssistantActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
+    }
+
+    // ── UI setup ──────────────────────────────────────────────────────────────
+
+    private void initializeGemini() {
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", BuildConfig.GEMINI_API_KEY);
+        model = GenerativeModelFutures.from(gm);
     }
 
     private void setupQuickActions() {
@@ -106,25 +126,40 @@ public class AIAssistantActivity extends AppCompatActivity {
     // ── AI logic ──────────────────────────────────────────────────────────────
 
     /**
-     * Matches the user's message against localised keywords loaded from strings.xml,
-     * so the AI understands input in English, French, AND Kinyarwanda.
+     * Matches the user's message against localised keywords for immediate actions,
+     * otherwise delegates to the Google Gemini AI model.
      */
     private void processAiResponse(String userMsg) {
         String lower = userMsg.toLowerCase().trim();
 
         if (containsKeyword(lower, R.string.ai_kw_risk)) {
             checkAppointmentRisk();
-        } else if (containsKeyword(lower, R.string.ai_kw_hello)
-                || containsKeyword(lower, R.string.ai_kw_hi)) {
-            addAiMessage(getString(R.string.ai_hello_response));
         } else if (containsKeyword(lower, R.string.ai_kw_reschedule)) {
             addAiMessage(getString(R.string.ai_reschedule_response));
             startActivity(new Intent(this, AppointmentManagementActivity.class));
-        } else if (containsKeyword(lower, R.string.ai_kw_reminder)) {
-            addAiMessage(getString(R.string.ai_reminder_response));
         } else {
-            addAiMessage(getString(R.string.ai_default_response));
+            callGeminiAI(userMsg);
         }
+    }
+
+    private void callGeminiAI(String prompt) {
+        Content content = new Content.Builder()
+                .addText(prompt)
+                .build();
+
+        ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+            @Override
+            public void onSuccess(GenerateContentResponse result) {
+                String text = result.getText();
+                runOnUiThread(() -> addAiMessage(text));
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                runOnUiThread(() -> addAiMessage("Sorry, I'm having trouble connecting to my AI brain. " + t.getMessage()));
+            }
+        }, executor);
     }
 
     /** Returns true if the message contains the localised keyword for the given string resource. */
@@ -138,7 +173,7 @@ public class AIAssistantActivity extends AppCompatActivity {
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onResult(List<Appointment> data) {
+            public void onSuccess(List<Appointment> data) {
                 int missed = 0;
                 for (Appointment a : data) {
                     if (Appointment.Status.MISSED.name().equals(a.getStatus())) missed++;

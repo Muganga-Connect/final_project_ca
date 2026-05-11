@@ -3,51 +3,56 @@ package com.example.mugangaconnect.data.repository;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorRepository {
-    private final FirebaseFirestore db;
-    private static final String COLLECTION = "doctors";
-
-    public interface Callback<T> {
-        void onResult(T data);
-        void onError(String message);
-    }
+    private FirebaseFirestore db;
+    private static final String COLLECTION_NAME = "doctors";
 
     public DoctorRepository() {
-        this.db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
+    }
+
+    public void getAllDoctors(Callback<List<Doctor>> callback) {
+        db.collection(COLLECTION_NAME)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Doctor> doctors = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Doctor doctor = document.toObject(Doctor.class);
+                        doctor.setId(document.getId());
+                        doctors.add(doctor);
+                    }
+                    callback.onSuccess(doctors);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
     }
 
     public void getByDepartment(String department, Callback<List<Doctor>> callback) {
-        db.collection(COLLECTION)
-                .whereEqualTo("department", department)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<Doctor> list = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : querySnapshot) {
-                        Doctor doctor = doc.toObject(Doctor.class);
-                        doctor.setId(doc.getId());
-                        list.add(doctor);
+        db.collection(COLLECTION_NAME)
+            .whereEqualTo("department", department)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Doctor> doctors = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Doctor doctor = document.toObject(Doctor.class);
+                        doctor.setId(document.getId());
+                        doctors.add(doctor);
                     }
-                    callback.onResult(list);
-                })
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                    callback.onSuccess(doctors);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
     }
 
-    public void getAll(Callback<List<Doctor>> callback) {
-        db.collection(COLLECTION)
-                .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    List<Doctor> list = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : querySnapshot) {
-                        Doctor doctor = doc.toObject(Doctor.class);
-                        doctor.setId(doc.getId());
-                        list.add(doctor);
-                    }
-                    callback.onResult(list);
-                })
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    public interface Callback<T> {
+        void onSuccess(T result);
+        void onError(String errorMessage);
     }
 }

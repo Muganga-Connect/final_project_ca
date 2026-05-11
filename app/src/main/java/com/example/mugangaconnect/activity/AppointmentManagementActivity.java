@@ -59,7 +59,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setContentView(R.layout.appointment_management);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
         doctorRepo      = new DoctorRepository();
 
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
@@ -133,46 +133,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String query = s.toString().trim().toLowerCase();
-                if (query.isEmpty()) { loadDoctors(selectedDepartment); return; }
-                List<Doctor> filtered = new ArrayList<>();
-                for (Doctor d : doctors) {
-                    if (d.getName().toLowerCase().contains(query) || d.getSpecialty().toLowerCase().contains(query) || d.getDepartment().toLowerCase().contains(query))
-                        filtered.add(d);
-                }
-                if (!filtered.isEmpty()) { updateDoctorCard(filtered.get(0)); selectedDoctor = filtered.get(0); }
-                if (doctorAdapter != null) { doctors.clear(); doctors.addAll(filtered); doctorAdapter.notifyDataSetChanged(); }
-            }
-        });
-    }
-
-    private void setupDepartmentSelection() {
-        LinearLayout llCardiology = findViewById(R.id.llCardiology);
-        LinearLayout llNeurology  = findViewById(R.id.llNeurology);
-        LinearLayout llDentistry  = findViewById(R.id.llDentistry);
-        if (llCardiology != null) llCardiology.setOnClickListener(v -> selectDepartment("Cardiology", llCardiology));
-        if (llNeurology  != null) llNeurology .setOnClickListener(v -> selectDepartment("Neurology",  llNeurology));
-        if (llDentistry  != null) llDentistry .setOnClickListener(v -> selectDepartment("Dentistry",  llDentistry));
-        if (llCardiology != null) selectDepartment("Cardiology", llCardiology);
-    }
-
-    private void selectDepartment(String dept, View selectedView) {
-        selectedDepartment = dept;
-        int[] ids = {R.id.llCardiology, R.id.llNeurology, R.id.llDentistry};
-        for (int id : ids) {
-            View v = findViewById(id);
-            if (v != null) v.setBackgroundResource(R.drawable.bg_department_item_normal);
-            if (v instanceof LinearLayout) for (int i = 0; i < ((LinearLayout)v).getChildCount(); i++) { View c = ((LinearLayout)v).getChildAt(i); if (c instanceof TextView) ((TextView)c).setTextColor(0xFF1A2340); }
-        }
-        selectedView.setBackgroundResource(R.drawable.bg_department_item_selected);
-        if (selectedView instanceof LinearLayout) for (int i = 0; i < ((LinearLayout)selectedView).getChildCount(); i++) { View c = ((LinearLayout)selectedView).getChildAt(i); if (c instanceof TextView) ((TextView)c).setTextColor(0xFFFFFFFF); }
-        loadDoctors(dept);
-    }
-
-    private void loadDoctors(String department) {
-        doctorRepo.getByDepartment(department, new DoctorRepository.Callback<List<Doctor>>() {
-            @Override public void onResult(List<Doctor> data) {
+            public void onSuccess(List<Doctor> data) {
                 runOnUiThread(() -> {
                     doctors.clear();
                     if (data.isEmpty()) {
@@ -197,32 +158,63 @@ public class AppointmentManagementActivity extends AppCompatActivity
         });
     }
 
-    private void updateDoctorCard(Doctor doctor) {
-        TextView tvName = findViewById(R.id.tvDoctorName);
-        if (tvName != null) tvName.setText(doctor.getName());
-        if (tvName != null && tvName.getParent() instanceof LinearLayout) {
-            LinearLayout parent = (LinearLayout) tvName.getParent();
-            if (parent.getChildCount() > 1 && parent.getChildAt(1) instanceof TextView)
-                ((TextView) parent.getChildAt(1)).setText(doctor.getSpecialty());
-        }
+    private void loadAppointments() {
+        String uid = session.getUid();
+        if (uid == null) return;
+        appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
+            @Override
+            public void onSuccess(List<Appointment> data) {
+                runOnUiThread(() -> {
+                    appointments.clear();
+                    appointments.addAll(data);
+                    if (appointmentAdapter != null) appointmentAdapter.notifyDataSetChanged();
+                });
+            }
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                        message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
-    private void setupChooseAnotherDoctor() {
-        LinearLayout llChoose = findViewById(R.id.llChooseAnotherDoctor);
-        if (llChoose == null) return;
-        llChoose.setOnClickListener(v -> {
-            if (rvDoctors == null) {
-                rvDoctors = new RecyclerView(this);
-                rvDoctors.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                rvDoctors.setLayoutManager(new LinearLayoutManager(this));
-                doctorAdapter = new DoctorAdapter(doctors, this);
-                rvDoctors.setAdapter(doctorAdapter);
-                if (llChoose.getParent() instanceof LinearLayout) {
-                    LinearLayout parent = (LinearLayout) llChoose.getParent();
-                    parent.addView(rvDoctors, parent.indexOfChild(llChoose) + 1);
-                }
-            } else {
-                rvDoctors.setVisibility(rvDoctors.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+    private void bookAppointment() {
+        if (selectedDoctor == null) {
+            Toast.makeText(this, getString(R.string.select_provider), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!isDateTimeSelected) {
+            Toast.makeText(this, getString(R.string.select_session), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String uid = session.getUid();
+        if (uid == null) return;
+
+        SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat timeSdf = new SimpleDateFormat("HH:mm",      Locale.getDefault());
+
+        Appointment appt = new Appointment(
+                uid, selectedDoctor.getId(), selectedDoctor.getName(),
+                selectedDepartment,
+                dateSdf.format(selectedDateTime.getTime()),
+                timeSdf.format(selectedDateTime.getTime()));
+
+        appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
+            @Override
+            public void onSuccess(Appointment data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AppointmentManagementActivity.this,
+                            getString(R.string.book_appointment), Toast.LENGTH_SHORT).show();
+                    isDateTimeSelected = false;
+                    TextView btnText = findViewById(R.id.btn_select_session);
+                    if (btnText != null) btnText.setText(getString(R.string.select_session));
+                    loadAppointments();
+                });
+            }
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                        message, Toast.LENGTH_SHORT).show());
             }
         });
     }
@@ -308,8 +300,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
     public void onReschedule(Appointment appointment) {
         appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, "Rescheduled", Toast.LENGTH_SHORT).show());
+                    @Override public void onSuccess(Void data) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AppointmentManagementActivity.this,
+                                    getString(R.string.reschedule) + ": " + newDate + " " + newTime,
+                                    Toast.LENGTH_SHORT).show();
+                            loadAppointments();
+                        });
                     }
                     @Override public void onError(String message) {
                         runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
@@ -322,8 +319,12 @@ public class AppointmentManagementActivity extends AppCompatActivity
         appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, "Cancelled", Toast.LENGTH_SHORT).show());
+                    @Override public void onSuccess(Void data) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(AppointmentManagementActivity.this,
+                                    getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
+                            loadAppointments();
+                        });
                     }
                     @Override public void onError(String message) {
                         runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());

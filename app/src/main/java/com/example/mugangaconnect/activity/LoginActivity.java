@@ -12,14 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
-import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
@@ -40,11 +43,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session  = new SessionManager(this);
 
         // Skip login if already authenticated
-        if (savedInstanceState == null && session.isLoggedIn() && authRepo.isLoggedIn()) {
+        if (session.isLoggedIn() && authRepo.isLoggedIn()) {
             goToDashboard();
             return;
         }
@@ -58,13 +61,13 @@ public class LoginActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        EditText     etEmail   = findViewById(R.id.etLoginEmail);
-        EditText     etPassword= findViewById(R.id.etLoginPassword);
-        ImageView    ivToggle  = findViewById(R.id.ivPasswordToggle);
-        Button       btnLogin  = findViewById(R.id.btnLogin);
-        LinearLayout btnBio    = findViewById(R.id.btnBiometric);
-        TextView     tvForgot  = findViewById(R.id.tvForgotPassword);
-        TextView     tvSignUp  = findViewById(R.id.tvSignUpLink);
+        EditText etEmail    = findViewById(R.id.etLoginEmail);
+        EditText etPassword = findViewById(R.id.etLoginPassword);
+        ImageView ivToggle  = findViewById(R.id.ivPasswordToggle);
+        Button btnLogin     = findViewById(R.id.btnLogin);
+        LinearLayout btnBio = findViewById(R.id.btnBiometric);
+        TextView tvForgot   = findViewById(R.id.tvForgotPassword);
+        TextView tvSignUp   = findViewById(R.id.tvSignUpLink);
         LinearLayout tabSignUp = findViewById(R.id.tabSignUp);
 
         ivToggle.setOnClickListener(v -> {
@@ -79,36 +82,34 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             String email    = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-            if (email.isEmpty())    { etEmail.setError("Please enter email");    return; }
+
+            if (email.isEmpty()) { etEmail.setError("Please enter email"); return; }
             if (password.isEmpty()) { etPassword.setError("Please enter password"); return; }
 
             btnLogin.setEnabled(false);
             authRepo.login(email, password, new AuthRepository.AuthCallback() {
                 @Override
-                public void onSuccess(com.google.firebase.auth.FirebaseUser firebaseUser) {
-                    authRepo.getProfile(firebaseUser.getUid(), new AuthRepository.ProfileCallback() {
+                public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
+                    authRepo.getProfile(user.getUid(), new AuthRepository.ProfileCallback() {
                         @Override
-                        public void onSuccess(User profile) {
-                            String savedEmail = profile.getEmail() != null ? profile.getEmail() : email;
-                            String savedPhone = profile.getPhone() != null ? profile.getPhone() : "";
-                            String savedName  = profile.getFullName() != null ? profile.getFullName() : "";
-                            session.saveSession(firebaseUser.getUid(), savedName, savedEmail, savedPhone);
-                            runOnUiThread(() -> goToDashboard());
+                        public void onSuccess(com.example.mugangaconnect.data.model.User profile) {
+                            String profileEmail = profile.getEmail() != null ? profile.getEmail() : email;
+                            session.saveSession(user.getUid(), profile.getFullName(), profileEmail,
+                                    profile.getPhone() != null ? profile.getPhone() : "");
+                            goToDashboard();
                         }
                         @Override
                         public void onError(String message) {
-                            String authEmail = firebaseUser.getEmail() != null ? firebaseUser.getEmail() : email;
-                            session.saveSession(firebaseUser.getUid(), "", authEmail, "");
-                            runOnUiThread(() -> goToDashboard());
+                            String authoritativeEmail = user.getEmail() != null ? user.getEmail() : email;
+                            session.saveSession(user.getUid(), "", authoritativeEmail, "");
+                            goToDashboard();
                         }
                     });
                 }
                 @Override
                 public void onError(String message) {
-                    runOnUiThread(() -> {
-                        btnLogin.setEnabled(true);
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
-                    });
+                    btnLogin.setEnabled(true);
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
                 }
             });
         });
@@ -116,25 +117,103 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(v -> goToSignUp());
         tabSignUp.setOnClickListener(v -> goToSignUp());
 
+        btnBio.setOnClickListener(v -> {
+            if (session.isBiometricEnabled()) {
+                authenticateWithBiometrics();
+            } else {
+                Toast.makeText(this, "Biometric login is not enabled. Please login with password and enable it in Profile settings.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Forgot Password — sends a real reset email via Firebase
         tvForgot.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
-            if (email.isEmpty()) { etEmail.setError("Enter your email first"); return; }
+            if (email.isEmpty()) {
+                etEmail.setError("Enter your email first");
+                etEmail.requestFocus();
+                return;
+            }
             authRepo.resetPassword(email, new AuthRepository.ResetCallback() {
-                @Override public void onSuccess() {
-                    Toast.makeText(LoginActivity.this, "Reset link sent to " + email, Toast.LENGTH_LONG).show();
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(LoginActivity.this,
+                            "Password reset link sent to " + email,
+                            Toast.LENGTH_LONG).show();
                 }
-                @Override public void onError(String message) {
+                @Override
+                public void onError(String message) {
                     Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
                 }
             });
         });
+    }
 
-        if (btnBio != null) {
-            btnBio.setOnClickListener(v ->
-                    Toast.makeText(this, "Biometric login coming soon", Toast.LENGTH_SHORT).show());
+    private void goToDashboard() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    private void goToSignUp() {
+        startActivity(new Intent(this, SignUpActivity.class));
+    }
+
+    private void authenticateWithBiometrics() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        int authenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
+        switch (biometricManager.canAuthenticate(authenticators)) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                performBiometricAuth(authenticators);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Toast.makeText(this, "No biometric features available on this device.", Toast.LENGTH_SHORT).show();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                Toast.makeText(this, "Biometric features are currently unavailable.", Toast.LENGTH_SHORT).show();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                Toast.makeText(this, "No biometrics enrolled. Please check your device settings.", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(this, "Biometric authentication is not supported.", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
-    private void goToDashboard() { startActivity(new Intent(this, MainActivity.class)); finish(); }
-    private void goToSignUp()    { startActivity(new Intent(this, SignUpActivity.class)); }
+    private void performBiometricAuth(int authenticators) {
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric Login")
+                .setSubtitle("Log in using your biometric credential")
+                .setAllowedAuthenticators(authenticators)
+                .build();
+
+        BiometricPrompt biometricPrompt = new BiometricPrompt(this,
+                ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                // Biometric succeeded. If we have a stored session and Firebase is still active, go to dashboard.
+                if (session.isLoggedIn() && authRepo.isLoggedIn()) {
+                    goToDashboard();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Session expired. Please login with password.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                // Fallback to password is implicitly handled as the login screen remains visible
+                Toast.makeText(LoginActivity.this, "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(LoginActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        biometricPrompt.authenticate(promptInfo);
+    }
 }

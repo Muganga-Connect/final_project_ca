@@ -141,8 +141,6 @@
     <string name="ai_kw_hi">hi</string>
     <string name="ai_kw_reschedule">reschedule</string>
     <string name="ai_kw_reminder">reminder</string>
-
-    <!-- Notification Preferences -->
     <string name="back">Back</string>
     <string name="enable_all">Enable All</string>
     <string name="appointment_reminders">Appointment Reminders</string>
@@ -153,39 +151,28 @@
     <string name="two_hours_before">2 Hours Before</string>
     <string name="thirty_minutes_before">30 Minutes Before</string>
     <string name="save_preferences">Save Preferences</string>
-
-    <!-- Personal Information -->
-    <string name="content_desc_back">Back</string>
-    <string name="title_personal_information">Personal Information</string>
-    <string name="content_desc_edit_photo">Edit profile photo</string>
-    <string name="action_edit">Edit</string>
-    <string name="welcome_name">John Doe</string>
-    <string name="label_gender">GENDER</string>
-    <string name="content_desc_edit_gender">Edit gender</string>
-    <string name="error_gender_required">Gender is required</string>
-    <string name="label_blood_type">BLOOD TYPE</string>
-    <string name="content_desc_edit_blood_type">Edit blood type</string>
-    <string name="error_blood_type_required">Blood type is required</string>
-    <string name="action_save_changes">Save Changes</string>
-    <string name="desc_edit_field">Edit field</string>
-
-    <!-- Splash Screen -->
-    <string name="app_logo_description">MugangaConnect Logo</string>
-    <string name="loading_text">Initializing security...</string>
-
-    <!-- Appointment History -->
-    <string name="desc_back_button">Go back</string>
+    <string name="content_desc_back">Go back</string>
+    <string name="app_logo_description">App Logo</string>
+    <string name="loading_text">Loading...</string>
+    <string name="desc_back_button">Back button</string>
     <string name="menu">Menu</string>
-
-    <!-- Bottom Navigation -->
+    <string name="dashboard">Dashboard</string>
+    <string name="schedule">Schedule</string>
+    <string name="ai_assistant">AI Assistant</string>
     <string name="profile_nav">Profile</string>
-
-    <!-- Photo Bottom Sheet -->
+    <string name="appointment_status_confirmed">Confirmed</string>
+    <string name="appointment_action_reschedule">Reschedule</string>
+    <string name="appointment_action_cancel">Cancel</string>
+    <string name="doctor_image">Doctor Image</string>
+    <string name="doctor_name_placeholder">Dr. Name</string>
+    <string name="doctor_specialty_placeholder">Specialty</string>
+    <string name="doctor_availability_placeholder">Availability</string>
+    <string name="doctor_selected">Doctor selected</string>
     <string name="photo_bottom_sheet_title">Profile Photo</string>
-    <string name="photo_bottom_sheet_subtitle">Choose an option to update your photo</string>
+    <string name="photo_bottom_sheet_subtitle">Update your profile picture</string>
     <string name="photo_option_take_photo">Take Photo</string>
-    <string name="photo_option_take_photo_desc">Capture a new photo using camera</string>
+    <string name="photo_option_take_photo_desc">Use camera to take a new photo</string>
     <string name="photo_option_gallery">Choose from Gallery</string>
-    <string name="photo_option_gallery_desc">Select an existing photo from gallery</string>
-
+    <string name="photo_option_gallery_desc">Select an image from your library</string>
+    <string name="desc_edit_field">Edit field</string>
 </resources>

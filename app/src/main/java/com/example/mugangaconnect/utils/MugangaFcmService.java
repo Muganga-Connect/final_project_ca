@@ -23,9 +23,9 @@ public class MugangaFcmService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        FirebaseUser user = new AuthRepository().getCurrentUser();
+        FirebaseUser user = new AuthRepository(this).getCurrentUser();
         if (user != null) {
-            new AuthRepository().updateFcmToken(user.getUid(), token);
+            new AuthRepository(this).updateFcmToken(user.getUid(), token);
         }
     }
 

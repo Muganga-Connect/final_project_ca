@@ -17,10 +17,10 @@ public class BootReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                AppointmentRepository repository = new AppointmentRepository(context);
+                AppointmentRepository repository = new AppointmentRepository();
                 repository.getForPatient(user.getUid(), new AppointmentRepository.Callback<List<Appointment>>() {
                     @Override
-                    public void onResult(List<Appointment> data) {
+                    public void onSuccess(List<Appointment> data) {
                         for (Appointment appointment : data) {
                             if (Appointment.Status.UPCOMING.name().equals(appointment.getStatus())) {
                                 ReminderManager.scheduleReminders(context, appointment);

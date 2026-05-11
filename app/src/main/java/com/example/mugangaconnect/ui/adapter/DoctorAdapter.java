@@ -6,12 +6,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Doctor;
 import java.util.List;
 
 public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder> {
-    
     private List<Doctor> doctors;
     private OnDoctorSelectedListener listener;
 
@@ -27,32 +26,35 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // We just use a basic android layout for dummy implementation since it's missing
-        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_doctor, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Doctor doctor = doctors.get(position);
-        holder.tvName.setText(doctor.getName());
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onDoctorSelected(doctor);
-            }
-        });
+        holder.txtName.setText(doctor.getName());
+        holder.txtSpecialty.setText(doctor.getSpecialty());
+        holder.itemView.setOnClickListener(v -> listener.onDoctorSelected(doctor));
     }
 
     @Override
     public int getItemCount() {
-        return doctors != null ? doctors.size() : 0;
+        return doctors.size();
+    }
+
+    public void updateData(List<Doctor> newDoctors) {
+        this.doctors = newDoctors;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName;
+        TextView txtName, txtSpecialty;
+
         ViewHolder(View view) {
             super(view);
-            tvName = view.findViewById(android.R.id.text1);
+            txtName = view.findViewById(R.id.txt_doctor_name);
+            txtSpecialty = view.findViewById(R.id.txt_specialty);
         }
     }
 }

@@ -16,10 +16,9 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder> {
-
-    private List<Appointment> appointmentList;
-    private final OnAppointmentActionListener listener;
+public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
+    private List<Appointment> appointments;
+    private OnAppointmentActionListener listener;
 
     public interface OnAppointmentActionListener {
         void onReschedule(Appointment appointment);
@@ -41,8 +40,15 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position) {
-        holder.bind(appointmentList.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Appointment appointment = appointments.get(position);
+        holder.txtDoctorName.setText(appointment.getDoctorName());
+        holder.txtSpecialty.setText(appointment.getDepartment());
+        holder.txtDateTime.setText(appointment.getDate() + " " + appointment.getTime());
+        holder.txtStatus.setText(appointment.getStatus());
+
+        holder.btnReschedule.setOnClickListener(v -> listener.onReschedule(appointment));
+        holder.btnCancel.setOnClickListener(v -> listener.onCancel(appointment));
     }
 
     @Override
@@ -55,65 +61,18 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         notifyDataSetChanged();
     }
 
-    static class AppointmentViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDoctorName, txtSpecialty, txtStatus, txtDateTime;
-        ImageView imgDoctor;
-        MaterialButton btnReschedule, btnCancel, btnMarkAttended, btnMarkMissed;
-        View layoutActions, layoutAdminActions;
-        private Appointment currentAppointment;
-        private final OnAppointmentActionListener listener;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView txtDoctorName, txtSpecialty, txtDateTime, txtStatus;
+        View btnReschedule, btnCancel;
 
-        AppointmentViewHolder(View itemView, OnAppointmentActionListener listener) {
-            super(itemView);
-            this.listener = listener;
-            txtDoctorName      = itemView.findViewById(R.id.txt_doctor_name);
-            txtSpecialty       = itemView.findViewById(R.id.txt_specialty);
-            txtStatus          = itemView.findViewById(R.id.txt_status);
-            txtDateTime        = itemView.findViewById(R.id.txt_date_time);
-            imgDoctor          = itemView.findViewById(R.id.img_doctor);
-            btnReschedule      = itemView.findViewById(R.id.btn_reschedule);
-            btnCancel          = itemView.findViewById(R.id.btn_cancel);
-            btnMarkAttended    = itemView.findViewById(R.id.btn_mark_attended);
-            btnMarkMissed      = itemView.findViewById(R.id.btn_mark_missed);
-            layoutActions      = itemView.findViewById(R.id.layout_actions);
-            layoutAdminActions = itemView.findViewById(R.id.layout_admin_actions);
-
-            btnReschedule.setOnClickListener(v -> {
-                if (listener != null && currentAppointment != null) listener.onReschedule(currentAppointment);
-            });
-            btnCancel.setOnClickListener(v -> {
-                if (listener != null && currentAppointment != null) listener.onCancel(currentAppointment);
-            });
-            btnMarkAttended.setOnClickListener(v -> {
-                if (listener != null && currentAppointment != null) listener.onMarkAttended(currentAppointment);
-            });
-            btnMarkMissed.setOnClickListener(v -> {
-                if (listener != null && currentAppointment != null) listener.onMarkMissed(currentAppointment);
-            });
-        }
-
-        void bind(Appointment appointment) {
-            currentAppointment = appointment;
-            txtDoctorName.setText(safeText(appointment.getDoctorName()));
-            txtSpecialty.setText(safeText(appointment.getDepartment()));
-            txtStatus.setText(safeText(appointment.getStatus()));
-            txtDateTime.setText(formatDateTime(appointment.getDate(), appointment.getTime()));
-
-            boolean isUpcoming = Appointment.Status.UPCOMING.name().equals(appointment.getStatus())
-                    || Appointment.Status.CONFIRMED.name().equals(appointment.getStatus());
-            if (layoutActions != null) layoutActions.setVisibility(isUpcoming ? View.VISIBLE : View.GONE);
-            if (layoutAdminActions != null) layoutAdminActions.setVisibility(isUpcoming ? View.VISIBLE : View.GONE);
-        }
-
-        private String safeText(String value) {
-            return TextUtils.isEmpty(value) ? "N/A" : value;
-        }
-
-        private String formatDateTime(String date, String time) {
-            if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) return "N/A";
-            if (TextUtils.isEmpty(date)) return time;
-            if (TextUtils.isEmpty(time)) return date;
-            return date + " at " + time;
+        ViewHolder(View view) {
+            super(view);
+            txtDoctorName = view.findViewById(R.id.txt_doctor_name);
+            txtSpecialty = view.findViewById(R.id.txt_specialty);
+            txtDateTime = view.findViewById(R.id.txt_date_time);
+            txtStatus = view.findViewById(R.id.txt_status);
+            btnReschedule = view.findViewById(R.id.btn_reschedule);
+            btnCancel = view.findViewById(R.id.btn_cancel);
         }
     }
 }

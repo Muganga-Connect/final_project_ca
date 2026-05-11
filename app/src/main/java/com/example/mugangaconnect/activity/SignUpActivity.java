@@ -45,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.signup);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session  = new SessionManager(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(

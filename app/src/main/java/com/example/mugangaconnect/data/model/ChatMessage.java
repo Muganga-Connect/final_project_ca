@@ -1,9 +1,14 @@
 package com.example.mugangaconnect.data.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "chat_messages")
 public class ChatMessage {
     public static final String ROLE_USER = "user";
     public static final String ROLE_AI = "model";
 
+    @PrimaryKey(autoGenerate = true)
     private long id;
     private String patientId;
     private String role;

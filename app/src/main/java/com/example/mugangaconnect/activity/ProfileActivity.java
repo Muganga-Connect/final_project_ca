@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        authRepo = new AuthRepository();
+        authRepo = new AuthRepository(this);
         session  = new SessionManager(this);
 
         initViews();
@@ -61,10 +61,15 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.languageSelector).setOnClickListener(v -> showLanguageDialog());
 
         SwitchCompat biometricSwitch = findViewById(R.id.biometricSwitch);
-        biometricSwitch.setOnCheckedChangeListener((btn, isChecked) ->
+        if (biometricSwitch != null) {
+            biometricSwitch.setChecked(session.isBiometricEnabled());
+            biometricSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+                session.setBiometricEnabled(isChecked);
                 Toast.makeText(this,
                         getString(isChecked ? R.string.biometrics_enabled : R.string.biometrics_disabled),
-                        Toast.LENGTH_SHORT).show());
+                        Toast.LENGTH_SHORT).show();
+            });
+        }
 
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }

@@ -2,6 +2,7 @@ package com.example.mugangaconnect.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import com.example.mugangaconnect.utils.SessionManager;
 
 import java.util.Locale;
 
