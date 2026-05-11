@@ -62,6 +62,12 @@ public class AppointmentManagementActivity extends AppCompatActivity
         BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
+    }
+
     private void setupDoctorList() {
         RecyclerView rvDoctors = findViewById(R.id.rv_doctors);
         if (rvDoctors == null) return;

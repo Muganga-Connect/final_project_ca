@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EAF4FB"
-    tools:context=".NotificationPreferencesActivity">
+    android:background="@color/background_main"
+    tools:context=".activity.NotificationPreferencesActivity">
 
     <!-- HEADER SECTION -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFF"
+        android:background="@color/card_background"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
@@ -26,13 +26,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="#1A1A2E" />
+            app:tint="@color/text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/notification_preferences"
-            android:textColor="#1A1A2E"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E0E0E0"
+            android:background="@color/divider_color"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/enable_all"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -90,8 +90,8 @@
                         android:id="@+id/switch_enable_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -104,7 +104,7 @@
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.05"
                 android:text="@string/reminders"
-                android:textColor="#1A237E"
+                android:textColor="@color/primary_blue"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -115,7 +115,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/appointment_reminders"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -142,8 +142,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -154,7 +154,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sms_notifications"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -181,8 +181,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -193,7 +193,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -212,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/push_notifications"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -220,8 +220,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -234,7 +234,7 @@
                 android:layout_marginBottom="8dp"
                 android:letterSpacing="0.05"
                 android:text="@string/reminder_timing"
-                android:textColor="#1A237E"
+                android:textColor="@color/primary_blue"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -245,7 +245,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -264,7 +264,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/one_day_before"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -272,8 +272,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -284,7 +284,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -303,7 +303,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/two_hours_before"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -311,8 +311,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -323,7 +323,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -342,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/thirty_minutes_before"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp" />
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -350,8 +350,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#1565C0" />
+                        app:thumbTint="@color/text_on_primary"
+                        app:trackTint="@color/primary_blue" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -364,10 +364,10 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_margin="16dp"
-        android:backgroundTint="#1565C0"
+        android:backgroundTint="@color/primary_blue"
         android:text="@string/save_preferences"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_on_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"

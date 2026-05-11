@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EAF4FB"
-    tools:context=".PersonalInformationActivity">
+    android:background="@color/background_main"
+    tools:context=".activity.PersonalInformationActivity">
 
     <!-- HEADER -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFF"
+        android:background="@color/card_background"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
@@ -26,13 +26,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="#1A1A2E" />
+            app:tint="@color/text_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_personal_information"
-            android:textColor="#1A1A2E"
+            android:text="@string/personal_information"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +43,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#E0E0E0"
+            android:background="@color/divider_color"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -87,18 +87,18 @@
                             android:background="@drawable/circle_profile_bg"
                             android:clipToOutline="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_person" />
+                            android:src="@drawable/user" />
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="bottom|end"
                             android:background="@drawable/circle_profile_bg"
-                            android:backgroundTint="#1565C0"
+                            android:backgroundTint="@color/primary_blue"
                             android:padding="4dp"
-                            android:contentDescription="@string/content_desc_edit_photo"
+                            android:contentDescription="@string/edit_btn"
                             android:src="@drawable/ic_photo_camera"
-                            android:tint="#FFFFFF" />
+                            app:tint="@color/text_on_primary" />
                     </FrameLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -107,21 +107,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="@string/action_edit"
+                        android:text="@string/edit_btn"
                         android:textAllCaps="false"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/primary_blue"
                         app:cornerRadius="8dp"
                         app:icon="@drawable/ic_photo_camera"
-                        app:iconTint="#1565C0"
-                        app:strokeColor="#1565C0" />
+                        app:iconTint="@color/primary_blue"
+                        app:strokeColor="@color/primary_blue" />
 
                     <TextView
                         android:id="@+id/tv_display_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        tools:text="@string/welcome_name"
-                        android:textColor="#1A1A2E"
+                        tools:text="Alexandrine Mukamana"
+                        android:textColor="@color/text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -130,14 +130,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="PN-10293"
-                        android:textColor="#1565C0"
+                        android:textColor="@color/primary_blue"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- FORM FIELDS -->
-            <!-- 1. FULL NAME -->
             <include
                 android:id="@+id/field_full_name"
                 layout="@layout/layout_profile_field"
@@ -147,7 +146,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 2. EMAIL ADDRESS -->
             <include
                 android:id="@+id/field_email"
                 layout="@layout/layout_profile_field"
@@ -157,7 +155,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 3. PHONE NUMBER -->
             <include
                 android:id="@+id/field_phone"
                 layout="@layout/layout_profile_field"
@@ -167,7 +164,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 4. DATE OF BIRTH -->
             <include
                 android:id="@+id/field_dob"
                 layout="@layout/layout_profile_field"
@@ -177,14 +173,14 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 5. GENDER (Using a specialized layout for spinner) -->
+            <!-- GENDER -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -202,8 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:letterSpacing="0.05"
-                        android:text="@string/label_gender"
-                        android:textColor="#1A237E"
+                        android:text="GENDER"
+                        android:textColor="@color/primary_blue"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -227,23 +223,12 @@
                             android:layout_height="24dp"
                             android:layout_marginStart="8dp"
                             android:background="@android:color/transparent"
-                            android:contentDescription="@string/content_desc_edit_gender"
                             android:src="@drawable/ic_edit"
-                            android:tint="#1565C0" />
+                            app:tint="@color/primary_blue" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_error_gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/error_gender_required"
-                        android:textColor="#FF6B6B"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 6. INSURANCE ID -->
             <include
                 android:id="@+id/field_insurance"
                 layout="@layout/layout_profile_field"
@@ -253,14 +238,40 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 7. BLOOD TYPE -->
+            <!-- WEIGHT & HEIGHT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp">
+
+                <include
+                    android:id="@+id/field_weight"
+                    layout="@layout/layout_profile_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp" />
+
+                <include
+                    android:id="@+id/field_height"
+                    layout="@layout/layout_profile_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- BLOOD TYPE -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/card_background"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -278,8 +289,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:letterSpacing="0.05"
-                        android:text="@string/label_blood_type"
-                        android:textColor="#1A237E"
+                        android:text="BLOOD TYPE"
+                        android:textColor="@color/primary_blue"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -303,23 +314,12 @@
                             android:layout_height="24dp"
                             android:layout_marginStart="8dp"
                             android:background="@android:color/transparent"
-                            android:contentDescription="@string/content_desc_edit_blood_type"
                             android:src="@drawable/ic_edit"
-                            android:tint="#1565C0" />
+                            app:tint="@color/primary_blue" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_error_blood"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/error_blood_type_required"
-                        android:textColor="#FF6B6B"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 8. MEDICAL ALLERGIES -->
             <include
                 android:id="@+id/field_allergies"
                 layout="@layout/layout_profile_field"
@@ -329,7 +329,6 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 9. EMERGENCY CONTACT -->
             <include
                 android:id="@+id/field_emergency"
                 layout="@layout/layout_profile_field"
@@ -348,11 +347,11 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_margin="16dp"
-        android:backgroundTint="#1565C0"
+        android:backgroundTint="@color/primary_blue"
         android:enabled="false"
-        android:text="@string/action_save_changes"
+        android:text="Save Changes"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_on_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"
