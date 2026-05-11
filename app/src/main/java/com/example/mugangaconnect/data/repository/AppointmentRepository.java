@@ -1,141 +1,171 @@
 package com.example.mugangaconnect.data.repository;
 
 import android.content.Context;
+
+import com.example.mugangaconnect.data.local.AppDatabase;
+import com.example.mugangaconnect.data.local.AppointmentDao;
 import com.example.mugangaconnect.data.model.Appointment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentRepository {
-    
-    private FirebaseFirestore db;
+
+    private final FirebaseFirestore db;
+    private final AppointmentDao dao;
     private static final String COLLECTION_NAME = "appointments";
-    
-    public AppointmentRepository() {
-        db = FirebaseFirestore.getInstance();
-    }
 
     public AppointmentRepository(Context context) {
-        this();
+        db  = FirebaseFirestore.getInstance();
+        dao = new AppointmentDao(AppDatabase.getInstance(context));
     }
-    
-    public void getById(String appointmentId, Callback<Appointment> callback) {
-        if (appointmentId == null || appointmentId.trim().isEmpty()) {
-            callback.onError("Appointment ID cannot be null or empty");
+
+    // ─────────────────────────────────────────────────────────────
+    //  GET ALL APPOINTMENTS FOR A PATIENT
+    //  ✅ Firestore first → save to SQLite → return list
+    //  ✅ If Firestore fails → fallback to SQLite (offline support)
+    // ─────────────────────────────────────────────────────────────
+    public void getForPatient(String patientId, Callback<List<Appointment>> callback) {
+        if (patientId == null || patientId.isEmpty()) {
+            callback.onError("Patient ID is null");
             return;
         }
-        
-        DocumentReference docRef = db.collection(COLLECTION_NAME).document(appointmentId);
-        
-        docRef.get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        try {
-                            Appointment appointment = documentToAppointment(document);
-                            callback.onResult(appointment);
-                        } catch (Exception e) {
-                            callback.onError("Error parsing appointment data: " + e.getMessage());
-                        }
+
+        db.collection(COLLECTION_NAME)
+                .whereEqualTo("patientId", patientId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Appointment> list = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        Appointment a = documentToAppointment(doc);
+                        if (a != null) list.add(a);
+                    }
+
+                    // ✅ Save to SQLite for offline access
+                    new Thread(() -> dao.upsertAll(list)).start();
+
+                    callback.onResult(list);
+                })
+                .addOnFailureListener(e -> {
+                    // ✅ Firestore failed → fallback to SQLite
+                    new Thread(() -> {
+                        List<Appointment> cached = dao.getByPatient(patientId);
+                        callback.onResult(cached);
+                    }).start();
+                });
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  GET APPOINTMENTS BY STATUS
+    //  ✅ Reads from SQLite only (fast, offline-first)
+    //  Used by AppointmentHistoryActivity tabs
+    // ─────────────────────────────────────────────────────────────
+    public void getCachedByStatus(String patientId, String status, Callback<List<Appointment>> callback) {
+        new Thread(() -> {
+            try {
+                List<Appointment> list = dao.getByStatus(patientId, status);
+                callback.onResult(list);
+            } catch (Exception e) {
+                callback.onError("Local DB error: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  GET SINGLE APPOINTMENT BY ID
+    // ─────────────────────────────────────────────────────────────
+    public void getById(String appointmentId, Callback<Appointment> callback) {
+        if (appointmentId == null || appointmentId.isEmpty()) {
+            callback.onError("Appointment ID is null");
+            return;
+        }
+
+        db.collection(COLLECTION_NAME).document(appointmentId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        callback.onResult(documentToAppointment(doc));
                     } else {
                         callback.onError("Appointment not found");
                     }
-                } else {
-                    callback.onError("Failed to fetch appointment: " + (task.getException() != null ? task.getException().getMessage() : "Unknown error"));
-                }
-            })
-            .addOnFailureListener(e -> callback.onError("Network error: " + e.getMessage()));
+                })
+                .addOnFailureListener(e -> callback.onError("Network error: " + e.getMessage()));
     }
 
-    public void getForPatient(String patientId, Callback<List<Appointment>> callback) {
-        db.collection(COLLECTION_NAME)
-            .whereEqualTo("patientId", patientId)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<Appointment> list = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult()) {
-                        list.add(documentToAppointment(doc));
-                    }
-                    callback.onResult(list);
-                } else {
-                    callback.onError(task.getException() != null ? task.getException().getMessage() : "Unknown error");
-                }
-            });
-    }
-
-    public void getCachedByStatus(String patientId, String status, Callback<List<Appointment>> callback) {
-        db.collection(COLLECTION_NAME)
-            .whereEqualTo("patientId", patientId)
-            .whereEqualTo("status", status)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<Appointment> list = new ArrayList<>();
-                    for (DocumentSnapshot doc : task.getResult()) {
-                        list.add(documentToAppointment(doc));
-                    }
-                    callback.onResult(list);
-                } else {
-                    callback.onError(task.getException() != null ? task.getException().getMessage() : "Unknown error");
-                }
-            });
-    }
-
-    public void updateStatus(String appointmentId, String patientId, String status, Callback<Void> callback) {
-        db.collection(COLLECTION_NAME).document(appointmentId)
-            .update("status", status)
-            .addOnSuccessListener(aVoid -> callback.onResult(null))
-            .addOnFailureListener(e -> callback.onError(e.getMessage()));
-    }
-
+    // ─────────────────────────────────────────────────────────────
+    //  BOOK A NEW APPOINTMENT
+    //  ✅ Saves to Firestore → then caches in SQLite
+    // ─────────────────────────────────────────────────────────────
     public void book(Appointment appt, Callback<Appointment> callback) {
         db.collection(COLLECTION_NAME).add(appt)
-            .addOnSuccessListener(docRef -> {
-                appt.setId(docRef.getId());
-                callback.onResult(appt);
-            })
-            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                .addOnSuccessListener(docRef -> {
+                    appt.setId(docRef.getId());
+                    // ✅ Cache locally
+                    new Thread(() -> dao.upsert(appt)).start();
+                    callback.onResult(appt);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
+    // ─────────────────────────────────────────────────────────────
+    //  UPDATE APPOINTMENT STATUS (CANCEL / ATTEND / MISS)
+    //  ✅ Updates Firestore → then updates SQLite
+    // ─────────────────────────────────────────────────────────────
+    public void updateStatus(String appointmentId, String patientId, String status, Callback<Void> callback) {
+        db.collection(COLLECTION_NAME).document(appointmentId)
+                .update("status", status)
+                .addOnSuccessListener(v -> {
+                    // ✅ Update local cache
+                    new Thread(() -> dao.updateStatus(appointmentId, status)).start();
+                    callback.onResult(null);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  RESCHEDULE APPOINTMENT
+    //  ✅ Updates Firestore → then updates SQLite
+    // ─────────────────────────────────────────────────────────────
     public void reschedule(String appointmentId, String newDate, String newTime, Callback<Void> callback) {
         db.collection(COLLECTION_NAME).document(appointmentId)
-            .update("date", newDate, "time", newTime)
-            .addOnSuccessListener(aVoid -> callback.onResult(null))
-            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                .update("date", newDate, "time", newTime)
+                .addOnSuccessListener(v -> {
+                    // ✅ Update local cache
+                    new Thread(() -> dao.updateDateAndTime(appointmentId, newDate, newTime)).start();
+                    callback.onResult(null);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
-    
-    private Appointment documentToAppointment(DocumentSnapshot document) {
-        String id = document.getId();
-        String patientId = document.getString("patientId");
-        String doctorId = document.getString("doctorId");
-        String doctorName = document.getString("doctorName");
-        String department = document.getString("department");
-        String date = document.getString("date");
-        String time = document.getString("time");
-        String status = document.getString("status");
-        
-        Appointment appointment = new Appointment(
-            patientId != null ? patientId : "",
-            doctorId != null ? doctorId : "",
-            doctorName != null ? doctorName : "",
-            department != null ? department : "",
-            date != null ? date : "",
-            time != null ? time : ""
-        );
-        appointment.setId(id);
-        if (status != null) appointment.setStatus(status);
-        return appointment;
+
+    // ─────────────────────────────────────────────────────────────
+    //  HELPER: Convert Firestore document → Appointment object
+    // ─────────────────────────────────────────────────────────────
+    private Appointment documentToAppointment(DocumentSnapshot doc) {
+        try {
+            Appointment a = new Appointment(
+                    doc.getString("patientId") != null ? doc.getString("patientId") : "",
+                    doc.getString("doctorId")  != null ? doc.getString("doctorId")  : "",
+                    doc.getString("doctorName")!= null ? doc.getString("doctorName"): "",
+                    doc.getString("department")!= null ? doc.getString("department"): "",
+                    doc.getString("date")      != null ? doc.getString("date")      : "",
+                    doc.getString("time")      != null ? doc.getString("time")      : ""
+            );
+            a.setId(doc.getId());
+            if (doc.getString("status") != null) a.setStatus(doc.getString("status"));
+            if (doc.getString("riskLevel") != null) a.setRiskLevel(doc.getString("riskLevel"));
+            Long createdAt = doc.getLong("createdAt");
+            a.setCreatedAt(createdAt != null ? createdAt : System.currentTimeMillis());
+            return a;
+        } catch (Exception e) {
+            return null;
+        }
     }
-    
+
+    // ─────────────────────────────────────────────────────────────
+    //  CALLBACK INTERFACE
+    // ─────────────────────────────────────────────────────────────
     public interface Callback<T> {
         void onResult(T data);
         void onError(String errorMessage);
