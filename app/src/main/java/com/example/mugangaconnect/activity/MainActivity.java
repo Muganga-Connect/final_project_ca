@@ -1,19 +1,26 @@
 package com.example.mugangaconnect.activity;
 
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.example.mugangaconnect.data.model.User;
-import com.example.mugangaconnect.data.repository.AuthRepository;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
+import com.example.mugangaconnect.data.model.User;
+import com.example.mugangaconnect.data.repository.AuthRepository;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
@@ -30,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
     private AppointmentRepository appointmentRepo;
     private Appointment upcomingAppointment;
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Notifications disabled. You won't receive reminders.", Toast.LENGTH_LONG).show();
+                }
+            });
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.applyLocale(base));
@@ -45,16 +61,20 @@ public class MainActivity extends AppCompatActivity {
         authRepo = new AuthRepository();
         appointmentRepo = new AppointmentRepository(this);
 
+        checkNotificationPermission();
         setupUI();
         loadData();
         
         BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 
     private void setupUI() {
@@ -112,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(List<Appointment> data) {
                 for (Appointment appt : data) {
-                    if (Appointment.Status.CONFIRMED.name().equals(appt.getStatus())) {
+                    if (Appointment.Status.CONFIRMED.name().equals(appt.getStatus()) || 
+                        Appointment.Status.UPCOMING.name().equals(appt.getStatus())) {
                         upcomingAppointment = appt;
                         updateUpcomingUI(appt);
                         break;

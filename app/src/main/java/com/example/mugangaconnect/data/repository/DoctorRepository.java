@@ -9,47 +9,45 @@ import java.util.List;
 
 public class DoctorRepository {
     private final FirebaseFirestore db;
-    private static final String COLLECTION_NAME = "doctors";
+    private static final String COLLECTION = "doctors";
 
-    public DoctorRepository() {
-        db = FirebaseFirestore.getInstance();
+    public interface Callback<T> {
+        void onResult(T data);
+        void onError(String message);
     }
 
-    public void getAllDoctors(Callback<List<Doctor>> callback) {
-        db.collection(COLLECTION_NAME)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<Doctor> doctors = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        doctors.add(document.toObject(Doctor.class));
-                    }
-                    callback.onResult(doctors);
-                } else {
-                    callback.onError(task.getException() != null ? task.getException().getMessage() : "Unknown error");
-                }
-            });
+    public DoctorRepository() {
+        this.db = FirebaseFirestore.getInstance();
     }
 
     public void getByDepartment(String department, Callback<List<Doctor>> callback) {
-        db.collection(COLLECTION_NAME)
-            .whereEqualTo("department", department)
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    List<Doctor> doctors = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        doctors.add(document.toObject(Doctor.class));
+        db.collection(COLLECTION)
+                .whereEqualTo("department", department)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Doctor> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        Doctor doctor = doc.toObject(Doctor.class);
+                        doctor.setId(doc.getId());
+                        list.add(doctor);
                     }
-                    callback.onResult(doctors);
-                } else {
-                    callback.onError(task.getException() != null ? task.getException().getMessage() : "Unknown error");
-                }
-            });
+                    callback.onResult(list);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    public interface Callback<T> {
-        void onResult(T result);
-        void onError(String errorMessage);
+    public void getAll(Callback<List<Doctor>> callback) {
+        db.collection(COLLECTION)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Doctor> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        Doctor doctor = doc.toObject(Doctor.class);
+                        doctor.setId(doc.getId());
+                        list.add(doctor);
+                    }
+                    callback.onResult(list);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 }

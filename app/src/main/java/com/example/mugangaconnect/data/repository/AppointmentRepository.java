@@ -44,14 +44,10 @@ public class AppointmentRepository {
                         Appointment a = documentToAppointment(doc);
                         if (a != null) list.add(a);
                     }
-
-                    // ✅ Save to SQLite for offline access
                     new Thread(() -> dao.upsertAll(list)).start();
-
                     callback.onResult(list);
                 })
                 .addOnFailureListener(e -> {
-                    // ✅ Firestore failed → fallback to SQLite
                     new Thread(() -> {
                         List<Appointment> cached = dao.getByPatient(patientId);
                         callback.onResult(cached);
@@ -59,11 +55,6 @@ public class AppointmentRepository {
                 });
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  GET APPOINTMENTS BY STATUS
-    //  ✅ Reads from SQLite only (fast, offline-first)
-    //  Used by AppointmentHistoryActivity tabs
-    // ─────────────────────────────────────────────────────────────
     public void getCachedByStatus(String patientId, String status, Callback<List<Appointment>> callback) {
         new Thread(() -> {
             try {
@@ -82,15 +73,11 @@ public class AppointmentRepository {
         }).start();
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  GET SINGLE APPOINTMENT BY ID
-    // ─────────────────────────────────────────────────────────────
     public void getById(String appointmentId, Callback<Appointment> callback) {
         if (appointmentId == null || appointmentId.isEmpty()) {
             callback.onError("Appointment ID is null");
             return;
         }
-
         db.collection(COLLECTION_NAME).document(appointmentId)
                 .get()
                 .addOnSuccessListener(doc -> {
@@ -111,46 +98,32 @@ public class AppointmentRepository {
         db.collection(COLLECTION_NAME).add(appt)
                 .addOnSuccessListener(docRef -> {
                     appt.setId(docRef.getId());
-                    // ✅ Cache locally
                     new Thread(() -> dao.upsert(appt)).start();
                     callback.onResult(appt);
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  UPDATE APPOINTMENT STATUS (CANCEL / ATTEND / MISS)
-    //  ✅ Updates Firestore → then updates SQLite
-    // ─────────────────────────────────────────────────────────────
     public void updateStatus(String appointmentId, String patientId, String status, Callback<Void> callback) {
         db.collection(COLLECTION_NAME).document(appointmentId)
                 .update("status", status)
                 .addOnSuccessListener(v -> {
-                    // ✅ Update local cache
                     new Thread(() -> dao.updateStatus(appointmentId, status)).start();
                     callback.onResult(null);
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  RESCHEDULE APPOINTMENT
-    //  ✅ Updates Firestore → then updates SQLite
-    // ─────────────────────────────────────────────────────────────
     public void reschedule(String appointmentId, String newDate, String newTime, Callback<Void> callback) {
         db.collection(COLLECTION_NAME).document(appointmentId)
-                .update("date", newDate, "time", newTime)
+                .update("date", newDate, "time", newTime, "status", Appointment.Status.RESCHEDULED.name())
                 .addOnSuccessListener(v -> {
-                    // ✅ Update local cache
                     new Thread(() -> dao.updateDateAndTime(appointmentId, newDate, newTime)).start();
                     callback.onResult(null);
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  HELPER: Convert Firestore document → Appointment object
-    // ─────────────────────────────────────────────────────────────
     private Appointment documentToAppointment(DocumentSnapshot doc) {
         try {
             Appointment a = buildAppointment(doc);
@@ -193,21 +166,14 @@ public class AppointmentRepository {
 
     private void setStatusIfPresent(Appointment a, DocumentSnapshot doc) {
         String status = doc.getString("status");
-        if (status != null) {
-            a.setStatus(status);
-        }
+        if (status != null) a.setStatus(status);
     }
 
     private void setRiskLevelIfPresent(Appointment a, DocumentSnapshot doc) {
         String riskLevel = doc.getString("riskLevel");
-        if (riskLevel != null) {
-            a.setRiskLevel(riskLevel);
-        }
+        if (riskLevel != null) a.setRiskLevel(riskLevel);
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  CALLBACK INTERFACE
-    // ─────────────────────────────────────────────────────────────
     public interface Callback<T> {
         void onResult(T data);
         void onError(String errorMessage);
