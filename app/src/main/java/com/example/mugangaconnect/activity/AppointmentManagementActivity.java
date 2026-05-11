@@ -133,7 +133,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void afterTextChanged(Editable s) {}
             @Override
-            public void onSuccess(List<Doctor> data) {
+            public void onResult(List<Doctor> data) {
                 runOnUiThread(() -> {
                     doctors.clear();
                     if (data.isEmpty()) {
@@ -163,7 +163,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         if (uid == null) return;
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onSuccess(List<Appointment> data) {
+            public void onResult(List<Appointment> data) {
                 runOnUiThread(() -> {
                     appointments.clear();
                     appointments.addAll(data);
@@ -201,7 +201,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
             @Override
-            public void onSuccess(Appointment data) {
+            public void onResult(Appointment data) {
                 runOnUiThread(() -> {
                     Toast.makeText(AppointmentManagementActivity.this,
                             getString(R.string.book_appointment), Toast.LENGTH_SHORT).show();
@@ -300,7 +300,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     public void onReschedule(Appointment appointment) {
         appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onSuccess(Void data) {
+                    @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.reschedule) + ": " + newDate + " " + newTime,
@@ -319,7 +319,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onSuccess(Void data) {
+                    @Override public void onResult(Void data) {
                         runOnUiThread(() -> {
                             Toast.makeText(AppointmentManagementActivity.this,
                                     getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
