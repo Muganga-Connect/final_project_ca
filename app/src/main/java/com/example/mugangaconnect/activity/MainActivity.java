@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     private void cancelAppointment(Appointment appt) {
         appointmentRepo.updateStatus(appt.getId(), session.getUid(), Appointment.Status.CANCELLED.name(), new AppointmentRepository.Callback<Void>() {
             @Override
-            public void onSuccess(Void data) {
+            public void onResult(Void data) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Appointment cancelled", Toast.LENGTH_SHORT).show();
                     loadData();
