@@ -1,6 +1,7 @@
 package com.example.mugangaconnect.data.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.mugangaconnect.data.local.AppDatabase;
 import com.example.mugangaconnect.data.local.AppointmentDao;
@@ -160,6 +161,8 @@ public class AppointmentRepository {
             a.setCreatedAt(createdAt != null ? createdAt : System.currentTimeMillis());
             return a;
         } catch (Exception e) {
+            Log.e("AppointmentRepository", "Error converting document to appointment", e);
+            Log.e("AppointmentRepository", "Error converting document to appointment", e);
             return null;
         }
     }
