@@ -29,8 +29,15 @@
 
     <color name="bottom_nav_bg">#FFFFFF</color>
     <color name="icon_tint">#667A90</color>
+    <color name="icon_primary">#000000</color>
+    <color name="icon_secondary">#757575</color>
+    <color name="icon_on_background">#000000</color>
     <color name="tab_selected">#0056b3</color>
     <color name="tab_unselected">#555555</color>
+    <color name="tab_active_bg">#2176FF</color>
+    <color name="tab_active_content">#FFFFFF</color>
+    <color name="tab_inactive_bg">#E8F2FF</color>
+    <color name="tab_inactive_content">#667A90</color>
 
     <!-- UI State Colors -->
     <color name="success_color">#1B5E20</color>

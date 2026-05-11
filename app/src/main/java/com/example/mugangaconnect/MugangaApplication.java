@@ -26,23 +26,6 @@ public class MugangaApplication extends Application {
         SessionManager session = new SessionManager(this);
         AppCompatDelegate.setDefaultNightMode(session.isDarkMode() ? 
                 AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-
-        // Global Theme Synchronization
-        registerActivityLifecycleCallbacks(new ActivityLifecycleAdapter() {
-            @Override
-            public void onActivityResumed(android.app.Activity activity) {
-                if (activity instanceof androidx.appcompat.app.AppCompatActivity) {
-                    int currentMode = activity.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
-                    boolean isDarkInConfig = currentMode == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-                    boolean isDarkInPrefs = session.isDarkMode();
-
-                    if (isDarkInConfig != isDarkInPrefs) {
-                        // Only recreate if the mode actually differs
-                        activity.recreate();
-                    }
-                }
-            }
-        });
     }
 
     private static abstract class ActivityLifecycleAdapter implements ActivityLifecycleCallbacks {
