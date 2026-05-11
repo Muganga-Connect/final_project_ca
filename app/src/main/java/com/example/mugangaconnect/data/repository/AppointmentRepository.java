@@ -161,8 +161,7 @@ public class AppointmentRepository {
             a.setCreatedAt(createdAt != null ? createdAt : System.currentTimeMillis());
             return a;
         } catch (Exception e) {
-            Log.e("AppointmentRepository", "Error converting document to appointment", e);
-            Log.e("AppointmentRepository", "Error converting document to appointment", e);
+            Log.e("AppointmentRepository", "Error converting document to appointment: " + e.getMessage(), e);
             return null;
         }
     }
