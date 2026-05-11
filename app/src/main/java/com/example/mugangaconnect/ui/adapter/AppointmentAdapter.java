@@ -28,7 +28,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     }
 
     public AppointmentAdapter(List<Appointment> appointmentList, OnAppointmentActionListener listener) {
-        this.appointmentList = appointmentList;
+        this.appointments = appointmentList;
         this.listener = listener;
     }
 
@@ -40,7 +40,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position) {
         Appointment appointment = appointments.get(position);
         holder.txtDoctorName.setText(appointment.getDoctorName());
         holder.txtSpecialty.setText(appointment.getDepartment());
@@ -53,11 +53,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     @Override
     public int getItemCount() {
-        return appointmentList.size();
+        return appointments.size();
     }
 
     public void updateData(List<Appointment> newAppointments) {
-        this.appointmentList = newAppointments;
+        this.appointments = newAppointments;
         notifyDataSetChanged();
     }
 
@@ -65,7 +65,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         TextView txtDoctorName, txtSpecialty, txtDateTime, txtStatus;
         View btnReschedule, btnCancel;
 
-        ViewHolder(View view) {
+        AppointmentViewHolder(View view) {
             super(view);
             txtDoctorName = view.findViewById(R.id.txt_doctor_name);
             txtSpecialty = view.findViewById(R.id.txt_specialty);
