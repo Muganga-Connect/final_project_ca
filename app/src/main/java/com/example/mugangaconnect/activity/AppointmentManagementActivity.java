@@ -17,16 +17,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.data.repository.DoctorRepository;
 import com.example.mugangaconnect.ui.adapter.DoctorAdapter;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
-import com.example.mugangaconnect.activity.BottomNavHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AppointmentManagementActivity extends AppCompatActivity
         implements DoctorAdapter.OnDoctorSelectedListener {
@@ -59,7 +63,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setContentView(R.layout.appointment_management);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository(this);
+        appointmentRepo = new AppointmentRepository();
         doctorRepo      = new DoctorRepository();
 
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
@@ -111,9 +115,9 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void setupHospitalChips() {
-        LinearLayout llCity   = findViewById(R.id.llHospitalCityGeneral);
-        LinearLayout llMayo   = findViewById(R.id.llHospitalMayo);
-        LinearLayout llStMarys= findViewById(R.id.llHospitalStMarys);
+        LinearLayout llCity    = findViewById(R.id.llHospitalCityGeneral);
+        LinearLayout llMayo    = findViewById(R.id.llHospitalMayo);
+        LinearLayout llStMarys = findViewById(R.id.llHospitalStMarys);
         if (llCity    != null) llCity.setOnClickListener(v -> onHospitalSelected("City General Hospital"));
         if (llMayo    != null) llMayo.setOnClickListener(v -> onHospitalSelected("Mayo Clinic"));
         if (llStMarys != null) llStMarys.setOnClickListener(v -> onHospitalSelected("St. Mary's Hospital"));
@@ -147,6 +151,41 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 if (doctorAdapter != null) { doctors.clear(); doctors.addAll(filtered); doctorAdapter.notifyDataSetChanged(); }
             }
         });
+    }
+
+    private void setupDepartmentSelection() {
+        // Department chips can be wired here if layout has them
+    }
+
+    private void setupChooseAnotherDoctor() {
+        if (rvDoctors == null) return;
+        rvDoctors.setVisibility(View.GONE);
+    }
+
+    private void loadDoctors(String department) {
+        doctorRepo.getByDepartment(department, new DoctorRepository.Callback<List<Doctor>>() {
+            @Override
+            public void onSuccess(List<Doctor> result) {
+                runOnUiThread(() -> {
+                    doctors.clear();
+                    doctors.addAll(result);
+                    if (!doctors.isEmpty()) {
+                        selectedDoctor = doctors.get(0);
+                        updateDoctorCard(selectedDoctor);
+                    }
+                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+                });
+            }
+            @Override
+            public void onError(String errorMessage) {}
+        });
+    }
+
+    private void updateDoctorCard(Doctor doctor) {
+        TextView tvName = findViewById(R.id.tvDoctorName);
+        TextView tvDept = findViewById(R.id.tvDoctorDept);
+        if (tvName != null) tvName.setText(doctor.getName());
+        if (tvDept != null) tvDept.setText(doctor.getSpecialty());
     }
 
     @Override
@@ -213,7 +252,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         if (bookBtn != null) bookBtn.setEnabled(false);
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
-            @Override public void onResult(Appointment data) {
+            @Override public void onSuccess(Appointment result) {
                 runOnUiThread(() -> {
                     Toast.makeText(AppointmentManagementActivity.this, "Booked with " + selectedDoctor.getName() + " on " + selectedDate + " at " + selectedTimeSlot, Toast.LENGTH_LONG).show();
                     if (bookBtn != null) bookBtn.setEnabled(true);
@@ -226,17 +265,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    public void onReschedule(Appointment appointment) {
+    public void rescheduleAppointment(Appointment appointment) {
         appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(AppointmentManagementActivity.this,
-                                    getString(R.string.reschedule) + ": " + newDate + " " + newTime,
-                                    Toast.LENGTH_SHORT).show();
-                            loadAppointments();
-                        });
+                    @Override public void onSuccess(Void result) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                                getString(R.string.reschedule_appointment) + ": " + selectedDate + " " + selectedTimeSlot,
+                                Toast.LENGTH_SHORT).show());
                     }
                     @Override public void onError(String message) {
                         runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
@@ -244,17 +279,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
                 });
     }
 
-    @Override
-    public void onCancel(Appointment appointment) {
+    public void cancelAppointment(Appointment appointment) {
         appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
-                    @Override public void onResult(Void data) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(AppointmentManagementActivity.this,
-                                    getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
-                            loadAppointments();
-                        });
+                    @Override public void onSuccess(Void result) {
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
+                                getString(R.string.cancelled), Toast.LENGTH_SHORT).show());
                     }
                     @Override public void onError(String message) {
                         runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
