@@ -1,13 +1,19 @@
 package com.example.mugangaconnect.ui.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
+import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.ViewHolder> {
@@ -17,18 +23,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
     public interface OnAppointmentActionListener {
         void onReschedule(Appointment appointment);
         void onCancel(Appointment appointment);
+        void onMarkAttended(Appointment appointment);
+        void onMarkMissed(Appointment appointment);
     }
 
-    public AppointmentAdapter(List<Appointment> appointments, OnAppointmentActionListener listener) {
-        this.appointments = appointments;
+    public AppointmentAdapter(List<Appointment> appointmentList, OnAppointmentActionListener listener) {
+        this.appointmentList = appointmentList;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AppointmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_appointment, parent, false);
-        return new ViewHolder(view);
+        return new AppointmentViewHolder(view, listener);
     }
 
     @Override
@@ -45,11 +53,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     @Override
     public int getItemCount() {
-        return appointments.size();
+        return appointmentList.size();
     }
 
     public void updateData(List<Appointment> newAppointments) {
-        this.appointments = newAppointments;
+        this.appointmentList = newAppointments;
         notifyDataSetChanged();
     }
 
