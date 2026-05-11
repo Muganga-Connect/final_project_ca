@@ -153,8 +153,25 @@ public class AppointmentRepository {
     // ─────────────────────────────────────────────────────────────
     private Appointment documentToAppointment(DocumentSnapshot doc) {
         try {
-            Appointment a = buildAppointment(doc);
-            populateOptionalFields(a, doc);
+            Appointment a = new Appointment(
+                    getString(doc, "patientId"),
+                    getString(doc, "doctorId"),
+                    getString(doc, "doctorName"),
+                    getString(doc, "department"),
+                    getString(doc, "date"),
+                    getString(doc, "time")
+            );
+            a.setId(doc.getId());
+            String status = doc.getString("status");
+            if (status != null) {
+                a.setStatus(status);
+            }
+            String riskLevel = doc.getString("riskLevel");
+            if (riskLevel != null) {
+                a.setRiskLevel(riskLevel);
+            }
+            Long createdAt = doc.getLong("createdAt");
+            a.setCreatedAt(createdAt != null ? createdAt : System.currentTimeMillis());
             return a;
         } catch (Exception e) {
             Log.e("AppointmentRepository", "Error converting document to appointment: " + e.getMessage(), e);
