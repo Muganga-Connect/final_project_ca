@@ -12,13 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.data.model.User;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
@@ -57,13 +58,13 @@ public class LoginActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        EditText etEmail    = findViewById(R.id.etLoginEmail);
-        EditText etPassword = findViewById(R.id.etLoginPassword);
-        ImageView ivToggle  = findViewById(R.id.ivPasswordToggle);
-        Button btnLogin     = findViewById(R.id.btnLogin);
-        LinearLayout btnBio = findViewById(R.id.btnBiometric);
-        TextView tvForgot   = findViewById(R.id.tvForgotPassword);
-        TextView tvSignUp   = findViewById(R.id.tvSignUpLink);
+        EditText     etEmail   = findViewById(R.id.etLoginEmail);
+        EditText     etPassword= findViewById(R.id.etLoginPassword);
+        ImageView    ivToggle  = findViewById(R.id.ivPasswordToggle);
+        Button       btnLogin  = findViewById(R.id.btnLogin);
+        LinearLayout btnBio    = findViewById(R.id.btnBiometric);
+        TextView     tvForgot  = findViewById(R.id.tvForgotPassword);
+        TextView     tvSignUp  = findViewById(R.id.tvSignUpLink);
         LinearLayout tabSignUp = findViewById(R.id.tabSignUp);
 
         ivToggle.setOnClickListener(v -> {
@@ -78,34 +79,36 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             String email    = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-
-            if (email.isEmpty()) { etEmail.setError("Please enter email"); return; }
+            if (email.isEmpty())    { etEmail.setError("Please enter email");    return; }
             if (password.isEmpty()) { etPassword.setError("Please enter password"); return; }
 
             btnLogin.setEnabled(false);
             authRepo.login(email, password, new AuthRepository.AuthCallback() {
                 @Override
-                public void onSuccess(com.google.firebase.auth.FirebaseUser user) {
-                    authRepo.getProfile(user.getUid(), new AuthRepository.ProfileCallback() {
+                public void onSuccess(com.google.firebase.auth.FirebaseUser firebaseUser) {
+                    authRepo.getProfile(firebaseUser.getUid(), new AuthRepository.ProfileCallback() {
                         @Override
-                        public void onSuccess(com.example.mugangaconnect.data.model.User profile) {
-                            String profileEmail = profile.getEmail() != null ? profile.getEmail() : email;
-                            session.saveSession(user.getUid(), profile.getFullName(), profileEmail,
-                                    profile.getPhone() != null ? profile.getPhone() : "");
-                            goToDashboard();
+                        public void onSuccess(User profile) {
+                            String savedEmail = profile.getEmail() != null ? profile.getEmail() : email;
+                            String savedPhone = profile.getPhone() != null ? profile.getPhone() : "";
+                            String savedName  = profile.getFullName() != null ? profile.getFullName() : "";
+                            session.saveSession(firebaseUser.getUid(), savedName, savedEmail, savedPhone);
+                            runOnUiThread(() -> goToDashboard());
                         }
                         @Override
                         public void onError(String message) {
-                            String authoritativeEmail = user.getEmail() != null ? user.getEmail() : email;
-                            session.saveSession(user.getUid(), "", authoritativeEmail, "");
-                            goToDashboard();
+                            String authEmail = firebaseUser.getEmail() != null ? firebaseUser.getEmail() : email;
+                            session.saveSession(firebaseUser.getUid(), "", authEmail, "");
+                            runOnUiThread(() -> goToDashboard());
                         }
                     });
                 }
                 @Override
                 public void onError(String message) {
-                    btnLogin.setEnabled(true);
-                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                    runOnUiThread(() -> {
+                        btnLogin.setEnabled(true);
+                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+                    });
                 }
             });
         });
@@ -113,38 +116,25 @@ public class LoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(v -> goToSignUp());
         tabSignUp.setOnClickListener(v -> goToSignUp());
 
-        // Forgot Password — sends a real reset email via Firebase
         tvForgot.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
-            if (email.isEmpty()) {
-                etEmail.setError("Enter your email first");
-                etEmail.requestFocus();
-                return;
-            }
+            if (email.isEmpty()) { etEmail.setError("Enter your email first"); return; }
             authRepo.resetPassword(email, new AuthRepository.ResetCallback() {
-                @Override
-                public void onSuccess() {
-                    Toast.makeText(LoginActivity.this,
-                            "Password reset link sent to " + email,
-                            Toast.LENGTH_LONG).show();
+                @Override public void onSuccess() {
+                    Toast.makeText(LoginActivity.this, "Reset link sent to " + email, Toast.LENGTH_LONG).show();
                 }
-                @Override
-                public void onError(String message) {
+                @Override public void onError(String message) {
                     Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
                 }
             });
         });
 
-        btnBio.setOnClickListener(v ->
-                Toast.makeText(this, "Biometric login coming soon", Toast.LENGTH_SHORT).show());
+        if (btnBio != null) {
+            btnBio.setOnClickListener(v ->
+                    Toast.makeText(this, "Biometric login coming soon", Toast.LENGTH_SHORT).show());
+        }
     }
 
-    private void goToDashboard() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }
-
-    private void goToSignUp() {
-        startActivity(new Intent(this, SignUpActivity.class));
-    }
+    private void goToDashboard() { startActivity(new Intent(this, MainActivity.class)); finish(); }
+    private void goToSignUp()    { startActivity(new Intent(this, SignUpActivity.class)); }
 }
