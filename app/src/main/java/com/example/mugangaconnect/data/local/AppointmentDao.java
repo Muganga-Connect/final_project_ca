@@ -1,8 +1,10 @@
 package com.example.mugangaconnect.data.local;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.mugangaconnect.data.model.Appointment;
 
@@ -11,30 +13,26 @@ import java.util.List;
 
 public class AppointmentDao {
 
-    private final AppDatabase db;
+    private final SQLiteOpenHelper helper;
 
-    public AppointmentDao(AppDatabase db) {
-        this.db = db;
+    public AppointmentDao(Context context) {
+        this.helper = AppDatabase.getInstance(context, true);
     }
 
-    // ✅ Insert or replace a single appointment
     public void upsert(Appointment a) {
-        db.getWritableDatabase().insertWithOnConflict(
+        helper.getWritableDatabase().insertWithOnConflict(
                 AppDatabase.TABLE_APPOINTMENTS, null,
                 toContentValues(a),
                 SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    // ✅ Insert or replace a list of appointments (bulk)
     public void upsertAll(List<Appointment> appointments) {
-        SQLiteDatabase w = db.getWritableDatabase();
+        SQLiteDatabase w = helper.getWritableDatabase();
         w.beginTransaction();
         try {
             for (Appointment a : appointments) {
-                w.insertWithOnConflict(
-                        AppDatabase.TABLE_APPOINTMENTS, null,
-                        toContentValues(a),
-                        SQLiteDatabase.CONFLICT_REPLACE);
+                w.insertWithOnConflict(AppDatabase.TABLE_APPOINTMENTS, null,
+                        toContentValues(a), SQLiteDatabase.CONFLICT_REPLACE);
             }
             w.setTransactionSuccessful();
         } finally {
@@ -42,76 +40,49 @@ public class AppointmentDao {
         }
     }
 
-    // ✅ Get all appointments for a patient
     public List<Appointment> getByPatient(String patientId) {
         List<Appointment> list = new ArrayList<>();
-        Cursor c = db.getReadableDatabase().query(
-                AppDatabase.TABLE_APPOINTMENTS,
-                null,
-                AppDatabase.COL_PATIENT_ID + " = ?",
-                new String[]{patientId},
-                null,
-                null,
-                AppDatabase.COL_DATE + " ASC");
-        try {
-            while (c.moveToNext()) list.add(fromCursor(c));
-        } finally {
-            c.close();
-        }
+        Cursor c = helper.getReadableDatabase().rawQuery(
+                "SELECT * FROM " + AppDatabase.TABLE_APPOINTMENTS +
+                " WHERE " + AppDatabase.COL_PATIENT_ID + " = ?" +
+                " ORDER BY " + AppDatabase.COL_DATE + " ASC",
+                new String[]{patientId});
+        try { while (c.moveToNext()) list.add(fromCursor(c)); } finally { c.close(); }
         return list;
     }
 
-    // ✅ Get appointments by patient + status (for History tabs)
     public List<Appointment> getByStatus(String patientId, String status) {
         List<Appointment> list = new ArrayList<>();
-        Cursor c = db.getReadableDatabase().query(
-                AppDatabase.TABLE_APPOINTMENTS,
-                null,
-                AppDatabase.COL_PATIENT_ID + " = ? AND " + AppDatabase.COL_STATUS + " = ?",
-                new String[]{patientId, status},
-                null,
-                null,
-                AppDatabase.COL_DATE + " ASC");
-        try {
-            while (c.moveToNext()) list.add(fromCursor(c));
-        } finally {
-            c.close();
-        }
+        Cursor c = helper.getReadableDatabase().rawQuery(
+                "SELECT * FROM " + AppDatabase.TABLE_APPOINTMENTS +
+                " WHERE " + AppDatabase.COL_PATIENT_ID + " = ?" +
+                " AND " + AppDatabase.COL_STATUS + " = ?" +
+                " ORDER BY " + AppDatabase.COL_DATE + " ASC",
+                new String[]{patientId, status});
+        try { while (c.moveToNext()) list.add(fromCursor(c)); } finally { c.close(); }
         return list;
     }
 
-    // ✅ Update only the status column
     public void updateStatus(String appointmentId, String status) {
         ContentValues cv = new ContentValues();
         cv.put(AppDatabase.COL_STATUS, status);
-        db.getWritableDatabase().update(
-                AppDatabase.TABLE_APPOINTMENTS, cv,
-                AppDatabase.COL_ID + "=?",
-                new String[]{appointmentId});
+        helper.getWritableDatabase().update(AppDatabase.TABLE_APPOINTMENTS, cv,
+                AppDatabase.COL_ID + "=?", new String[]{appointmentId});
     }
 
-    // ✅ Update date and time (reschedule)
     public void updateDateAndTime(String appointmentId, String date, String time) {
         ContentValues cv = new ContentValues();
         cv.put(AppDatabase.COL_DATE, date);
         cv.put(AppDatabase.COL_TIME, time);
-        db.getWritableDatabase().update(
-                AppDatabase.TABLE_APPOINTMENTS, cv,
-                AppDatabase.COL_ID + "=?",
-                new String[]{appointmentId});
+        helper.getWritableDatabase().update(AppDatabase.TABLE_APPOINTMENTS, cv,
+                AppDatabase.COL_ID + "=?", new String[]{appointmentId});
     }
 
-    // ✅ Delete an appointment
     public void delete(String appointmentId) {
-        db.getWritableDatabase().delete(
-                AppDatabase.TABLE_APPOINTMENTS,
-                AppDatabase.COL_ID + "=?",
-                new String[]{appointmentId});
+        helper.getWritableDatabase().delete(AppDatabase.TABLE_APPOINTMENTS,
+                AppDatabase.COL_ID + "=?", new String[]{appointmentId});
     }
 
-    // ─────────────────────────────────────────
-    //  HELPERS
-    // ─────────────────────────────────────────
     private ContentValues toContentValues(Appointment a) {
         ContentValues cv = new ContentValues();
         cv.put(AppDatabase.COL_ID,          a.getId());
