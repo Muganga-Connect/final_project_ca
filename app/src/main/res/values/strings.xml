@@ -51,6 +51,9 @@
     <string name="time_slot">Time Slot</string>
     <string name="next_checkup">NEXT CHECKUP</string>
     <string name="health_score">HEALTH SCORE</string>
+    <string name="appointment_status_confirmed">Confirmed</string>
+    <string name="appointment_action_reschedule">Reschedule</string>
+    <string name="appointment_action_cancel">Cancel</string>
 
     <!-- Login / Signup -->
     <string name="login">Login</string>
@@ -92,6 +95,7 @@
     <string name="view_appointment_history">View Appointment History</string>
     <string name="height_label">HEIGHT</string>
     <string name="score_label">SCORE</string>
+    <string name="dashboard">Dashboard</string>
 
     <!-- Scheduler -->
     <string name="recent_hospital">Recent Hospital</string>
@@ -102,6 +106,12 @@
     <string name="dept_cardiology">Cardiology</string>
     <string name="dept_neurology">Neurology</string>
     <string name="dept_dentistry">Dentistry</string>
+    <string name="schedule">Schedule</string>
+    <string name="doctor_image">Doctor image</string>
+    <string name="doctor_name_placeholder">Doctor Name</string>
+    <string name="doctor_specialty_placeholder">Specialty</string>
+    <string name="doctor_availability_placeholder">Available</string>
+    <string name="doctor_selected">Doctor selected</string>
 
     <!-- AI Assistant -->
     <string name="ai_greeting">How can I help you today?</string>
@@ -113,6 +123,7 @@
     <string name="reschedule_appointment">Reschedule Appointment</string>
     <string name="type_message">Type your message\u2026</string>
     <string name="active_care">Active Care</string>
+    <string name="ai_assistant">AI Assistant</string>
 
     <!-- AI Responses -->
     <string name="ai_check_risk_question">Can you check my risk of missing the next appointment?</string>
@@ -130,4 +141,51 @@
     <string name="ai_kw_hi">hi</string>
     <string name="ai_kw_reschedule">reschedule</string>
     <string name="ai_kw_reminder">reminder</string>
+
+    <!-- Notification Preferences -->
+    <string name="back">Back</string>
+    <string name="enable_all">Enable All</string>
+    <string name="appointment_reminders">Appointment Reminders</string>
+    <string name="sms_notifications">SMS Notifications</string>
+    <string name="push_notifications">Push Notifications</string>
+    <string name="reminder_timing">Reminder Timing</string>
+    <string name="one_day_before">1 Day Before</string>
+    <string name="two_hours_before">2 Hours Before</string>
+    <string name="thirty_minutes_before">30 Minutes Before</string>
+    <string name="save_preferences">Save Preferences</string>
+
+    <!-- Personal Information -->
+    <string name="content_desc_back">Back</string>
+    <string name="title_personal_information">Personal Information</string>
+    <string name="content_desc_edit_photo">Edit profile photo</string>
+    <string name="action_edit">Edit</string>
+    <string name="welcome_name">John Doe</string>
+    <string name="label_gender">GENDER</string>
+    <string name="content_desc_edit_gender">Edit gender</string>
+    <string name="error_gender_required">Gender is required</string>
+    <string name="label_blood_type">BLOOD TYPE</string>
+    <string name="content_desc_edit_blood_type">Edit blood type</string>
+    <string name="error_blood_type_required">Blood type is required</string>
+    <string name="action_save_changes">Save Changes</string>
+    <string name="desc_edit_field">Edit field</string>
+
+    <!-- Splash Screen -->
+    <string name="app_logo_description">MugangaConnect Logo</string>
+    <string name="loading_text">Initializing security...</string>
+
+    <!-- Appointment History -->
+    <string name="desc_back_button">Go back</string>
+    <string name="menu">Menu</string>
+
+    <!-- Bottom Navigation -->
+    <string name="profile_nav">Profile</string>
+
+    <!-- Photo Bottom Sheet -->
+    <string name="photo_bottom_sheet_title">Profile Photo</string>
+    <string name="photo_bottom_sheet_subtitle">Choose an option to update your photo</string>
+    <string name="photo_option_take_photo">Take Photo</string>
+    <string name="photo_option_take_photo_desc">Capture a new photo using camera</string>
+    <string name="photo_option_gallery">Choose from Gallery</string>
+    <string name="photo_option_gallery_desc">Select an existing photo from gallery</string>
+
 </resources>

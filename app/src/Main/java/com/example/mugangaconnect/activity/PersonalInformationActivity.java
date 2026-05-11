@@ -353,13 +353,14 @@ public class PersonalInformationActivity extends AppCompatActivity {
 
     private void saveData(String name, String phone) {
         String uid = session.getUid();
-        authRepo.updateProfile(uid, name, phone, new AuthRepository.ProfileCallback() {
+        String email = etEmail.getText().toString().trim();
+        authRepo.updateProfile(name, phone, email, new AuthRepository.Callback() {
             @Override
-            public void onSuccess(User user) {
-                session.saveSession(uid, name, user.getEmail());
+            public void onSuccess(String message) {
+                session.saveSession(uid, name, email);
                 runOnUiThread(() -> {
                     tvDisplayName.setText(name);
-                    Toast.makeText(PersonalInformationActivity.this, "Profile updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PersonalInformationActivity.this, message, Toast.LENGTH_SHORT).show();
                     lockFields();
                     isModified = false;
                     btnSave.setEnabled(false);

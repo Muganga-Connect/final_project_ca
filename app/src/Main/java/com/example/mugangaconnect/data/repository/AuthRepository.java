@@ -20,6 +20,12 @@ public class AuthRepository {
         this.db = FirebaseFirestore.getInstance();
     }
 
+    public void resetPassword(String email, ResetCallback callback) {
+        auth.sendPasswordResetEmail(email)
+                .addOnSuccessListener(v -> callback.onSuccess())
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
     // ✅ Simple Callback interface (used by PersonalInformationActivity)
     public interface Callback {
         void onSuccess(String message);
@@ -35,6 +41,12 @@ public class AuthRepository {
     // ✅ Profile Callback (returns full User object)
     public interface ProfileCallback {
         void onSuccess(User user);
+        void onError(String message);
+    }
+
+    // ✅ Reset Password Callback
+    public interface ResetCallback {
+        void onSuccess();
         void onError(String message);
     }
 

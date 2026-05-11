@@ -14,6 +14,9 @@ public class AppointmentRepository {
     private final FirebaseFirestore db;
     private static final String COLLECTION = "appointments";
 
+    public void getCachedByStatus(String uid, String status, Callback<List<Appointment>> callback) {
+    }
+
     public interface Callback<T> {
         void onResult(T data);
         void onError(String message);

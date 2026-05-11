@@ -57,6 +57,10 @@ dependencies {
     implementation libs.blurview
     implementation libs.lucide.icons
 
+    // Room
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
+
     // Firebase BoM — manages all Firebase library versions
     implementation platform(libs.firebase.bom)
     implementation libs.google.firebase.auth
