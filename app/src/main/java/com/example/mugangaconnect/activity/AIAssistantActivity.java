@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
-import com.example.mugangaconnect.activity.AppointmentRepository;
+import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.ai.client.generativeai.GenerativeModel;
@@ -173,7 +173,7 @@ public class AIAssistantActivity extends AppCompatActivity {
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
-            public void onResult(List<Appointment> data) {
+            public void onSuccess(List<Appointment> data) {
                 int missed = 0;
                 for (Appointment a : data) {
                     if (Appointment.Status.MISSED.name().equals(a.getStatus())) missed++;

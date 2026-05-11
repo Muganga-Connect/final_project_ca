@@ -135,8 +135,8 @@ public class PersonalInformationActivity extends AppCompatActivity {
         spinnerBlood = findViewById(R.id.spinner_blood);
         btnEditGender = findViewById(R.id.btn_edit_gender);
         btnEditBlood = findViewById(R.id.btn_edit_blood);
-        tvErrorGender = findViewById(R.id.tv_error_gender);
-        tvErrorBlood = findViewById(R.id.tv_error_blood);
+        tvErrorGender = null;
+        tvErrorBlood = null;
     }
 
     private void setupFieldInternal(View field, String label, String hint) {

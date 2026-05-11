@@ -71,6 +71,10 @@ public class SessionManager {
         return prefs.getBoolean(KEY_BIOMETRIC, false);
     }
 
+    private static final String KEY_DARK_MODE = "dark_mode";
+    public void setDarkMode(boolean enabled) { prefs.edit().putBoolean(KEY_DARK_MODE, enabled).apply(); }
+    public boolean isDarkMode() { return prefs.getBoolean(KEY_DARK_MODE, false); }
+
     private void requireNonEmpty(String value, String name) {
         if (value == null || value.trim().isEmpty())
             throw new IllegalArgumentException(name + " is required");
