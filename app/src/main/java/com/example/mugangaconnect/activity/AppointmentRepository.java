@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class AppointmentRepository {
     
@@ -48,7 +49,7 @@ public class AppointmentRepository {
                             callback.onError("Appointment not found");
                         }
                     } else {
-                        callback.onError("Failed to fetch appointment: " + (task.getException() != null ? task.getException().getMessage() : "Unknown error"));
+                        callback.onError("Failed to fetch appointment: " + task.getException().getMessage());
                     }
                 }
             })
@@ -66,28 +67,20 @@ public class AppointmentRepository {
      * @return Appointment object
      */
     private Appointment documentToAppointment(DocumentSnapshot document) {
+        String id = document.getId();
         String patientId = document.getString("patientId");
         
         // Extract doctor data
         Doctor doctor = null;
         if (document.contains("doctor")) {
-            String doctorId = document.getString("doctor.id");
+            String doctorId = document.contains("doctor.id") ? document.getString("doctor.id") : "";
             String doctorName = document.getString("doctor.name");
             String doctorSpecialty = document.getString("doctor.specialty");
-            String doctorDepartment = document.getString("doctor.department");
+            String doctorDepartment = document.contains("doctor.department") ? document.getString("doctor.department") : "";
             String doctorAvailability = document.getString("doctor.availability");
-            String doctorImageUrl = document.getString("doctor.imageUrl");
             
             if (doctorName != null && doctorSpecialty != null) {
-                // Using the 6-argument constructor as identified by the compiler
-                doctor = new Doctor(
-                    doctorId != null ? doctorId : "",
-                    doctorName,
-                    doctorSpecialty,
-                    doctorDepartment != null ? doctorDepartment : "",
-                    doctorAvailability != null ? doctorAvailability : "",
-                    doctorImageUrl != null ? doctorImageUrl : ""
-                );
+                doctor = new Doctor(doctorId, doctorName, doctorSpecialty, doctorDepartment, doctorAvailability);
             }
         }
         
@@ -98,22 +91,16 @@ public class AppointmentRepository {
         // Handle null values with defaults
         if (date == null) date = "";
         if (time == null) time = "";
+        if (status == null) status = "UNKNOWN";
         
-        Appointment appointment = new Appointment(
-            patientId != null ? patientId : "",
-            doctor != null ? doctor.getId() : "",
-            doctor != null ? doctor.getName() : "",
-            doctor != null ? doctor.getDepartment() : "",
-            date,
-            time
+        return new Appointment(
+            patientId != null ? patientId : "",       // patientId
+            doctor != null ? doctor.getId() : "",     // doctorId
+            doctor != null ? doctor.getName() : "",   // doctorName
+            doctor != null ? doctor.getDepartment() : "", // department
+            date,                                       // date
+            time                                        // time
         );
-        
-        appointment.setId(document.getId());
-        if (status != null) {
-            appointment.setStatus(status);
-        }
-        
-        return appointment;
     }
     
     /**

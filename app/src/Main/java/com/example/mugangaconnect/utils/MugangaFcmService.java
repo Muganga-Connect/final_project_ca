@@ -10,6 +10,7 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import com.example.mugangaconnect.activity.LoginActivity;
+import com.example.mugangaconnect.activity.NotificationPreferencesActivity;
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.repository.AuthRepository;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,10 +31,23 @@ public class MugangaFcmService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        if (message.getNotification() == null) return;
+        android.content.SharedPreferences prefs = getSharedPreferences(
+                NotificationPreferencesActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        if (!prefs.getBoolean(NotificationPreferencesActivity.KEY_PUSH_NOTIFICATIONS, true)) return;
 
-        String title = message.getNotification().getTitle();
-        String body  = message.getNotification().getBody();
+        String type = message.getData().get("type");
+        if ("appointment".equals(type) &&
+                !prefs.getBoolean(NotificationPreferencesActivity.KEY_APPOINTMENT_REMINDERS, true)) return;
+
+        String title, body;
+        if (message.getNotification() != null) {
+            title = message.getNotification().getTitle();
+            body  = message.getNotification().getBody();
+        } else {
+            title = message.getData().get("title");
+            body  = message.getData().get("body");
+        }
+        if (title == null || body == null) return;
 
         createChannel();
 
@@ -50,7 +64,7 @@ public class MugangaFcmService extends FirebaseMessagingService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify((int) System.currentTimeMillis(), builder.build());
+        if (nm != null) nm.notify((int) System.currentTimeMillis(), builder.build());
     }
 
     private void createChannel() {
