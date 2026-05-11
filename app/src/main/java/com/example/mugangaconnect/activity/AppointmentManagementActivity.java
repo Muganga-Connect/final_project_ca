@@ -5,12 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,7 +43,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     private DoctorAdapter doctorAdapter;
     private RecyclerView  rvDoctors;
 
-    private final int[]     slotIds      = {R.id.tvSlot0900, R.id.tvSlot0930, R.id.tvSlot1000, R.id.tvSlot1030, R.id.tvSlot1100, R.id.tvSlot1130, R.id.tvSlot0100, R.id.tvSlot0130, R.id.tvSlot0200};
+    private final int[]     slotIds      = {};
     private final String[]  slotTimes    = {"09:00","09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00"};
     private final boolean[] slotAvailable= {true,true,false,true,true,true,true,true,false};
 
@@ -82,42 +77,13 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void setupMenuAndViewAll() {
-        View ivMenu = findViewById(R.id.ivMenu);
-        if (ivMenu != null) {
-            ivMenu.setOnClickListener(v -> {
-                String[] options = {"Dashboard", "Appointment History", "AI Assistant", "Profile"};
-                new AlertDialog.Builder(this)
-                        .setTitle("Navigate to")
-                        .setItems(options, (dialog, which) -> {
-                            switch (which) {
-                                case 0: startActivity(new Intent(this, MainActivity.class)); break;
-                                case 1: startActivity(new Intent(this, AppointmentHistoryActivity.class)); break;
-                                case 2: startActivity(new Intent(this, AIAssistantActivity.class)); break;
-                                case 3: startActivity(new Intent(this, ProfileActivity.class)); break;
-                            }
-                        }).show();
-            });
-        }
-
-        TextView tvViewAll = findViewById(R.id.tvViewAllHospitals);
-        if (tvViewAll != null) {
-            tvViewAll.setOnClickListener(v -> {
-                String[] hospitals = {"City General Hospital","Mayo Clinic","St. Mary's Hospital","King Faisal Hospital","CHUK","CHUB","Kibagabaga Hospital"};
-                new AlertDialog.Builder(this)
-                        .setTitle("All Hospitals")
-                        .setItems(hospitals, (dialog, which) -> {
-                            Toast.makeText(this, hospitals[which] + " selected", Toast.LENGTH_SHORT).show();
-                            EditText et = findViewById(R.id.etSearch);
-                            if (et != null) et.setText(hospitals[which]);
-                        }).show();
-            });
-        }
+        // ivMenu and tvViewAllHospitals not in current layout — skip
     }
 
     private void setupHospitalChips() {
-        LinearLayout llCity    = findViewById(R.id.llHospitalCityGeneral);
-        LinearLayout llMayo    = findViewById(R.id.llHospitalMayo);
-        LinearLayout llStMarys = findViewById(R.id.llHospitalStMarys);
+        View llCity    = findViewById(R.id.hospitalCityGeneral);
+        View llMayo    = findViewById(R.id.hospitalMayo);
+        View llStMarys = findViewById(R.id.hospitalStMarys);
         if (llCity    != null) llCity.setOnClickListener(v -> onHospitalSelected("City General Hospital"));
         if (llMayo    != null) llMayo.setOnClickListener(v -> onHospitalSelected("Mayo Clinic"));
         if (llStMarys != null) llStMarys.setOnClickListener(v -> onHospitalSelected("St. Mary's Hospital"));
@@ -125,41 +91,29 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     private void onHospitalSelected(String name) {
         Toast.makeText(this, name + " selected", Toast.LENGTH_SHORT).show();
-        EditText et = findViewById(R.id.etSearch);
-        if (et != null) { et.setText(name); et.setSelection(name.length()); }
         loadDoctors(selectedDepartment);
     }
 
     private void setupSearch() {
-        EditText etSearch = findViewById(R.id.etSearch);
-        if (etSearch == null) return;
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String query = s.toString().trim().toLowerCase();
-                if (query.isEmpty()) { loadDoctors(selectedDepartment); return; }
-                List<Doctor> filtered = new ArrayList<>();
-                for (Doctor d : doctors) {
-                    if (d.getName().toLowerCase().contains(query)
-                            || d.getSpecialty().toLowerCase().contains(query)
-                            || d.getDepartment().toLowerCase().contains(query))
-                        filtered.add(d);
-                }
-                if (!filtered.isEmpty()) { updateDoctorCard(filtered.get(0)); selectedDoctor = filtered.get(0); }
-                if (doctorAdapter != null) { doctors.clear(); doctors.addAll(filtered); doctorAdapter.notifyDataSetChanged(); }
-            }
-        });
+        // etSearch not in current layout — skip
     }
 
     private void setupDepartmentSelection() {
-        // Department chips can be wired here if layout has them
+        View deptCardiology = findViewById(R.id.deptCardiology);
+        View deptDentistry  = findViewById(R.id.deptDentistry);
+        View deptNeurology  = findViewById(R.id.deptNeurology);
+        if (deptCardiology != null) deptCardiology.setOnClickListener(v -> { selectedDepartment = "Cardiology"; loadDoctors(selectedDepartment); });
+        if (deptDentistry  != null) deptDentistry.setOnClickListener(v  -> { selectedDepartment = "Dentistry";  loadDoctors(selectedDepartment); });
+        if (deptNeurology  != null) deptNeurology.setOnClickListener(v  -> { selectedDepartment = "Neurology";  loadDoctors(selectedDepartment); });
     }
 
     private void setupChooseAnotherDoctor() {
-        if (rvDoctors == null) return;
-        rvDoctors.setVisibility(View.GONE);
+        rvDoctors = findViewById(R.id.rv_doctors);
+        if (rvDoctors != null) {
+            doctorAdapter = new DoctorAdapter(doctors, this);
+            rvDoctors.setLayoutManager(new LinearLayoutManager(this));
+            rvDoctors.setAdapter(doctorAdapter);
+        }
     }
 
     private void loadDoctors(String department) {
@@ -197,34 +151,17 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void setupTimeSlots() {
-        for (int i = 0; i < slotIds.length; i++) {
-            TextView slot = findViewById(slotIds[i]);
-            if (slot == null) continue;
-            if (!slotAvailable[i]) { slot.setAlpha(0.5f); continue; }
-            final String time = slotTimes[i];
-            slot.setOnClickListener(v -> selectTimeSlot(time));
-        }
-        selectTimeSlot("10:30");
+        // Time slots not in current layout — default selection only
+        selectedTimeSlot = slotTimes.length > 3 ? slotTimes[3] : null;
     }
 
     private void selectTimeSlot(String time) {
         selectedTimeSlot = time;
-        for (int i = 0; i < slotIds.length; i++) {
-            TextView slot = findViewById(slotIds[i]);
-            if (slot == null || !slotAvailable[i]) continue;
-            if (slotTimes[i].equals(time)) { slot.setBackgroundResource(R.drawable.bg_slot_selected); slot.setTextColor(0xFFFFFFFF); }
-            else { slot.setBackgroundResource(R.drawable.bg_slot_available); slot.setTextColor(0xFF3D7FE8); }
-        }
     }
 
     private void setupDayPicker() {
-        TextView slot = findViewById(R.id.tvSlot0900);
-        if (slot == null) return;
-        if (slot.getParent() instanceof LinearLayout) {
-            View slotRow = (View) slot.getParent();
-            if (slotRow.getParent() instanceof LinearLayout)
-                ((LinearLayout) slotRow.getParent()).setOnClickListener(v -> openDatePicker());
-        }
+        View btnSelectSession = findViewById(R.id.btn_select_session);
+        if (btnSelectSession != null) btnSelectSession.setOnClickListener(v -> openDatePicker());
     }
 
     private void openDatePicker() {
@@ -237,7 +174,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
     }
 
     private void setupBookButton() {
-        View btnBook = findViewById(R.id.btnBookAppointment);
+        View btnBook = findViewById(R.id.btn_book_appointment);
         if (btnBook != null) btnBook.setOnClickListener(v -> bookAppointment());
     }
 
@@ -248,7 +185,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         if (uid == null) { Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show(); return; }
 
         Appointment appt = new Appointment(uid, selectedDoctor.getId(), selectedDoctor.getName(), selectedDepartment, selectedDate, selectedTimeSlot);
-        View bookBtn = findViewById(R.id.btnBookAppointment);
+        View bookBtn = findViewById(R.id.btn_book_appointment);
         if (bookBtn != null) bookBtn.setEnabled(false);
 
         appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
