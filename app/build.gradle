@@ -67,6 +67,7 @@ dependencies {
     implementation libs.google.firebase.firestore
     implementation libs.google.firebase.messaging
     implementation libs.generativeai
+    implementation 'com.google.guava:guava:33.0.0-android'
     implementation libs.biometric
     implementation libs.security.crypto
     
