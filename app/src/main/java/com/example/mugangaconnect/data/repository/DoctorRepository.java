@@ -8,46 +8,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorRepository {
-
+    private final FirebaseFirestore db;
     private static final String COLLECTION = "doctors";
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public interface Callback<T> {
         void onResult(T data);
         void onError(String message);
     }
 
+    public DoctorRepository() {
+        this.db = FirebaseFirestore.getInstance();
+    }
+
     public void getByDepartment(String department, Callback<List<Doctor>> callback) {
         db.collection(COLLECTION)
-          .whereEqualTo("department", department)
-          .get()
-          .addOnSuccessListener(snapshot -> {
-              List<Doctor> list = new ArrayList<>();
-              for (QueryDocumentSnapshot doc : snapshot) {
-                  Doctor d = doc.toObject(Doctor.class);
-                  d.setId(doc.getId());
-                  list.add(d);
-              }
-              callback.onResult(list);
-          })
-          .addOnFailureListener(e -> callback.onError(safeMessage(e)));
+                .whereEqualTo("department", department)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Doctor> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        Doctor doctor = doc.toObject(Doctor.class);
+                        doctor.setId(doc.getId());
+                        list.add(doctor);
+                    }
+                    callback.onResult(list);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
     public void getAll(Callback<List<Doctor>> callback) {
-        db.collection(COLLECTION).get()
-          .addOnSuccessListener(snapshot -> {
-              List<Doctor> list = new ArrayList<>();
-              for (QueryDocumentSnapshot doc : snapshot) {
-                  Doctor d = doc.toObject(Doctor.class);
-                  d.setId(doc.getId());
-                  list.add(d);
-              }
-              callback.onResult(list);
-          })
-          .addOnFailureListener(e -> callback.onError(safeMessage(e)));
-    }
-
-    private String safeMessage(Exception e) {
-        return e.getMessage() != null ? e.getMessage() : "Unknown error";
+        db.collection(COLLECTION)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Doctor> list = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        Doctor doctor = doc.toObject(Doctor.class);
+                        doctor.setId(doc.getId());
+                        list.add(doctor);
+                    }
+                    callback.onResult(list);
+                })
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 }

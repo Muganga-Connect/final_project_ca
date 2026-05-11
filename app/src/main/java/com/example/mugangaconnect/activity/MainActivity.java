@@ -1,6 +1,10 @@
 package com.example.mugangaconnect.activity;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,36 +13,43 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.mugangaconnect.data.model.User;
+import com.example.mugangaconnect.data.repository.AuthRepository;
+
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
-import com.example.mugangaconnect.utils.NoShowPredictor;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
-
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private AuthRepository authRepo;
     private SessionManager session;
     private AppointmentRepository appointmentRepo;
-    private FirebaseFirestore firestore;
-    private ImageView dashboardProfileImage;
-    private TextView tvWelcomeName;
-    private TextView tvSmartAlertBody;
-    private TextView tvUpcomingDoctor;
-    private TextView tvUpcomingDateTime;
-    private TextView tvUpcomingStatus;
-    private Button btnReschedule;
-    private Button btnCancelAppointment;
-    private Button btnMarkAttended;
-    private Button btnMarkMissed;
-    private Button btnEnableReminder;
-    private Appointment currentUpcoming;
+    private Appointment upcomingAppointment;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Notifications disabled. You won't receive reminders.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,165 +58,117 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(this);
+        authRepo = new AuthRepository();
         appointmentRepo = new AppointmentRepository(this);
-        firestore = FirebaseFirestore.getInstance();
-        bindViews();
 
-        bindUserName();
-        loadDashboardData();
-        wireButtons();
-
+        checkNotificationPermission();
+        setupUI();
+        loadData();
+        
         BottomNavHelper.setup(this, BottomNavHelper.Screen.DASHBOARD);
     }
 
-    private void bindViews() {
-        dashboardProfileImage = findViewById(R.id.dashboardProfileImage);
-        tvWelcomeName = findViewById(R.id.tvWelcomeName);
-        tvSmartAlertBody = findViewById(R.id.tvSmartAlertBody);
-        tvUpcomingDoctor = findViewById(R.id.tvUpcomingDoctor);
-        tvUpcomingDateTime = findViewById(R.id.tvUpcomingDateTime);
-        tvUpcomingStatus = findViewById(R.id.tvUpcomingStatus);
-        btnReschedule = findViewById(R.id.btnReschedule);
-        btnCancelAppointment = findViewById(R.id.btnCancelAppointment);
-        btnMarkAttended = findViewById(R.id.btnMarkAttended);
-        btnMarkMissed = findViewById(R.id.btnMarkMissed);
-        btnEnableReminder = findViewById(R.id.btnEnableReminder);
-    }
-
-    private void bindUserName() {
-        String name = session.getFullName();
-        if (tvWelcomeName != null && name != null && !name.isEmpty()) {
-            tvWelcomeName.setText(name);
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
         }
-        
-        // Load profile image
-        loadProfileImage();
-    }
-    
-    private void loadProfileImage() {
-        String uid = session.getUid();
-        if (uid == null) return;
-        
-        firestore.collection("users").document(uid).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String profileImageUrl = documentSnapshot.getString("profilePicture");
-                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-                            Glide.with(this).load(profileImageUrl).into(dashboardProfileImage);
-                        }
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Log error but don't show to user
-                    android.util.Log.e("MainActivity", "Error loading profile image", e);
-                });
     }
 
-    private void loadDashboardData() {
+    private void setupUI() {
+        // Set User Name
+        TextView tvUserName = findViewById(R.id.tvUserName);
+        if (tvUserName != null && session.getFullName() != null) {
+            tvUserName.setText(session.getFullName().replace(" ", "\n"));
+        }
+
+        // View History Button
+        View btnHistory = findViewById(R.id.btnViewHistory);
+        if (btnHistory != null) {
+            btnHistory.setOnClickListener(v -> {
+                startActivity(new Intent(MainActivity.this, AppointmentHistoryActivity.class));
+            });
+        }
+
+        // Reschedule/Cancel buttons for upcoming appointment
+        Button btnReschedule = findViewById(R.id.btnRescheduleMain);
+        Button btnCancel = findViewById(R.id.btnCancelMain);
+
+        if (btnReschedule != null) {
+            btnReschedule.setOnClickListener(v -> {
+                if (upcomingAppointment != null) {
+                    // Navigate to management or handle here
+                    startActivity(new Intent(MainActivity.this, AppointmentManagementActivity.class));
+                } else {
+                    Toast.makeText(this, "No upcoming appointment to reschedule", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> {
+                if (upcomingAppointment != null) {
+                    cancelAppointment(upcomingAppointment);
+                } else {
+                    Toast.makeText(this, "No upcoming appointment to cancel", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        findViewById(R.id.btnEnableReminder).setOnClickListener(v -> 
+                Toast.makeText(this, "Early reminders enabled", Toast.LENGTH_SHORT).show());
+    }
+
+    private void loadData() {
+
         String uid = session.getUid();
         if (uid == null) return;
+
+        loadProfileImage(uid);
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
             public void onResult(List<Appointment> data) {
-                // Find next upcoming appointment
-                Appointment next = null;
-                for (Appointment a : data) {
-                    if (Appointment.Status.UPCOMING.equals(a.getStatus())) {
-                        if (next == null || a.getDate().compareTo(next.getDate()) < 0) next = a;
+                for (Appointment appt : data) {
+                    if (Appointment.Status.CONFIRMED.name().equals(appt.getStatus()) || 
+                        Appointment.Status.UPCOMING.name().equals(appt.getStatus())) {
+                        upcomingAppointment = appt;
+                        updateUpcomingUI(appt);
+                        break;
                     }
                 }
-                currentUpcoming = next;
 
-                // Compute risk from stats
-                appointmentRepo.getMissedStats(uid, new AppointmentRepository.Callback<int[]>() {
-                    @Override
-                    public void onResult(int[] stats) {
-                        String risk = NoShowPredictor.predict(stats[0], stats[1]);
-                        runOnUiThread(() -> updateDashboardUI(currentUpcoming, risk, stats[0], stats[1]));
-                    }
-                    @Override public void onError(String message) {}
-                });
+            @Override
+            public void onError(String message) {
+                // Handle error
             }
-            @Override public void onError(String message) {}
+        });
+
+    }
+
+    private void updateUpcomingUI(Appointment appt) {
+        runOnUiThread(() -> {
+            TextView tvDoctor = findViewById(R.id.tvDoctorName);
+            TextView tvTime = findViewById(R.id.tvAppointmentTime);
+            TextView tvStatus = findViewById(R.id.tvAppointmentStatus);
+            TextView tvDept = findViewById(R.id.tvDoctorDept);
+
+            if (tvDoctor != null) tvDoctor.setText(appt.getDoctorName());
+            if (tvTime != null) tvTime.setText(appt.getDate() + ", " + appt.getTime());
+            if (tvStatus != null) tvStatus.setText(appt.getStatus());
+            if (tvDept != null) tvDept.setText(appt.getDepartment());
         });
     }
 
-    private void updateDashboardUI(Appointment upcoming, String risk, int missed, int total) {
-        View content = findViewById(R.id.appointmentContent);
-        View empty = findViewById(R.id.emptyAppointmentState);
-
-        if (upcoming != null) {
-            if (content != null) content.setVisibility(View.VISIBLE);
-            if (empty != null) empty.setVisibility(View.GONE);
-
-            if (tvUpcomingDoctor != null) tvUpcomingDoctor.setText(upcoming.getDoctorName());
-            if (tvUpcomingDateTime != null) tvUpcomingDateTime.setText(upcoming.getDate() + "\n" + upcoming.getTime());
-            if (tvUpcomingStatus != null) tvUpcomingStatus.setText(upcoming.getStatusValue());
-        } else {
-            if (content != null) content.setVisibility(View.GONE);
-            if (empty != null) empty.setVisibility(View.VISIBLE);
-        }
-        
-        // Update smart alert based on prediction
-        if (tvSmartAlertBody != null) {
-            if (total >= 3 && missed > 0) {
-                tvSmartAlertBody.setText(missed + " of last " + total + " appointments were missed.");
-            } else {
-                tvSmartAlertBody.setText("You're on track! Keep attending your appointments.");
-            }
-        }
-    }
-
-    private void wireButtons() {
-        if (findViewById(R.id.tvUpcomingStatus) != null) {
-            findViewById(R.id.tvUpcomingStatus).setOnClickListener(v ->
-                startActivity(new Intent(this, AppointmentHistoryActivity.class)));
-        }
-
-        if (btnReschedule != null) {
-            btnReschedule.setOnClickListener(v ->
-                    startActivity(new Intent(this, AppointmentManagementActivity.class)));
-        }
-
-        if (btnCancelAppointment != null) {
-            btnCancelAppointment.setOnClickListener(v -> {
-                if (currentUpcoming != null) {
-                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.CANCELLED.name());
-                }
-            });
-        }
-
-        if (btnMarkAttended != null) {
-            btnMarkAttended.setOnClickListener(v -> {
-                if (currentUpcoming != null) {
-                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.ATTENDED.name());
-                }
-            });
-        }
-
-        if (btnMarkMissed != null) {
-            btnMarkMissed.setOnClickListener(v -> {
-                if (currentUpcoming != null) {
-                    updateAppointmentStatus(currentUpcoming.getId(), Appointment.Status.MISSED.name());
-                }
-            });
-        }
-
-        if (btnEnableReminder != null) {
-            btnEnableReminder.setOnClickListener(v ->
-                    Toast.makeText(this, "Early reminder enabled for upcoming appointments", Toast.LENGTH_SHORT).show());
-        }
-    }
-
-    private void updateAppointmentStatus(String id, String status) {
-        String uid = session.getUid();
-        appointmentRepo.updateStatus(id, uid, status, new AppointmentRepository.Callback<Void>() {
+    private void cancelAppointment(Appointment appt) {
+        appointmentRepo.updateStatus(appt.getId(), session.getUid(), Appointment.Status.CANCELLED.name(), new AppointmentRepository.Callback<Void>() {
             @Override
             public void onResult(Void data) {
                 runOnUiThread(() -> {
-                    Toast.makeText(MainActivity.this, "Appointment marked as " + status, Toast.LENGTH_SHORT).show();
-                    loadDashboardData();
+                    Toast.makeText(MainActivity.this, "Appointment cancelled", Toast.LENGTH_SHORT).show();
+                    loadData();
                 });
             }
 
@@ -213,6 +176,27 @@ public class MainActivity extends AppCompatActivity {
             public void onError(String message) {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
             }
+        });
+    }
+
+    private void loadProfileImage(String uid) {
+        authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> {
+                    ImageView imgProfile = findViewById(R.id.ivDashboardProfile);
+                    if (imgProfile != null && user.getProfileImageUrl() != null
+                            && !user.getProfileImageUrl().isEmpty()) {
+                        Glide.with(MainActivity.this)
+                                .load(user.getProfileImageUrl())
+                                .placeholder(R.drawable.user)
+                                .circleCrop()
+                                .into(imgProfile);
+                    }
+                });
+            }
+            @Override
+            public void onError(String message) { }
         });
     }
 }

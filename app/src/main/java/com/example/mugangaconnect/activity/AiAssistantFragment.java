@@ -1,8 +1,5 @@
 package com.example.mugangaconnect.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,27 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.example.mugangaconnect.R;
-import com.example.mugangaconnect.data.model.ChatMessage;
-import com.example.mugangaconnect.data.repository.ChatRepository;
-import com.example.mugangaconnect.utils.ImagePickerUtils;
-import com.example.mugangaconnect.utils.ImageUploadUtils;
-import com.example.mugangaconnect.utils.SessionManager;
+import androidx.cardview.widget.CardView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class AiAssistantFragment extends Fragment implements ImagePickerUtils.ImagePickerResultHandler {
+import com.example.mugangaconnect.R;
+
+public class AiAssistantFragment extends Fragment {
 
     private EditText messageEditText;
     private ImageView sendButton;
-    private ImageView uploadButton;
     private LinearLayout chatContainer;
-    private ChatRepository chatRepo;
-    private SessionManager session;
-    private ImageUploadUtils imageUploadUtils;
-    private ImagePickerUtils.ImagePickerCallback pendingImageCallback;
 
     @Nullable
     @Override
@@ -45,13 +34,7 @@ public class AiAssistantFragment extends Fragment implements ImagePickerUtils.Im
 
         messageEditText = view.findViewById(R.id.messageEditText);
         sendButton = view.findViewById(R.id.sendButton);
-        uploadButton = view.findViewById(R.id.uploadButton);
         chatContainer = view.findViewById(R.id.chatContainer);
-        session = new SessionManager(requireContext());
-        chatRepo = new ChatRepository(requireContext());
-        imageUploadUtils = new ImageUploadUtils(requireContext());
-
-        loadHistory();
         
         TextView checkRiskBtn = view.findViewById(R.id.checkRiskButton);
         TextView rescheduleBtn = view.findViewById(R.id.rescheduleButton);
@@ -74,86 +57,33 @@ public class AiAssistantFragment extends Fragment implements ImagePickerUtils.Im
             });
         }
 
-        if (uploadButton != null) {
-            uploadButton.setOnClickListener(v -> {
-                if (ImagePickerUtils.hasImagePermissions(requireContext())) {
-                    ImagePickerUtils.showImagePickerDialog(this, new ImagePickerUtils.ImagePickerCallback() {
-                        @Override
-                        public void onImageSelected(Uri imageUri) {
-                            uploadImageToCloudinary(imageUri);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    ImagePickerUtils.requestImagePermissions(requireActivity());
-                    Toast.makeText(requireContext(), "Please grant camera and storage permissions", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        View clearBtn = view.findViewById(R.id.clearChatBtn);
-        if (clearBtn != null) {
-            clearBtn.setOnClickListener(v -> {
-                String uid = session.getUid();
-                if (uid != null) chatRepo.clearHistory(uid);
-                chatContainer.removeAllViews();
-            });
-        }
-
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        chatRepo = null;
-        session = null;
-        imageUploadUtils = null;
-        pendingImageCallback = null;
     }
 
     private void sendMessage(String text) {
         addUserMessageBubble(text);
-        String patientId = session.getUid();
-        if (patientId == null) return;
-
-        chatRepo.sendMessage(patientId, text, new ChatRepository.ChatCallback() {
-            @Override
-            public void onResponse(String aiReply) {
-                if (!isAdded()) return;
-                requireActivity().runOnUiThread(() -> addAiMessageBubble(aiReply));
-            }
-
-            @Override
-            public void onError(String message) {
-                if (!isAdded()) return;
-                requireActivity().runOnUiThread(() ->
-                        addAiMessageBubble("Sorry, I couldn't process that. Please try again."));
-            }
-        });
+        
+        // Simulate "Thinking" and then responding
+        new android.os.Handler().postDelayed(() -> {
+            String response = getConsultationResponse(text.toLowerCase());
+            addAiMessageBubble(response);
+        }, 1500);
     }
 
-    private void loadHistory() {
-        String patientId = session.getUid();
-        if (patientId == null) return;
-
-        chatRepo.getHistory(patientId, messages -> {
-            if (!isAdded()) return;
-            requireActivity().runOnUiThread(() -> {
-                chatContainer.removeAllViews();
-                for (ChatMessage msg : messages) {
-                    if (ChatMessage.ROLE_USER.equals(msg.getRole())) {
-                        addUserMessageBubble(msg.getContent());
-                    } else {
-                        addAiMessageBubble(msg.getContent());
-                    }
-                }
-            });
-        });
+    private String getConsultationResponse(String query) {
+        if (query.contains("risk") || query.contains("check risk")) {
+            return "Based on your history, you've attended 90% of your appointments. However, your last two visits were delayed by 15 mins. Your current risk of missing the next one is LOW (12%). Would you like a 1-hour early reminder?";
+        } else if (query.contains("reschedule") || query.contains("appointment")) {
+            return "I can help with that. You have an upcoming appointment on Friday at 2:00 PM. I see slots available on Monday at 10:00 AM or Tuesday at 3:30 PM. Which works better for you?";
+        } else if (query.contains("heart") || query.contains("bpm")) {
+            return "Your heart rate is currently 72 BPM, which is within the normal range for you. You've been active for 30 minutes today. Keep it up!";
+        } else if (query.contains("pressure") || query.contains("blood")) {
+            return "Your last blood pressure reading was 118/76 mmHg. This is optimal. Are you feeling any dizziness or headaches today?";
+        } else if (query.contains("hello") || query.contains("hi")) {
+            return "Hello! I'm your Muganga AI Assistant. I can help you analyze your health trends, manage appointments, or check your adherence risks. What can I do for you today?";
+        } else {
+            return "I understand you're asking about '" + query + "'. As your health consultant, I recommend monitoring your vitals daily. Is there a specific symptom or record you'd like me to look into?";
+        }
     }
 
     private void addUserMessageBubble(String text) {
@@ -185,44 +115,5 @@ public class AiAssistantFragment extends Fragment implements ImagePickerUtils.Im
         if (scrollView instanceof android.widget.ScrollView) {
             scrollView.post(() -> ((android.widget.ScrollView) scrollView).fullScroll(View.FOCUS_DOWN));
         }
-    }
-
-    private void uploadImageToCloudinary(Uri imageUri) {
-        addUserMessageBubble("[Image uploaded]");
-        
-        imageUploadUtils.uploadAIAssistantImage(imageUri, new ImageUploadUtils.UploadCallback() {
-            @Override
-            public void onSuccess(String imageUrl) {
-                if (!isAdded()) return;
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                    sendMessage("I've uploaded an image. Please analyze it: " + imageUrl);
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                if (!isAdded()) return;
-                requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(requireContext(), "Upload failed: " + error, Toast.LENGTH_SHORT).show();
-                });
-            }
-        });
-    }
-
-    @Override
-    public void setPendingImageCallback(ImagePickerUtils.ImagePickerCallback callback) {
-        this.pendingImageCallback = callback;
-    }
-
-    @Override
-    public ImagePickerUtils.ImagePickerCallback getPendingImageCallback() {
-        return pendingImageCallback;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ImagePickerUtils.handleActivityResult(this, requestCode, resultCode, data);
     }
 }

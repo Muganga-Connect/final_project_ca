@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@color/card_background">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,7 +13,7 @@
         android:text="Select Appointment Session"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#1A4C91"
+        android:textColor="@color/text_blue"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Choose your preferred date and time"
         android:textSize="14sp"
-        android:textColor="#8AA6C7"
+        android:textColor="@color/text_hint"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Quick Selection"
         android:textStyle="bold"
-        android:textColor="#1A4C91"
+        android:textColor="@color/text_blue"
         android:textSize="16sp"
         android:layout_marginBottom="12dp"/>
 
@@ -52,8 +53,8 @@
             android:textSize="12sp"
             app:cornerRadius="8dp"
             android:layout_marginEnd="4dp"
-            android:textColor="#1E88E5"
-            app:strokeColor="#1E88E5"/>
+            android:textColor="@color/primary_blue"
+            app:strokeColor="@color/primary_blue"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_afternoon_session"
@@ -67,8 +68,8 @@
             app:cornerRadius="8dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:textColor="#1E88E5"
-            app:strokeColor="#1E88E5"/>
+            android:textColor="@color/primary_blue"
+            app:strokeColor="@color/primary_blue"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_evening_session"
@@ -81,8 +82,8 @@
             android:textSize="12sp"
             app:cornerRadius="8dp"
             android:layout_marginStart="4dp"
-            android:textColor="#1E88E5"
-            app:strokeColor="#1E88E5"/>
+            android:textColor="@color/primary_blue"
+            app:strokeColor="@color/primary_blue"/>
 
     </LinearLayout>
 
@@ -91,7 +92,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/field_background"
         android:layout_marginBottom="16dp">
 
         <LinearLayout
@@ -105,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="Select Date"
                 android:textStyle="bold"
-                android:textColor="#1A4C91"
+                android:textColor="@color/text_blue"
                 android:textSize="16sp"
                 android:layout_marginBottom="12dp"/>
 
@@ -115,7 +116,8 @@
                 android:layout_height="wrap_content"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:theme="@style/Theme.Appointment_Schedule"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -125,7 +127,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/field_background"
         android:layout_marginBottom="24dp">
 
         <LinearLayout
@@ -139,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:text="Select Time"
                 android:textStyle="bold"
-                android:textColor="#1A4C91"
+                android:textColor="@color/text_blue"
                 android:textSize="16sp"
                 android:layout_marginBottom="12dp"/>
 
@@ -148,7 +150,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:theme="@style/Theme.Appointment_Schedule"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -169,8 +172,8 @@
             android:textAllCaps="false"
             app:cornerRadius="12dp"
             android:layout_marginEnd="8dp"
-            android:textColor="#1E88E5"
-            app:strokeColor="#1E88E5"/>
+            android:textColor="@color/primary_blue"
+            app:strokeColor="@color/primary_blue"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_confirm_session"
@@ -181,7 +184,8 @@
             android:text="Confirm Session"
             android:textAllCaps="false"
             app:cornerRadius="12dp"
-            android:backgroundTint="#1E88E5"
+            android:backgroundTint="@color/primary_blue"
+            android:textColor="@color/text_on_primary"
             android:layout_marginStart="8dp"/>
 
     </LinearLayout>

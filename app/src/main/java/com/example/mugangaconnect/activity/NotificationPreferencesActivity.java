@@ -9,11 +9,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mugangaconnect.R;
+import com.example.mugangaconnect.utils.LocaleHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class NotificationPreferencesActivity extends AppCompatActivity {
+
+    @Override
+    protected void attachBaseContext(android.content.Context base) {
+        super.attachBaseContext(LocaleHelper.applyLocale(base));
+    }
 
     // UI elements
     private ImageButton btnBack;
@@ -21,16 +27,23 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
     private SwitchMaterial switchAppointment, switchSms, switchPush;
     private SwitchMaterial switchOneDay, switchTwoHours, switchThirtyMin;
     private MaterialButton btnSave;
-    private boolean isProgrammaticChange;
 
     // SharedPreferences constants
-    private static final String PREFS_NAME = "MugangaConnectPrefs";
-    private static final String KEY_APPOINTMENT = "notification_appointmentReminders";
-    private static final String KEY_SMS = "notification_smsNotifications";
-    private static final String KEY_PUSH = "notification_pushNotifications";
-    private static final String KEY_ONE_DAY = "reminder_oneDayBefore";
-    private static final String KEY_TWO_HOURS = "reminder_twoHoursBefore";
-    private static final String KEY_THIRTY_MIN = "reminder_thirtyMinBefore";
+    public static final String PREFS_NAME = "MugangaConnectPrefs";
+    public static final String KEY_APPOINTMENT_REMINDERS = "notification_appointmentReminders";
+    public static final String KEY_SMS_NOTIFICATIONS = "notification_smsNotifications";
+    public static final String KEY_PUSH_NOTIFICATIONS = "notification_pushNotifications";
+    public static final String KEY_ONE_DAY_BEFORE = "reminder_oneDayBefore";
+    public static final String KEY_TWO_HOURS_BEFORE = "reminder_twoHoursBefore";
+    public static final String KEY_THIRTY_MIN_BEFORE = "reminder_thirtyMinBefore";
+
+    // Keep private aliases for internal use
+    private static final String KEY_APPOINTMENT = KEY_APPOINTMENT_REMINDERS;
+    private static final String KEY_SMS = KEY_SMS_NOTIFICATIONS;
+    private static final String KEY_PUSH = KEY_PUSH_NOTIFICATIONS;
+    private static final String KEY_ONE_DAY = KEY_ONE_DAY_BEFORE;
+    private static final String KEY_TWO_HOURS = KEY_TWO_HOURS_BEFORE;
+    private static final String KEY_THIRTY_MIN = KEY_THIRTY_MIN_BEFORE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +78,6 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
         switchThirtyMin = findViewById(R.id.switch_thirty_min);
         
         btnSave = findViewById(R.id.btn_save_preferences);
-
-        requireView(btnBack, "btn_back");
-        requireView(switchEnableAll, "switch_enable_all");
-        requireView(switchAppointment, "switch_appointment");
-        requireView(switchSms, "switch_sms");
-        requireView(switchPush, "switch_push");
-        requireView(switchOneDay, "switch_one_day");
-        requireView(switchTwoHours, "switch_two_hours");
-        requireView(switchThirtyMin, "switch_thirty_min");
-        requireView(btnSave, "btn_save_preferences");
     }
 
     /**
@@ -83,14 +86,12 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
     private void loadPreferences() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         
-        isProgrammaticChange = true;
         switchAppointment.setChecked(prefs.getBoolean(KEY_APPOINTMENT, true));
         switchSms.setChecked(prefs.getBoolean(KEY_SMS, false));
         switchPush.setChecked(prefs.getBoolean(KEY_PUSH, true));
         switchOneDay.setChecked(prefs.getBoolean(KEY_ONE_DAY, true));
         switchTwoHours.setChecked(prefs.getBoolean(KEY_TWO_HOURS, true));
         switchThirtyMin.setChecked(prefs.getBoolean(KEY_THIRTY_MIN, false));
-        isProgrammaticChange = false;
         
         // Update "Enable All" state based on individual switches
         updateEnableAllState();
@@ -105,10 +106,11 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
 
         // Enable All toggle logic
         switchEnableAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isProgrammaticChange) return;
-            setAllSwitches(isChecked);
-            String message = isChecked ? "All notifications enabled" : "All notifications disabled";
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+            if (buttonView.isPressed()) { // Only trigger if manually toggled
+                setAllSwitches(isChecked);
+                String message = isChecked ? "All notifications enabled" : "All notifications disabled";
+                Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+            }
         });
 
         // Individual toggle listeners with Snackbars
@@ -128,7 +130,7 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
      */
     private void setupIndividualToggle(SwitchMaterial toggle, String name) {
         toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isProgrammaticChange) {
+            if (buttonView.isPressed()) {
                 String state = isChecked ? "ON" : "OFF";
                 Snackbar.make(findViewById(android.R.id.content), name + ": " + state, Snackbar.LENGTH_SHORT).show();
                 updateEnableAllState(); // Check if Enable All should be updated
@@ -140,14 +142,12 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
      * Set the state of all notification switches
      */
     private void setAllSwitches(boolean state) {
-        isProgrammaticChange = true;
         switchAppointment.setChecked(state);
         switchSms.setChecked(state);
         switchPush.setChecked(state);
         switchOneDay.setChecked(state);
         switchTwoHours.setChecked(state);
         switchThirtyMin.setChecked(state);
-        isProgrammaticChange = false;
     }
 
     /**
@@ -158,9 +158,17 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
                         switchPush.isChecked() && switchOneDay.isChecked() &&
                         switchTwoHours.isChecked() && switchThirtyMin.isChecked();
         
-        isProgrammaticChange = true;
+        // Remove listener temporarily to prevent loop
+        switchEnableAll.setOnCheckedChangeListener(null);
         switchEnableAll.setChecked(allOn);
-        isProgrammaticChange = false;
+        // Re-attach listener
+        switchEnableAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                setAllSwitches(isChecked);
+                String message = isChecked ? "All notifications enabled" : "All notifications disabled";
+                Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -179,11 +187,5 @@ public class NotificationPreferencesActivity extends AppCompatActivity {
         editor.apply();
         
         Toast.makeText(this, "Preferences saved successfully!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void requireView(View view, String idName) {
-        if (view == null) {
-            throw new IllegalStateException("Missing required view: " + idName);
-        }
     }
 }

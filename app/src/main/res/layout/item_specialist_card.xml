@@ -7,7 +7,7 @@
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/card_background"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
@@ -23,14 +23,16 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="24dp"
-            app:cardElevation="2dp">
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/field_background">
 
             <com.example.mugangaconnect.ui.view.LucideIconView
                 android:id="@+id/specialistAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:lucideIcon="user_round"/>
+                app:lucideIcon="user_round"
+                app:tint="@color/icon_tint"/>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Specialist Info -->
@@ -47,7 +49,7 @@
                 android:text="Dr. Sarah Chen"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#111827"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="4dp"/>
 
             <TextView
@@ -56,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Neurology Specialist"
                 android:textSize="14sp"
-                android:textColor="#6B7280"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="8dp"/>
 
             <!-- Availability Status -->
@@ -69,7 +71,7 @@
                 <View
                     android:layout_width="8dp"
                     android:layout_height="8dp"
-                    android:background="#22C55E"
+                    android:background="@color/success_green"
                     android:layout_marginEnd="6dp"/>
 
                 <TextView
@@ -78,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:text="Available Today"
                     android:textSize="12sp"
-                    android:textColor="#22C55E"/>
+                    android:textColor="@color/success_green"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -88,7 +90,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="#FEF3C7"
+            android:background="@color/warning_orange_light"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp">
 
@@ -99,7 +101,7 @@
                 android:text="4.8"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:textColor="#F59E0B"
+                android:textColor="@color/warning_orange"
                 android:layout_marginEnd="4dp"/>
 
             <TextView

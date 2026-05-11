@@ -5,9 +5,8 @@ public class Doctor {
     private String name;
     private String specialty;
     private String department;
-    private String availability;  // e.g. "Mon-Fri 08:00-17:00"
-    private String photoUrl;
-    private float rating;
+    private String availability;
+    private String imageUrl;
 
     public Doctor() {}
 
@@ -19,19 +18,30 @@ public class Doctor {
         this.availability = availability;
     }
 
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getSpecialty() { return specialty; }
-    public String getDepartment() { return department; }
-    public String getAvailability() { return availability; }
-    public String getPhotoUrl() { return photoUrl; }
-    public float getRating() { return rating; }
+    public Doctor(String id, String name, String specialty, String department, String availability, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.specialty = specialty;
+        this.department = department;
+        this.availability = availability;
+        this.imageUrl = imageUrl;
+    }
 
+    public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+
+    public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public String getSpecialty() { return specialty; }
     public void setSpecialty(String specialty) { this.specialty = specialty; }
+
+    public String getDepartment() { return department != null ? department : specialty; }
     public void setDepartment(String department) { this.department = department; }
+
+    public String getAvailability() { return availability; }
     public void setAvailability(String availability) { this.availability = availability; }
-    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
-    public void setRating(float rating) { this.rating = rating; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
