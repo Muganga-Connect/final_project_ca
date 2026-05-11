@@ -1,5 +1,9 @@
 package com.example.mugangaconnect.activity;
 
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.example.mugangaconnect.data.model.User;
+import com.example.mugangaconnect.data.repository.AuthRepository;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +25,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private AuthRepository authRepo;
     private SessionManager session;
     private AppointmentRepository appointmentRepo;
     private Appointment upcomingAppointment;
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(this);
+        authRepo = new AuthRepository();
         appointmentRepo = new AppointmentRepository(this);
 
         setupUI();
@@ -96,8 +102,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+
         String uid = session.getUid();
         if (uid == null) return;
+
+        loadProfileImage(uid);
 
         appointmentRepo.getForPatient(uid, new AppointmentRepository.Callback<List<Appointment>>() {
             @Override
@@ -116,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 // Handle error
             }
         });
+
     }
 
     private void updateUpcomingUI(Appointment appt) {
@@ -146,6 +156,27 @@ public class MainActivity extends AppCompatActivity {
             public void onError(String message) {
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show());
             }
+        });
+    }
+
+    private void loadProfileImage(String uid) {
+        authRepo.getProfile(uid, new AuthRepository.ProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                runOnUiThread(() -> {
+                    ImageView imgProfile = findViewById(R.id.ivDashboardProfile);
+                    if (imgProfile != null && user.getProfileImageUrl() != null
+                            && !user.getProfileImageUrl().isEmpty()) {
+                        Glide.with(MainActivity.this)
+                                .load(user.getProfileImageUrl())
+                                .placeholder(R.drawable.user)
+                                .circleCrop()
+                                .into(imgProfile);
+                    }
+                });
+            }
+            @Override
+            public void onError(String message) { }
         });
     }
 }
