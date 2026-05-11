@@ -59,7 +59,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setContentView(R.layout.appointment_management);
 
         session         = new SessionManager(this);
-        appointmentRepo = new AppointmentRepository();
+        appointmentRepo = new AppointmentRepository(this);
         doctorRepo      = new DoctorRepository();
 
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
