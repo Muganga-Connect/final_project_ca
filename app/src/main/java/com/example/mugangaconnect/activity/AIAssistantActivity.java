@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
-import com.example.mugangaconnect.activity.AppointmentRepository;
+import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
 import com.google.ai.client.generativeai.GenerativeModel;
