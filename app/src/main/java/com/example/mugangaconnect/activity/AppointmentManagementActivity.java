@@ -1,10 +1,15 @@
 package com.example.mugangaconnect.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,40 +17,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mugangaconnect.R;
 import com.example.mugangaconnect.data.model.Appointment;
 import com.example.mugangaconnect.data.model.Doctor;
 import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.data.repository.DoctorRepository;
-import com.example.mugangaconnect.ui.adapter.AppointmentAdapter;
 import com.example.mugangaconnect.ui.adapter.DoctorAdapter;
-import com.example.mugangaconnect.utils.LocaleHelper;
 import com.example.mugangaconnect.utils.SessionManager;
+import com.example.mugangaconnect.activity.BottomNavHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class AppointmentManagementActivity extends AppCompatActivity
-        implements AppointmentAdapter.OnAppointmentActionListener,
-                   DoctorAdapter.OnDoctorSelectedListener {
+        implements DoctorAdapter.OnDoctorSelectedListener {
 
     private AppointmentRepository appointmentRepo;
-    private DoctorRepository doctorRepo;
-    private SessionManager session;
-
-    private AppointmentAdapter appointmentAdapter;
-    private DoctorAdapter doctorAdapter;
-
-    private final List<Appointment> appointments = new ArrayList<>();
-    private final List<Doctor> doctors = new ArrayList<>();
+    private DoctorRepository      doctorRepo;
+    private SessionManager        session;
 
     private String selectedDepartment = "Cardiology";
     private Doctor selectedDoctor;
-    private final Calendar selectedDateTime = Calendar.getInstance();
-    private boolean isDateTimeSelected = false;
+    private String selectedTimeSlot;
+    private String selectedDate;
+    private final List<Doctor> doctors = new ArrayList<>();
+
+    private DoctorAdapter doctorAdapter;
+    private RecyclerView  rvDoctors;
+
+    private final int[]     slotIds      = {R.id.tvSlot0900, R.id.tvSlot0930, R.id.tvSlot1000, R.id.tvSlot1030, R.id.tvSlot1100, R.id.tvSlot1130, R.id.tvSlot0100, R.id.tvSlot0130, R.id.tvSlot0200};
+    private final String[]  slotTimes    = {"09:00","09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00"};
+    private final boolean[] slotAvailable= {true,true,false,true,true,true,true,true,false};
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -61,125 +62,98 @@ public class AppointmentManagementActivity extends AppCompatActivity
         appointmentRepo = new AppointmentRepository();
         doctorRepo      = new DoctorRepository();
 
-        setupDoctorList();
-        setupAppointmentList();
-        setupDepartmentTabs();
-        setupButtons();
+        selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
 
-        loadAppointments();
-        loadDoctors();
+        setupMenuAndViewAll();
+        setupHospitalChips();
+        setupSearch();
+        setupDepartmentSelection();
+        setupTimeSlots();
+        setupDayPicker();
+        setupBookButton();
+        setupChooseAnotherDoctor();
 
         BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
+        loadDoctors(selectedDepartment);
     }
 
-    private void setupDoctorList() {
-        RecyclerView rvDoctors = findViewById(R.id.rv_doctors);
-        if (rvDoctors == null) return;
-        doctorAdapter = new DoctorAdapter(doctors, this);
-        rvDoctors.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        rvDoctors.setAdapter(doctorAdapter);
-    }
+    private void setupMenuAndViewAll() {
+        View ivMenu = findViewById(R.id.ivMenu);
+        if (ivMenu != null) {
+            ivMenu.setOnClickListener(v -> {
+                String[] options = {"Dashboard", "Appointment History", "AI Assistant", "Profile"};
+                new AlertDialog.Builder(this)
+                        .setTitle("Navigate to")
+                        .setItems(options, (dialog, which) -> {
+                            switch (which) {
+                                case 0: startActivity(new Intent(this, MainActivity.class)); break;
+                                case 1: startActivity(new Intent(this, AppointmentHistoryActivity.class)); break;
+                                case 2: startActivity(new Intent(this, AIAssistantActivity.class)); break;
+                                case 3: startActivity(new Intent(this, ProfileActivity.class)); break;
+                            }
+                        }).show();
+            });
+        }
 
-    private void setupAppointmentList() {
-        RecyclerView rvAppointments = findViewById(R.id.rv_appointments);
-        if (rvAppointments == null) return;
-        appointmentAdapter = new AppointmentAdapter(appointments, this);
-        rvAppointments.setLayoutManager(new LinearLayoutManager(this));
-        rvAppointments.setAdapter(appointmentAdapter);
-    }
-
-    private void setupDepartmentTabs() {
-        int[] deptIds   = {R.id.deptCardiology, R.id.deptNeurology, R.id.deptDentistry};
-        String[] deptNames = {
-            getString(R.string.dept_cardiology),
-            getString(R.string.dept_neurology),
-            getString(R.string.dept_dentistry)
-        };
-
-        for (int i = 0; i < deptIds.length; i++) {
-            TextView tv = findViewById(deptIds[i]);
-            if (tv == null) continue;
-            final String dept = deptNames[i];
-            tv.setOnClickListener(v -> {
-                selectedDepartment = dept;
-                updateTabUI(v);
-                loadDoctors();
+        TextView tvViewAll = findViewById(R.id.tvViewAllHospitals);
+        if (tvViewAll != null) {
+            tvViewAll.setOnClickListener(v -> {
+                String[] hospitals = {"City General Hospital","Mayo Clinic","St. Mary's Hospital","King Faisal Hospital","CHUK","CHUB","Kibagabaga Hospital"};
+                new AlertDialog.Builder(this)
+                        .setTitle("All Hospitals")
+                        .setItems(hospitals, (dialog, which) -> {
+                            Toast.makeText(this, hospitals[which] + " selected", Toast.LENGTH_SHORT).show();
+                            EditText et = findViewById(R.id.etSearch);
+                            if (et != null) et.setText(hospitals[which]);
+                        }).show();
             });
         }
     }
 
-    private void updateTabUI(View selectedTab) {
-        int[] deptIds = {R.id.deptCardiology, R.id.deptNeurology, R.id.deptDentistry};
-        for (int id : deptIds) {
-            TextView tv = findViewById(id);
-            if (tv != null) {
-                boolean isSelected = id == selectedTab.getId();
-                tv.setBackgroundResource(isSelected ? R.drawable.bg_tab_active : R.drawable.bg_tab_inactive);
-                tv.setTextColor(getColor(isSelected ? android.R.color.white : android.R.color.black));
-            }
-        }
+    private void setupHospitalChips() {
+        LinearLayout llCity   = findViewById(R.id.llHospitalCityGeneral);
+        LinearLayout llMayo   = findViewById(R.id.llHospitalMayo);
+        LinearLayout llStMarys= findViewById(R.id.llHospitalStMarys);
+        if (llCity    != null) llCity.setOnClickListener(v -> onHospitalSelected("City General Hospital"));
+        if (llMayo    != null) llMayo.setOnClickListener(v -> onHospitalSelected("Mayo Clinic"));
+        if (llStMarys != null) llStMarys.setOnClickListener(v -> onHospitalSelected("St. Mary's Hospital"));
     }
 
-    private void setupButtons() {
-        View btnSelectSession = findViewById(R.id.btn_select_session);
-        if (btnSelectSession != null) {
-            btnSelectSession.setOnClickListener(v -> showDateTimePicker(null));
-        }
-
-        View btnBook = findViewById(R.id.btn_book_appointment);
-        if (btnBook != null) {
-            btnBook.setOnClickListener(v -> bookAppointment());
-        }
+    private void onHospitalSelected(String name) {
+        Toast.makeText(this, name + " selected", Toast.LENGTH_SHORT).show();
+        EditText et = findViewById(R.id.etSearch);
+        if (et != null) { et.setText(name); et.setSelection(name.length()); }
+        loadDoctors(selectedDepartment);
     }
 
-    private void showDateTimePicker(Appointment apptToReschedule) {
-        final Calendar current = Calendar.getInstance();
-        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-            selectedDateTime.set(Calendar.YEAR, year);
-            selectedDateTime.set(Calendar.MONTH, month);
-            selectedDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-            new TimePickerDialog(this, (view1, hourOfDay, minute) -> {
-                selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                selectedDateTime.set(Calendar.MINUTE, minute);
-                isDateTimeSelected = true;
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-                String formatted = sdf.format(selectedDateTime.getTime());
-                String[] parts   = formatted.split(" ");
-
-                if (apptToReschedule != null) {
-                    processReschedule(apptToReschedule, parts[0], parts[1]);
-                } else {
-                    Toast.makeText(this, "Selected: " + formatted, Toast.LENGTH_SHORT).show();
-                    TextView btnText = findViewById(R.id.btn_select_session);
-                    if (btnText != null) btnText.setText("Session: " + formatted);
-                }
-            }, current.get(Calendar.HOUR_OF_DAY), current.get(Calendar.MINUTE), true).show();
-
-        }, current.get(Calendar.YEAR), current.get(Calendar.MONTH), current.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-    private void loadDoctors() {
-        doctorRepo.getByDepartment(selectedDepartment, new DoctorRepository.Callback<List<Doctor>>() {
+    private void setupSearch() {
+        EditText etSearch = findViewById(R.id.etSearch);
+        if (etSearch == null) return;
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(Editable s) {}
             @Override
             public void onSuccess(List<Doctor> data) {
                 runOnUiThread(() -> {
                     doctors.clear();
                     if (data.isEmpty()) {
-                        doctors.add(new Doctor("d1", "Dr. Mugisha Eric", "Cardiologist", selectedDepartment, "Mon-Fri 08:00-17:00"));
-                        doctors.add(new Doctor("d2", "Dr. Uwase Claire", "Specialist",   selectedDepartment, "Mon-Wed 09:00-15:00"));
-                    } else {
-                        doctors.addAll(data);
-                    }
+                        doctors.add(new Doctor("d1","Dr. Sarah Chen","Neurologist",department,"Mon-Fri 08:00-17:00"));
+                        doctors.add(new Doctor("d2","Dr. Mugisha Eric","Cardiologist",department,"Mon-Fri 09:00-16:00"));
+                        doctors.add(new Doctor("d3","Dr. Uwase Claire","Specialist",department,"Mon-Wed 09:00-15:00"));
+                        doctors.add(new Doctor("d4","Dr. Habimana Jean","Dentist",department,"Tue-Thu 08:00-14:00"));
+                    } else { doctors.addAll(data); }
+                    if (!doctors.isEmpty()) { updateDoctorCard(doctors.get(0)); selectedDoctor = doctors.get(0); }
                     if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
                 });
             }
-
-            @Override
-            public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
-                        "Error: " + message, Toast.LENGTH_SHORT).show());
+            @Override public void onError(String message) {
+                runOnUiThread(() -> {
+                    doctors.clear();
+                    doctors.add(new Doctor("d1","Dr. Sarah Chen","Neurologist",department,"Mon-Fri 08:00-17:00"));
+                    doctors.add(new Doctor("d2","Dr. Mugisha Eric","Cardiologist",department,"Mon-Fri 09:00-16:00"));
+                    if (!doctors.isEmpty()) { updateDoctorCard(doctors.get(0)); selectedDoctor = doctors.get(0); }
+                    if (doctorAdapter != null) doctorAdapter.notifyDataSetChanged();
+                });
             }
         });
     }
@@ -248,16 +222,83 @@ public class AppointmentManagementActivity extends AppCompatActivity
     @Override
     public void onDoctorSelected(Doctor doctor) {
         selectedDoctor = doctor;
+        updateDoctorCard(doctor);
+        if (rvDoctors != null) rvDoctors.setVisibility(View.GONE);
         Toast.makeText(this, doctor.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupTimeSlots() {
+        for (int i = 0; i < slotIds.length; i++) {
+            TextView slot = findViewById(slotIds[i]);
+            if (slot == null) continue;
+            if (!slotAvailable[i]) { slot.setAlpha(0.5f); continue; }
+            final String time = slotTimes[i];
+            slot.setOnClickListener(v -> selectTimeSlot(time));
+        }
+        selectTimeSlot("10:30");
+    }
+
+    private void selectTimeSlot(String time) {
+        selectedTimeSlot = time;
+        for (int i = 0; i < slotIds.length; i++) {
+            TextView slot = findViewById(slotIds[i]);
+            if (slot == null || !slotAvailable[i]) continue;
+            if (slotTimes[i].equals(time)) { slot.setBackgroundResource(R.drawable.bg_slot_selected); slot.setTextColor(0xFFFFFFFF); }
+            else { slot.setBackgroundResource(R.drawable.bg_slot_available); slot.setTextColor(0xFF3D7FE8); }
+        }
+    }
+
+    private void setupDayPicker() {
+        TextView slot = findViewById(R.id.tvSlot0900);
+        if (slot == null) return;
+        if (slot.getParent() instanceof LinearLayout) {
+            View slotRow = (View) slot.getParent();
+            if (slotRow.getParent() instanceof LinearLayout)
+                ((LinearLayout) slotRow.getParent()).setOnClickListener(v -> openDatePicker());
+        }
+    }
+
+    private void openDatePicker() {
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, day) -> {
+            c.set(year, month, day);
+            selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(c.getTime());
+            Toast.makeText(this, "Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void setupBookButton() {
+        View btnBook = findViewById(R.id.btnBookAppointment);
+        if (btnBook != null) btnBook.setOnClickListener(v -> bookAppointment());
+    }
+
+    private void bookAppointment() {
+        if (selectedDoctor == null)  { Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show(); return; }
+        if (selectedTimeSlot == null){ Toast.makeText(this, "Please select a time slot", Toast.LENGTH_SHORT).show(); return; }
+        String uid = session.getUid();
+        if (uid == null) { Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show(); return; }
+
+        Appointment appt = new Appointment(uid, selectedDoctor.getId(), selectedDoctor.getName(), selectedDepartment, selectedDate, selectedTimeSlot);
+        View bookBtn = findViewById(R.id.btnBookAppointment);
+        if (bookBtn != null) bookBtn.setEnabled(false);
+
+        appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
+            @Override public void onResult(Appointment data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AppointmentManagementActivity.this, "Booked with " + selectedDoctor.getName() + " on " + selectedDate + " at " + selectedTimeSlot, Toast.LENGTH_LONG).show();
+                    if (bookBtn != null) bookBtn.setEnabled(true);
+                    startActivity(new Intent(AppointmentManagementActivity.this, AppointmentHistoryActivity.class));
+                });
+            }
+            @Override public void onError(String message) {
+                runOnUiThread(() -> { Toast.makeText(AppointmentManagementActivity.this, "Booking failed: " + message, Toast.LENGTH_LONG).show(); if (bookBtn != null) bookBtn.setEnabled(true); });
+            }
+        });
     }
 
     @Override
     public void onReschedule(Appointment appointment) {
-        showDateTimePicker(appointment);
-    }
-
-    private void processReschedule(Appointment appointment, String newDate, String newTime) {
-        appointmentRepo.reschedule(appointment.getId(), newDate, newTime,
+        appointmentRepo.reschedule(appointment.getId(), selectedDate, selectedTimeSlot,
                 new AppointmentRepository.Callback<Void>() {
                     @Override public void onSuccess(Void data) {
                         runOnUiThread(() -> {
@@ -268,16 +309,14 @@ public class AppointmentManagementActivity extends AppCompatActivity
                         });
                     }
                     @Override public void onError(String message) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
-                                message, Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
                     }
                 });
     }
 
     @Override
     public void onCancel(Appointment appointment) {
-        appointmentRepo.updateStatus(
-                appointment.getId(), session.getUid(),
+        appointmentRepo.updateStatus(appointment.getId(), session.getUid(),
                 Appointment.Status.CANCELLED.name(),
                 new AppointmentRepository.Callback<Void>() {
                     @Override public void onSuccess(Void data) {
@@ -288,8 +327,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                         });
                     }
                     @Override public void onError(String message) {
-                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this,
-                                message, Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(AppointmentManagementActivity.this, message, Toast.LENGTH_SHORT).show());
                     }
                 });
     }

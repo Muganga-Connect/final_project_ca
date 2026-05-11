@@ -37,6 +37,20 @@
     <string name="biometrics_disabled">Biométrie désactivée</string>
     <string name="coming_soon">Bientôt disponible</string>
 
+    <!-- Navigation & Common -->
+    <string name="back">Retour</string>
+
+    <!-- Notifications -->
+    <string name="enable_all">Tout activer</string>
+    <string name="appointment_reminders">Rappels de rendez-vous</string>
+    <string name="sms_notifications">Notifications SMS</string>
+    <string name="push_notifications">Notifications Push</string>
+    <string name="reminder_timing">Moment du rappel</string>
+    <string name="one_day_before">1 jour avant</string>
+    <string name="two_hours_before">2 heures avant</string>
+    <string name="thirty_minutes_before">30 minutes avant</string>
+    <string name="save_preferences">Enregistrer les préférences</string>
+
     <!-- Appointments -->
     <string name="book_appointment">Prendre Rendez-vous</string>
     <string name="select_session">Choisir une Session</string>

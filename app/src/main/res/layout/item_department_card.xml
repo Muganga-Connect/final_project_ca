@@ -7,7 +7,7 @@
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
-    app:cardBackgroundColor="#F3F4F6"
+    app:cardBackgroundColor="@color/field_background"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_heart"
-            android:tint="#6B7280"
+            app:tint="@color/text_hint"
             android:layout_marginEnd="16dp"/>
 
         <TextView
@@ -33,14 +33,14 @@
             android:text="Cardiology"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#111827"/>
+            android:textColor="@color/text_primary"/>
 
         <com.example.mugangaconnect.ui.view.LucideIconView
             android:id="@+id/selectedCheckmark"
             android:layout_width="20dp"
             android:layout_height="20dp"
-                app:lucideIcon="check"
-            android:tint="#FFFFFF"
+            app:lucideIcon="check"
+            app:tint="@color/text_on_primary"
             android:visibility="gone"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

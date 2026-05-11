@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/accent_blue_light"
+    app:cardBackgroundColor="@color/field_background"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp">
 
@@ -24,7 +24,7 @@
             android:contentDescription="@string/doctor_image"
             app:shapeAppearanceOverlay="@style/CircleImage"
             android:scaleType="centerCrop"
-            android:background="@color/white"/>
+            android:background="@color/card_background"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/doctor_name_placeholder"
                 android:textStyle="bold"
-                android:textColor="@color/primary_dark" />
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:id="@+id/txt_doctor_specialty"
@@ -64,7 +64,7 @@
             android:layout_height="24dp"
             android:src="@android:drawable/checkbox_on_background"
             android:contentDescription="@string/doctor_selected"
-            android:tint="@color/primary_blue"
+            app:tint="@color/primary_blue"
             android:visibility="gone"/>
 
     </LinearLayout>

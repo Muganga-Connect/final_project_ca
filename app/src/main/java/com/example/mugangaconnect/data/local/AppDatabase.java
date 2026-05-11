@@ -33,6 +33,44 @@ public abstract class AppDatabase extends RoomDatabase {
                 }
             }
         }
-        return INSTANCE;
+        return instance;
+    }
+
+    private AppDatabase(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_USERS);
+        db.execSQL(CREATE_APPOINTMENTS);
+        db.execSQL(CREATE_CHAT);
+        createIndexes(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            db.execSQL(CREATE_CHAT);
+        }
+        if (oldVersion < 3) {
+            db.execSQL(CREATE_USERS);
+        }
+        if (oldVersion < 5) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_APPOINTMENTS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAT);
+            db.execSQL(CREATE_APPOINTMENTS);
+            db.execSQL(CREATE_CHAT);
+            createIndexes(db);
+        }
+    }
+
+    private void createIndexes(SQLiteDatabase db) {
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_appointments_patient ON " +
+                TABLE_APPOINTMENTS + "(" + COL_PATIENT_ID + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_appointments_doctor ON " +
+                TABLE_APPOINTMENTS + "(" + COL_DOCTOR_ID + ")");
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_chat_patient ON " +
+                TABLE_CHAT + "(" + COL_CHAT_PID + ")");
     }
 }

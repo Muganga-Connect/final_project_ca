@@ -51,6 +51,9 @@
     <string name="time_slot">Time Slot</string>
     <string name="next_checkup">NEXT CHECKUP</string>
     <string name="health_score">HEALTH SCORE</string>
+    <string name="appointment_status_confirmed">Confirmed</string>
+    <string name="appointment_action_reschedule">Reschedule</string>
+    <string name="appointment_action_cancel">Cancel</string>
 
     <!-- Login / Signup -->
     <string name="login">Login</string>
@@ -92,6 +95,7 @@
     <string name="view_appointment_history">View Appointment History</string>
     <string name="height_label">HEIGHT</string>
     <string name="score_label">SCORE</string>
+    <string name="dashboard">Dashboard</string>
 
     <!-- Scheduler -->
     <string name="recent_hospital">Recent Hospital</string>
@@ -102,6 +106,12 @@
     <string name="dept_cardiology">Cardiology</string>
     <string name="dept_neurology">Neurology</string>
     <string name="dept_dentistry">Dentistry</string>
+    <string name="schedule">Schedule</string>
+    <string name="doctor_image">Doctor image</string>
+    <string name="doctor_name_placeholder">Doctor Name</string>
+    <string name="doctor_specialty_placeholder">Specialty</string>
+    <string name="doctor_availability_placeholder">Available</string>
+    <string name="doctor_selected">Doctor selected</string>
 
     <!-- AI Assistant -->
     <string name="ai_greeting">How can I help you today?</string>
@@ -113,6 +123,7 @@
     <string name="reschedule_appointment">Reschedule Appointment</string>
     <string name="type_message">Type your message\u2026</string>
     <string name="active_care">Active Care</string>
+    <string name="ai_assistant">AI Assistant</string>
 
     <!-- AI Responses -->
     <string name="ai_check_risk_question">Can you check my risk of missing the next appointment?</string>

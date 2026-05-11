@@ -2,6 +2,7 @@ package com.example.mugangaconnect.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
     private SessionManager session;
     private TextView tvName, tvPatientId, tvWeight, tvBloodType, tvEmergency;
     private ImageView imgProfile;
+    private SwitchCompat darkModeSwitch;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -45,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         initViews();
         setupInsets();
         loadUserProfile();
+        setupDarkMode();
 
         setupAccountSettings();
         setupSupport();
@@ -70,6 +74,13 @@ public class ProfileActivity extends AppCompatActivity {
         findViewById(R.id.logoutBtn).setOnClickListener(v -> showLogoutDialog());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.PROFILE);
+        loadUserProfile();
+    }
+
     private void initViews() {
         tvName = findViewById(R.id.profileName);
         tvPatientId = findViewById(R.id.patientId);
@@ -77,6 +88,25 @@ public class ProfileActivity extends AppCompatActivity {
         tvBloodType = findViewById(R.id.bloodTypeValue);
         tvEmergency = findViewById(R.id.emergencyValue);
         imgProfile = findViewById(R.id.profileImage);
+        darkModeSwitch = findViewById(R.id.darkModeSwitch);
+    }
+
+    private void setupDarkMode() {
+        if (darkModeSwitch != null) {
+            // Set initial state based on current night mode
+            boolean isDark = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+            darkModeSwitch.setChecked(isDark);
+
+            darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // Save preference
+                session.setDarkMode(isChecked);
+
+                int targetMode = isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+                if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                    AppCompatDelegate.setDefaultNightMode(targetMode);
+                }
+            });
+        }
     }
 
     private void setupInsets() {
@@ -84,19 +114,20 @@ public class ProfileActivity extends AppCompatActivity {
         View scroll = findViewById(R.id.profileScroll);
         View bottomBar = findViewById(R.id.bottomBar);
 
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            if (scroll    != null) scroll.setPadding(0, sys.top, 0, 0);
-            if (bottomBar != null) bottomBar.setPadding(0, 0, 0, sys.bottom);
-            return insets;
-        });
+        if (root != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+                Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                if (scroll != null) scroll.setPadding(0, sys.top, 0, 0);
+                if (bottomBar != null) bottomBar.setPadding(0, 0, 0, sys.bottom);
+                return insets;
+            });
+        }
     }
 
     private void loadUserProfile() {
         String uid = session.getUid();
         if (uid == null) return;
 
-        // Load cached name first
         if (tvName != null) tvName.setText(session.getFullName());
         if (tvPatientId != null) tvPatientId.setText("PN-" + uid.substring(0, 5).toUpperCase());
 
@@ -109,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (tvBloodType != null) tvBloodType.setText(user.getBloodType() != null ? user.getBloodType() : "---");
                     if (tvEmergency != null) tvEmergency.setText(user.getEmergencyContact() != null ? user.getEmergencyContact() : "---");
                     
-                    if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+                    if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty() && imgProfile != null) {
                         Glide.with(ProfileActivity.this)
                                 .load(user.getProfileImageUrl())
                                 .placeholder(R.drawable.user)
@@ -119,17 +150,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(String message) {
-                // Keep default/session values
-            }
+            public void onError(String message) {}
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadUserProfile(); // Refresh data when coming back from edit screen
-    }
+
 
     private void updateLanguageButton() {
         TextView btn = findViewById(R.id.languageSelector);
@@ -168,28 +193,40 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupAccountSettings() {
-        findViewById(R.id.personalInfoItem).setOnClickListener(v ->
-                startActivity(new Intent(this, PersonalInformationActivity.class)));
+        View personalInfo = findViewById(R.id.personalInfoItem);
+        if (personalInfo != null) {
+            personalInfo.setOnClickListener(v ->
+                    startActivity(new Intent(this, PersonalInformationActivity.class)));
+        }
 
-        findViewById(R.id.securityPinItem).setOnClickListener(v ->
-                startActivity(new Intent(this, SecurityPinActivity.class)));
+        View securityPin = findViewById(R.id.securityPinItem);
+        if (securityPin != null) {
+            securityPin.setOnClickListener(v ->
+                    startActivity(new Intent(this, SecurityPinActivity.class)));
+        }
 
-        findViewById(R.id.notificationItem).setOnClickListener(v ->
-                startActivity(new Intent(this, NotificationPreferencesActivity.class)));
+        View notifications = findViewById(R.id.notificationItem);
+        if (notifications != null) {
+            notifications.setOnClickListener(v ->
+                    startActivity(new Intent(this, NotificationPreferencesActivity.class)));
+        }
 
-        findViewById(R.id.remindersItem).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
+        View reminders = findViewById(R.id.remindersItem);
+        if (reminders != null) {
+            reminders.setOnClickListener(v ->
+                    Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
+        }
     }
 
     private void setupSupport() {
-        findViewById(R.id.helpCenterItem).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
+        View help = findViewById(R.id.helpCenterItem);
+        if (help != null) help.setOnClickListener(v -> Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.privacyPolicyItem).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
+        View privacy = findViewById(R.id.privacyPolicyItem);
+        if (privacy != null) privacy.setOnClickListener(v -> Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.termsItem).setOnClickListener(v ->
-                Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
+        View terms = findViewById(R.id.termsItem);
+        if (terms != null) terms.setOnClickListener(v -> Toast.makeText(this, getString(R.string.coming_soon), Toast.LENGTH_SHORT).show());
     }
 
     private void showLogoutDialog() {

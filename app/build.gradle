@@ -11,8 +11,8 @@ android {
         applicationId "com.example.mugangaconnect"
         minSdk 24
         targetSdk 35
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         Properties properties = new Properties()
@@ -56,7 +56,10 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.blurview
     implementation libs.lucide.icons
-    implementation libs.biometric
+
+    // Room
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
 
     // Firebase BoM — manages all Firebase library versions
     implementation platform(libs.firebase.bom)

@@ -44,7 +44,8 @@
             android:layout_height="12dp"
             android:layout_marginEnd="8dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/loading_pulse" />
+            android:src="@drawable/loading_pulse"
+            android:tint="@color/text_on_primary" />
 
         <ImageView
             android:id="@+id/loading_dot2"
@@ -52,14 +53,16 @@
             android:layout_height="12dp"
             android:layout_marginEnd="8dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/loading_pulse" />
+            android:src="@drawable/loading_pulse"
+            android:tint="@color/text_on_primary" />
 
         <ImageView
             android:id="@+id/loading_dot3"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/loading_pulse" />
+            android:src="@drawable/loading_pulse"
+            android:tint="@color/text_on_primary" />
 
     </LinearLayout>
 
@@ -71,7 +74,7 @@
         android:layout_below="@+id/loading_container"
         android:layout_centerHorizontal="true"
         android:text="@string/loading_text"
-        android:textColor="@color/text_hint"
+        android:textColor="@color/text_on_primary"
         android:textSize="14sp"
         android:fontFamily="sans-serif"
         android:letterSpacing="0.1" />

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Palette -->
+    <color name="splash_accent_orange">#FF8C00</color>
+
+    <!-- Semantic Colors for Dark Mode -->
+    <color name="background_main">#121212</color>
+    <color name="auth_background">#121212</color>
+    <color name="splash_background">#1A5DC8</color>
+
+    <color name="card_background">#1E1E1E</color>
+    <color name="card_background_alt">#242424</color>
+    <color name="field_background">#2C2C2C</color>
+    <color name="alert_background">#3D2B1F</color>
+    <color name="divider_color">#333333</color>
+
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0BEC5</color>
+    <color name="text_hint">#78909C</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_blue">#64B5F6</color>
+
+    <color name="bottom_nav_bg">#1E1E1E</color>
+    <color name="icon_tint">#90A4AE</color>
+    <color name="icon_primary">#FFFFFF</color>
+    <color name="icon_secondary">#90A4AE</color>
+    <color name="icon_on_background">#FFFFFF</color>
+    <color name="tab_selected">#2176FF</color>
+    <color name="tab_unselected">#B0BEC5</color>
+    <color name="tab_active_bg">#2176FF</color>
+    <color name="tab_active_content">#FFFFFF</color>
+    <color name="tab_inactive_bg">#2C2C2C</color>
+    <color name="tab_inactive_content">#90A4AE</color>
+
+    <!-- UI State Colors (Night) -->
+    <color name="success_color">#81C784</color>
+    <color name="success_background">#1B3320</color>
+    <color name="text_on_success">#121212</color>
+    <color name="warning_color">#FFB74D</color>
+    <color name="warning_background">#33251B</color>
+    <color name="text_on_warning">#121212</color>
+    <color name="error_color">#E57373</color>
+    <color name="error_background">#331B1B</color>
+    <color name="text_on_error">#121212</color>
+
+    <color name="step_inactive">#37474F</color>
+
+    <!-- Legacy Overrides -->
+    <color name="white">#1E1E1E</color>
+    <color name="black">#FFFFFF</color>
+    <color name="bg_light">#121212</color>
+    <color name="blue_field_bg">#2C2C2C</color>
+    <color name="tab_selected_bg">#2C2C2C</color>
+    <color name="tab_unselected_bg">#121212</color>
+    <color name="text_dark">#FFFFFF</color>
+    <color name="success_green">#81C784</color>
+    <color name="success_green_light">#1B3320</color>
+    <color name="warning_orange">#FFB74D</color>
+    <color name="warning_orange_light">#33251B</color>
+    <color name="error_red">#E57373</color>
+    <color name="error_red_light">#331B1B</color>
+    <color name="primary_dark">#000000</color>
+</resources>

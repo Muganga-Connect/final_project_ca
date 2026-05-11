@@ -73,6 +73,12 @@ public class AIAssistantActivity extends AppCompatActivity {
         BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavHelper.setup(this, BottomNavHelper.Screen.AI_ASSISTANT);
+    }
+
     // ── UI setup ──────────────────────────────────────────────────────────────
 
     private void initializeGemini() {
@@ -197,7 +203,7 @@ public class AIAssistantActivity extends AppCompatActivity {
         TextView tv = new TextView(this);
         tv.setText(message);
         tv.setBackgroundResource(R.drawable.user_message_bg);
-        tv.setTextColor(android.graphics.Color.WHITE);
+        tv.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_on_primary));
         tv.setPadding(32, 24, 32, 24);
 
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
@@ -215,7 +221,7 @@ public class AIAssistantActivity extends AppCompatActivity {
         TextView tv = new TextView(this);
         tv.setText(message);
         tv.setBackgroundResource(R.drawable.ai_message_bg);
-        tv.setTextColor(android.graphics.Color.BLACK);
+        tv.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_primary));
         tv.setPadding(32, 24, 32, 24);
 
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(

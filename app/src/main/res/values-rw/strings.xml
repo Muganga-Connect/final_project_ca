@@ -37,6 +37,20 @@
     <string name="biometrics_disabled">Biometrike yafunzwe</string>
     <string name="coming_soon">Bizaza vuba</string>
 
+    <!-- Navigation & Common -->
+    <string name="back">Gusubira inyuma</string>
+
+    <!-- Notifications -->
+    <string name="enable_all">Fungura byose</string>
+    <string name="appointment_reminders">Ibibutso bya gahunda</string>
+    <string name="sms_notifications">Imenyesha rya SMS</string>
+    <string name="push_notifications">Imenyesha rya Push</string>
+    <string name="reminder_timing">Igihe cy\'ikibutso</string>
+    <string name="one_day_before">Umunsi 1 mbere</string>
+    <string name="two_hours_before">Amasaha 2 mbere</string>
+    <string name="thirty_minutes_before">Iminota 30 mbere</string>
+    <string name="save_preferences">Bika ibyo wahisemo</string>
+
     <!-- Appointments -->
     <string name="book_appointment">Fata Gahunda</string>
     <string name="select_session">Hitamo Igihe</string>
