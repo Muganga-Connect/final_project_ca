@@ -189,7 +189,7 @@ public class AppointmentBookingActivity extends AppCompatActivity
                 }
             });
         } else {
-            String patientName = session.getName(); 
+            String patientName = session.getFullName(); 
             if (patientName == null || patientName.isEmpty()) patientName = "Anonymous Patient";
 
             Appointment appt = new Appointment(uid, selectedDoctor.getId(), selectedDoctor.getName(), selectedDepartment, selectedDate, selectedTimeSlot);
