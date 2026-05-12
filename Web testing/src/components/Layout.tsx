@@ -135,6 +135,7 @@ export default function Layout({ user, onLogout }: LayoutProps) {
           <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">
               <p className="text-sm font-semibold text-slate-900">{user.name}</p>
+              <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">{user.hospitalName || 'General Hospital'}</p>
               <p className="text-xs text-slate-500">{user.email}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-md">
