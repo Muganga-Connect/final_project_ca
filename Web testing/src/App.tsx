@@ -62,7 +62,11 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/patients" element={<Patients />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile onUpdateUser={(updates) => {
+            const newUser = { ...user!, ...updates };
+            setUser(newUser);
+            localStorage.setItem('muganga_auth', JSON.stringify(newUser));
+          }} />} />
         </Route>
 
         <Route path="/404" element={<NotFound />} />

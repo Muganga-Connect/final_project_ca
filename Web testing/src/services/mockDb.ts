@@ -177,11 +177,14 @@ class FirebaseDbService {
     }
   }
 
-  // Simulated Image Upload (to be replaced with actual Cloudinary/Firebase Storage)
+  // Simulated Image Upload (converts to Base64 for persistence in mock environment)
   async uploadProfileImage(file: File): Promise<string> {
-    console.log("Simulating Cloudinary upload for:", file.name);
-    // Return a dummy Cloudinary-like URL
-    return URL.createObjectURL(file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 }
 

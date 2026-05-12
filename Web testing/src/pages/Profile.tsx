@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useRef } from 'react';
+import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Doctor } from '../types';
 import { mockDb } from '../services/mockDb';
@@ -19,7 +19,11 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
-export default function Profile() {
+interface ProfileProps {
+  onUpdateUser: (updates: Partial<Doctor>) => void;
+}
+
+export default function Profile({ onUpdateUser }: ProfileProps) {
   const { user } = useOutletContext<{ user: Doctor }>();
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
@@ -39,7 +43,7 @@ export default function Profile() {
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const url = await mockDb.uploadProfileImage(file);
@@ -56,7 +60,7 @@ export default function Profile() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setMessage(null);
@@ -74,20 +78,21 @@ export default function Profile() {
       }
     };
 
-    const success = await mockDb.updateDoctor(user.id, updates);
-    
-    if (success) {
-      setMessage({ type: 'success', text: 'Profile updated successfully! Changes are now live on the mobile app.' });
-      // Update local storage to persist session data
-      const stored = localStorage.getItem('muganga_auth');
-      if (stored) {
-        const authData = JSON.parse(stored);
-        localStorage.setItem('muganga_auth', JSON.stringify({ ...authData, ...updates }));
+    try {
+      const success = await mockDb.updateDoctor(user.id, updates);
+      
+      if (success) {
+        setMessage({ type: 'success', text: 'Profile updated successfully! Changes are now live on the mobile app.' });
+        onUpdateUser(updates);
+      } else {
+        setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
       }
-    } else {
-      setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: 'error', text: 'An unexpected error occurred. Please try again.' });
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   return (
