@@ -13,7 +13,7 @@
         android:layout_margin="16dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="20dp"
-        app:cardElevation="2dp"
+        app:cardElevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -63,9 +63,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="Next: 2PM"
+                    android:text="Next: 2:00 PM"
                     android:textColor="@color/text_primary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"/>
             </LinearLayout>
 
@@ -91,7 +91,7 @@
                     android:layout_marginStart="4dp"
                     android:text="@string/active_care"
                     android:textColor="@color/text_primary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
@@ -117,13 +117,13 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                app:cardBackgroundColor="@color/field_background"
-                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/card_background_alt"
+                app:cardCornerRadius="40dp"
                 app:cardElevation="0dp">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="16dp"
+                    android:padding="20dp"
                     android:src="@android:drawable/ic_menu_info_details"
                     app:tint="@color/blue_primary"/>
             </androidx.cardview.widget.CardView>
@@ -204,6 +204,25 @@
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"/>
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@android:drawable/radiobutton_off_background"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="@string/ai_help_3"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -226,7 +245,7 @@
                 android:layout_marginStart="60dp"
                 app:cardBackgroundColor="@color/blue_primary"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="1dp">
+                app:cardElevation="0dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -250,43 +269,78 @@
     </ScrollView>
 
     <!-- Quick Actions -->
-    <LinearLayout
+    <HorizontalScrollView
         android:id="@+id/quickActionsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/inputCard">
 
-        <TextView
-            android:id="@+id/checkRiskButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/quick_action_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="@string/check_risk"
-            android:textColor="@color/blue_primary"
-            android:textSize="12sp"/>
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
 
-        <TextView
-            android:id="@+id/rescheduleButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/quick_action_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="@string/reschedule_appointment"
-            android:textColor="@color/blue_primary"
-            android:textSize="12sp"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/checkRiskButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/quick_action_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/check_risk"
+                android:textColor="@color/text_blue"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/rescheduleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/quick_action_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/reschedule"
+                android:textColor="@color/text_blue"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/reminderButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/quick_action_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/set_reminder"
+                android:textColor="@color/text_blue"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/contactDoctorButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/quick_action_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/contact_doctor"
+                android:textColor="@color/text_blue"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <!-- Input Field -->
     <androidx.cardview.widget.CardView
@@ -297,7 +351,7 @@
         android:layout_marginBottom="16dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="30dp"
-        app:cardElevation="4dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomBar">
         <LinearLayout
             android:layout_width="match_parent"
@@ -349,7 +403,7 @@
         layout="@layout/include_bottom_nav"
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="84dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
