@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.mugangaconnect.R;
 
 public class BottomNavHelper {
@@ -24,11 +26,11 @@ public class BottomNavHelper {
             if (screens[i] == activeScreen) {
                 item.setBackgroundResource(R.drawable.bottom_nav_selected_bg);
                 item.setPadding(dp(activity, 14), dp(activity, 8), dp(activity, 14), dp(activity, 8));
-                tintItem(item, "#FFFFFF");
+                tintItem(item, ContextCompat.getColor(activity, R.color.tab_active_content), true);
             } else {
                 item.setBackground(null);
                 item.setPadding(0, 0, 0, 0);
-                tintItem(item, "#667A90");
+                tintItem(item, ContextCompat.getColor(activity, R.color.icon_tint), false);
             }
 
             Screen target = screens[i];
@@ -58,8 +60,7 @@ public class BottomNavHelper {
         }
     }
 
-    private static void tintItem(LinearLayout item, String colorHex) {
-        int color = android.graphics.Color.parseColor(colorHex);
+    private static void tintItem(LinearLayout item, int color, boolean isActive) {
         for (int i = 0; i < item.getChildCount(); i++) {
             View child = item.getChildAt(i);
             if (child instanceof ImageView) {
@@ -67,7 +68,7 @@ public class BottomNavHelper {
             } else if (child instanceof TextView) {
                 ((TextView) child).setTextColor(color);
                 ((TextView) child).setTypeface(null,
-                        colorHex.equals("#FFFFFF") ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
+                        isActive ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL);
             }
         }
     }

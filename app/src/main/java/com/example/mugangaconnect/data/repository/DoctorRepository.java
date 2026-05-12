@@ -1,6 +1,7 @@
 package com.example.mugangaconnect.data.repository;
 
 import com.example.mugangaconnect.data.model.Doctor;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
@@ -49,6 +50,35 @@ public class DoctorRepository {
                     callback.onError(task.getException().getMessage());
                 }
             });
+    }
+
+    public void getByHospital(String hospitalId, Callback<List<Doctor>> callback) {
+        db.collection("doctors")
+            .whereEqualTo("hospitalId", hospitalId)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<Doctor> doctors = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        Doctor doctor = documentToDoctor(document);
+                        doctors.add(doctor);
+                    }
+                    callback.onSuccess(doctors);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
+    }
+
+    private Doctor documentToDoctor(DocumentSnapshot document) {
+        Doctor doctor = new Doctor();
+        doctor.setId(document.getId());
+        doctor.setName(document.getString("name"));
+        doctor.setSpecialty(document.getString("specialty"));
+        doctor.setDepartment(document.getString("department"));
+        doctor.setHospitalId(document.getString("hospitalId"));
+        // ... other fields
+        return doctor;
     }
 
     public interface Callback<T> {

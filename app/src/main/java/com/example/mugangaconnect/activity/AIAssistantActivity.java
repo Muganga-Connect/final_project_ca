@@ -89,6 +89,8 @@ public class AIAssistantActivity extends AppCompatActivity {
     private void setupQuickActions() {
         TextView checkRiskBtn  = findViewById(R.id.checkRiskButton);
         TextView rescheduleBtn = findViewById(R.id.rescheduleButton);
+        TextView reminderBtn   = findViewById(R.id.reminderButton);
+        TextView contactBtn    = findViewById(R.id.contactDoctorButton);
 
         if (checkRiskBtn != null) {
             checkRiskBtn.setOnClickListener(v -> {
@@ -102,6 +104,20 @@ public class AIAssistantActivity extends AppCompatActivity {
                 addUserMessage(getString(R.string.reschedule_appointment));
                 addAiMessage(getString(R.string.ai_reschedule_response));
                 startActivity(new Intent(this, AppointmentManagementActivity.class));
+            });
+        }
+
+        if (reminderBtn != null) {
+            reminderBtn.setOnClickListener(v -> {
+                addUserMessage(getString(R.string.enable_reminder));
+                addAiMessage(getString(R.string.ai_reminder_response));
+            });
+        }
+
+        if (contactBtn != null) {
+            contactBtn.setOnClickListener(v -> {
+                addUserMessage(getString(R.string.contact_doctor));
+                addAiMessage(getString(R.string.ai_contact_response));
             });
         }
     }
