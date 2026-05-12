@@ -31,6 +31,8 @@ export default function Profile({ onUpdateUser }: ProfileProps) {
 
   const [formData, setFormData] = useState({
     name: user.name,
+    email: user.email,
+    phone: user.phone || '',
     specialty: user.specialty || '',
     department: user.department || '',
     startTime: user.availability?.startTime || '08:00',
@@ -65,16 +67,21 @@ export default function Profile({ onUpdateUser }: ProfileProps) {
     setIsSaving(true);
     setMessage(null);
 
+    const availabilityData = {
+      days: formData.days,
+      startTime: formData.startTime,
+      endTime: formData.endTime,
+      slotDuration: formData.slotDuration
+    };
+
     const updates: Partial<Doctor> = {
       name: formData.name,
+      phone: formData.phone,
       specialty: formData.specialty,
       department: formData.department,
-      profileImageUrl: profileImage,      availability: {
-        days: formData.days,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-        slotDuration: formData.slotDuration
-      }
+      profileImageUrl: profileImage,
+      availability: availabilityData,
+      availabilitySchedule: availabilityData
     };
 
     try {
@@ -180,6 +187,25 @@ export default function Profile({ onUpdateUser }: ProfileProps) {
                   type="text"
                   value={formData.name}
                   onChange={e => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700 ml-1">Email (Account ID)</label>
+                <input 
+                  type="email"
+                  value={formData.email}
+                  readOnly
+                  className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-2xl text-slate-500 cursor-not-allowed focus:outline-none"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700 ml-1">Phone Number</label>
+                <input 
+                  type="tel"
+                  placeholder="+250 7xx xxx xxx"
+                  value={formData.phone}
+                  onChange={e => setFormData({...formData, phone: e.target.value})}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                 />
               </div>

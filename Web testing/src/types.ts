@@ -16,6 +16,7 @@ export interface Doctor {
   id: string;
   name: string;
   email: string;
+  phone?: string;
   hospitalId: string;
   hospitalName?: string;
   specialty?: string;
@@ -23,10 +24,16 @@ export interface Doctor {
   rating?: number;
   profileImageUrl?: string;
   availability?: {
-    days: string[]; // ['Monday', 'Tuesday', ...]
-    startTime: string; // '08:00'
-    endTime: string; // '17:00'
-    slotDuration: number; // minutes, e.g. 30
+    days: string[];
+    startTime: string;
+    endTime: string;
+    slotDuration: number;
+  };
+  availabilitySchedule?: {
+    days: string[];
+    startTime: string;
+    endTime: string;
+    slotDuration: number;
   };
 }
 
@@ -46,10 +53,15 @@ export interface Appointment {
   patientId: string;
   patientName: string;
   doctorId: string;
+  doctorName?: string;
+  hospitalId?: string;
+  hospitalName?: string;
+  department?: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
   status: AppointmentStatus;
   reason?: string;
+  riskLevel?: string;
 }
 
 export interface AuthState {

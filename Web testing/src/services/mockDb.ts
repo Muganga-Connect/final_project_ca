@@ -81,25 +81,32 @@ class FirebaseDbService {
   // Appointments
   async getAppointments(doctorId?: string): Promise<Appointment[]> {
     try {
-      console.log("Fetching appointments from Firestore...");
-      // For testing: Fetch ALL appointments to verify connection
-      // Once verified, we can re-enable the: if (doctorId) query
-      const q = query(collection(db, 'appointments'));
+      console.log(`Fetching appointments for doctor: ${doctorId || 'all'}`);
+      
+      let q;
+      if (doctorId) {
+        q = query(
+          collection(db, 'appointments'),
+          where('doctorId', '==', doctorId)
+        );
+      } else {
+        q = query(collection(db, 'appointments'));
+      }
+      
       const querySnapshot = await getDocs(q);
-
       console.log(`Found ${querySnapshot.size} appointments`);
 
       const apps = querySnapshot.docs.map(d => {
         const data = d.data();
         return {
           ...data,
-          id: d.id, // Ensure Firestore ID is always used
+          id: d.id,
           patientName: data.patientName || data.patientId || 'Anonymous Patient',
           date: data.date || 'No Date',
           time: data.time || 'No Time',
           status: data.status || 'pending'
-        };
-      }) as Appointment[];
+        } as Appointment;
+      });
 
       return apps.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     } catch (error) {
@@ -127,7 +134,6 @@ class FirebaseDbService {
         ...doc.data()
       })) as Appointment[];
 
-      // Sort in memory to avoid index requirements
       return apps.sort((a, b) => b.date.localeCompare(a.date));
     } catch (error) {
       console.error("Error fetching patient appointments:", error);
@@ -148,8 +154,16 @@ class FirebaseDbService {
   // Stats for Dashboard
   async getStats(doctorId?: string) {
     try {
-      // Fetch ALL for verification
-      const q = query(collection(db, 'appointments'));
+      let q;
+      if (doctorId) {
+        q = query(
+          collection(db, 'appointments'),
+          where('doctorId', '==', doctorId)
+        );
+      } else {
+        q = query(collection(db, 'appointments'));
+      }
+      
       const querySnapshot = await getDocs(q);
       const appointments = querySnapshot.docs.map(doc => doc.data() as Appointment);
 

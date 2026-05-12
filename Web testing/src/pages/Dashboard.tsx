@@ -29,14 +29,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadData() {
-      const dbStats = await mockDb.getStats(user.id);
-      const allApps = await mockDb.getAppointments(user.id);
-      setStats(dbStats);
-      // Sort by date and time
-      const sorted = allApps.sort((a, b) => {
-        const dateCompare = b.date.localeCompare(a.date);
-        if (dateCompare !== 0) return dateCompare;
-        return a.time.localeCompare(b.time);
+      if (!user.id) return;
+      
+      const statsData = await mockDb.getStats(user.id);
+      setStats(statsData);
+      
+      const appointments = await mockDb.getAppointments(user.id);
+      const sorted = [...appointments].sort((a, b) => {
+        const timeA = `${a.date} ${a.time}`;
+        const timeB = `${b.date} ${b.time}`;
+        return timeB.localeCompare(timeA);
       });
       setRecentAppointments(sorted);
       setIsLoading(false);
@@ -54,25 +56,26 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-12">
-      {          {/* KPI Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
-              <h3 className="text-sm font-medium text-slate-500">Total</h3>
-              <p className="text-2xl font-bold text-indigo-600">{stats.total}</p>
-            </div>
-            <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
-              <h3 className="text-sm font-medium text-slate-500">Pending</h3>
-              <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
-            </div>
-            <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
-              <h3 className="text-sm font-medium text-slate-500">Confirmed</h3>
-              <p className="text-2xl font-bold text-emerald-600">{stats.confirmed}</p>
-            </div>
-            <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
-              <h3 className="text-sm font-medium text-slate-500">Completed</h3>
-              <p className="text-2xl font-bold text-blue-600">{stats.completed}</p>
-            </div>
-          </div>}
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
+          <h3 className="text-sm font-medium text-slate-500">Total</h3>
+          <p className="text-2xl font-bold text-indigo-600">{stats.total}</p>
+        </div>
+        <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
+          <h3 className="text-sm font-medium text-slate-500">Pending</h3>
+          <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
+        </div>
+        <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
+          <h3 className="text-sm font-medium text-slate-500">Confirmed</h3>
+          <p className="text-2xl font-bold text-emerald-600">{stats.confirmed}</p>
+        </div>
+        <div className="p-4 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col items-center">
+          <h3 className="text-sm font-medium text-slate-500">Completed</h3>
+          <p className="text-2xl font-bold text-blue-600">{stats.completed}</p>
+        </div>
+      </div>
+
       {/* ... existing stats grid ... */}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
