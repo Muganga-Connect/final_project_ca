@@ -142,7 +142,7 @@ export default function Layout({ user, onLogout }: LayoutProps) {
             </div>
             <Link to="/profile" className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-md overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all">
               {user.profileImage ? (
-                <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+                <img src={user.profileImageUrl || user.profileImage} alt="Profile" className="w-full h-full object-cover" />
               ) : (
                 user.name.charAt(0)
               )}

@@ -21,7 +21,7 @@ export interface Doctor {
   specialty?: string;
   department?: string;
   rating?: number;
-  profileImage?: string;
+  profileImageUrl?: string;
   availability?: {
     days: string[]; // ['Monday', 'Tuesday', ...]
     startTime: string; // '08:00'

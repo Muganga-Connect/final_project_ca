@@ -39,7 +39,7 @@ export default function Profile({ onUpdateUser }: ProfileProps) {
     days: user.availability?.days || ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   });
 
-  const [profileImage, setProfileImage] = useState(user.profileImage || '');
+  const [profileImage, setProfileImage] = useState(user.profileImageUrl || '');
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -69,8 +69,7 @@ export default function Profile({ onUpdateUser }: ProfileProps) {
       name: formData.name,
       specialty: formData.specialty,
       department: formData.department,
-      profileImage,
-      availability: {
+      profileImageUrl: profileImage,      availability: {
         days: formData.days,
         startTime: formData.startTime,
         endTime: formData.endTime,
