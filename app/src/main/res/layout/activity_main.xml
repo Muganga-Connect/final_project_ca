@@ -254,101 +254,141 @@
                         android:layout_marginBottom="12dp"/>
 
                     <LinearLayout
+                        android:id="@+id/containerAppointmentDetails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="vertical"
+                        android:visibility="visible">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvDoctorName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Dr. Diane Gashumba"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/health_muted_navy" />
+
+                                <TextView
+                                    android:id="@+id/tvDoctorDept"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chief Cardiologist • Cardiology"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/health_text_muted" />
+                            </LinearLayout>
 
                             <TextView
-                                android:id="@+id/tvDoctorName"
+                                android:id="@+id/tvAppointmentStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Dr. Diane Gashumba"
-                                android:textSize="18sp"
+                                android:background="@drawable/bg_tag_green"
+                                android:backgroundTint="#E8F8F0"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:text="Confirmed"
+                                android:textSize="10sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/health_muted_navy" />
-
-                            <TextView
-                                android:id="@+id/tvDoctorDept"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Chief Cardiologist • Cardiology"
-                                android:textSize="12sp"
-                                android:textColor="@color/health_text_muted" />
+                                android:textColor="@color/health_optimal_green" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvAppointmentStatus"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_tag_green"
-                            android:backgroundTint="#E8F8F0"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:text="Confirmed"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/health_optimal_green" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="20dp">
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_clock"
+                                app:tint="@color/health_primary"
+                                android:layout_marginEnd="6dp"/>
+                            <TextView
+                                android:id="@+id/tvAppointmentTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tomorrow, April 24 at 10:30 AM"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/health_muted_navy" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnRescheduleMain"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="#F0F7FF"
+                                android:text="Reschedule"
+                                android:textColor="@color/health_primary"
+                                android:textAllCaps="false"
+                                app:cornerRadius="12dp"
+                                android:layout_marginEnd="8dp"/>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnCancelMain"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="#FFF1F0"
+                                android:text="Cancel"
+                                android:textColor="@color/health_critical_red"
+                                android:textAllCaps="false"
+                                app:cornerRadius="12dp"/>
+                        </LinearLayout>
                     </LinearLayout>
 
+                    <!-- EMPTY STATE -->
                     <LinearLayout
+                        android:id="@+id/containerNoAppointment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="20dp">
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_clock"
-                            app:tint="@color/health_primary"
-                            android:layout_marginEnd="6dp"/>
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingVertical="12dp"
+                        android:visibility="gone">
+
                         <TextView
-                            android:id="@+id/tvAppointmentTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tomorrow, April 24 at 10:30 AM"
+                            android:text="No upcoming appointments"
+                            android:textColor="@color/health_text_muted"
                             android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/health_muted_navy" />
-                    </LinearLayout>
+                            android:layout_marginBottom="8dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnRescheduleMain"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="0dp"
-                            android:layout_height="44dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="#F0F7FF"
-                            android:text="Reschedule"
+                        <TextView
+                            android:id="@+id/tvBookAppointmentLink"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Book one from schedule →"
                             android:textColor="@color/health_primary"
-                            android:textAllCaps="false"
-                            app:cornerRadius="12dp"
-                            android:layout_marginEnd="8dp"/>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnCancelMain"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="0dp"
-                            android:layout_height="44dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="#FFF1F0"
-                            android:text="Cancel"
-                            android:textColor="@color/health_critical_red"
-                            android:textAllCaps="false"
-                            app:cornerRadius="12dp"/>
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:padding="8dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground"/>
                     </LinearLayout>
 
                 </LinearLayout>

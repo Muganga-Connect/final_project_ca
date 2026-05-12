@@ -28,7 +28,7 @@ public class BottomNavHelper {
             } else {
                 item.setBackground(null);
                 item.setPadding(0, 0, 0, 0);
-                tintItem(item, "#667A90");
+                tintItem(item, "#BDC3C7"); // Muted slate/gray for inactive
             }
 
             Screen target = screens[i];
