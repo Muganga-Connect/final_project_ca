@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { mockDb } from '../services/mockDb';
-import { Doctor } from '../types';
-import { Stethoscope, Lock, Mail, ChevronRight, AlertCircle } from 'lucide-react';
+import { Doctor, Hospital } from '../types';
+import { Stethoscope, Lock, Mail, ChevronRight, AlertCircle, Building2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface LoginProps {
@@ -14,21 +14,36 @@ interface LoginProps {
 }
 
 export default function Login({ onLogin }: LoginProps) {
+  const [hospitals, setHospitals] = useState<Hospital[]>([]);
+  const [selectedHospitalId, setSelectedHospitalId] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    async function loadHospitals() {
+      const data = await mockDb.getHospitals();
+      setHospitals(data);
+      if (data.length > 0) setSelectedHospitalId(data[0].id);
+    }
+    loadHospitals();
+  }, []);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!selectedHospitalId) {
+      setError('Please select a hospital.');
+      return;
+    }
     setIsLoading(true);
     setError('');
 
     try {
-      const doctor = await mockDb.login(email);
+      const doctor = await mockDb.login(email, selectedHospitalId);
       if (doctor) {
         onLogin(doctor);
       } else {
-        setError('Doctor not found. Please use a registered doctor email.');
+        setError('Doctor not found in this hospital. Please check your email or selected hospital.');
       }
     } catch (err) {
       setError('An error occurred during login. Please try again.');
@@ -64,6 +79,24 @@ export default function Login({ onLogin }: LoginProps) {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2 px-1">Select Hospital</label>
+                <div className="relative">
+                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                  <select
+                    required
+                    value={selectedHospitalId}
+                    onChange={(e) => setSelectedHospitalId(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-900 appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled>Choose your facility</option>
+                    {hospitals.map(h => (
+                      <option key={h.id} value={h.id}>{h.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2 px-1">Email Address</label>
                 <div className="relative">

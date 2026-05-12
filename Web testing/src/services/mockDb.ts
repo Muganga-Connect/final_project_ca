@@ -31,9 +31,16 @@ class FirebaseDbService {
       if (querySnapshot.empty) return null;
       
       const docData = querySnapshot.docs[0].data();
+      
+      // Fetch Hospital details
+      const hospRef = doc(db, 'hospitals', hospitalId);
+      const hospSnap = await getDoc(hospRef);
+      const hospitalName = hospSnap.exists() ? hospSnap.data().name : 'Unknown Hospital';
+
       return {
         id: querySnapshot.docs[0].id,
-        ...docData
+        ...docData,
+        hospitalName
       } as Doctor;
     } catch (error) {
       console.error("Error logging in:", error);
