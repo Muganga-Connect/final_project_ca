@@ -164,6 +164,25 @@ class FirebaseDbService {
       return { total: 0, pending: 0, confirmed: 0, completed: 0 };
     }
   }
+
+  // Doctor Profile Updates
+  async updateDoctor(doctorId: string, updates: Partial<Doctor>): Promise<boolean> {
+    try {
+      const docRef = doc(db, 'doctors', doctorId);
+      await updateDoc(docRef, updates);
+      return true;
+    } catch (error) {
+      console.error("Error updating doctor profile:", error);
+      return false;
+    }
+  }
+
+  // Simulated Image Upload (to be replaced with actual Cloudinary/Firebase Storage)
+  async uploadProfileImage(file: File): Promise<string> {
+    console.log("Simulating Cloudinary upload for:", file.name);
+    // Return a dummy Cloudinary-like URL
+    return URL.createObjectURL(file);
+  }
 }
 
 export const mockDb = new FirebaseDbService();

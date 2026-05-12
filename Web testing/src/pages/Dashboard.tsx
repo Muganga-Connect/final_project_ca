@@ -142,8 +142,8 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
-              <div key={day} className="text-center text-[10px] font-bold text-slate-400 uppercase py-2">
+            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, idx) => (
+              <div key={`${day}-${idx}`} className="text-center text-[10px] font-bold text-slate-400 uppercase py-2">
                 {day}
               </div>
             ))}
