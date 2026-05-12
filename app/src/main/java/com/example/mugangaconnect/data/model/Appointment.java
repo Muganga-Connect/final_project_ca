@@ -12,6 +12,9 @@ public class Appointment {
     private String date;        // ISO format: yyyy-MM-dd
     private String time;        // HH:mm
     private String status;
+    private String patientName;
+    private String hospitalId;
+    private String hospitalName;
     private String riskLevel;
     private long createdAt;
 
@@ -50,5 +53,11 @@ public class Appointment {
     public void setRiskLevel(String riskLevel) { this.riskLevel = riskLevel; }
     public void setDate(String date) { this.date = date; }
     public void setTime(String time) { this.time = time; }
+    public String getHospitalId() { return hospitalId; }
+    public void setHospitalId(String hospitalId) { this.hospitalId = hospitalId; }
+    public String getHospitalName() { return hospitalName; }
+    public void setHospitalName(String hospitalName) { this.hospitalName = hospitalName; }
+    public String getPatientName() { return patientName; }
+    public void setPatientName(String patientName) { this.patientName = patientName; }
     public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
 }

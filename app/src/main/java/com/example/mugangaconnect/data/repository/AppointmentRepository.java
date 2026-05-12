@@ -68,6 +68,25 @@ public class AppointmentRepository {
         return appointment;
     }
     
+    public void getBookedSlots(String doctorId, String date, Callback<List<String>> callback) {
+        db.collection(COLLECTION_NAME)
+            .whereEqualTo("doctorId", doctorId)
+            .whereEqualTo("date", date)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<String> bookedSlots = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        String time = document.getString("time");
+                        if (time != null) bookedSlots.add(time);
+                    }
+                    callback.onSuccess(bookedSlots);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
+    }
+
     public void getForPatient(String patientId, Callback<List<Appointment>> callback) {
         db.collection(COLLECTION_NAME)
             .whereEqualTo("patientId", patientId)
@@ -115,8 +134,23 @@ public class AppointmentRepository {
     }
 
     public void getCachedByStatus(String uid, String status, Callback<List<Appointment>> callback) {
-        // Simple implementation that redirects to getForPatient for now
-        getForPatient(uid, callback);
+        getForPatient(uid, new Callback<List<Appointment>>() {
+            @Override
+            public void onSuccess(List<Appointment> result) {
+                List<Appointment> filtered = new ArrayList<>();
+                for (Appointment appt : result) {
+                    if (appt.getStatus().equalsIgnoreCase(status)) {
+                        filtered.add(appt);
+                    }
+                }
+                callback.onSuccess(filtered);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onError(errorMessage);
+            }
+        });
     }
 
     public interface Callback<T> {

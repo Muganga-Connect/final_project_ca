@@ -115,11 +115,14 @@
 
     <!-- AI Assistant -->
     <string name="ai_greeting">How can I help you today?</string>
-    <string name="ai_subtitle">Ask me anything</string>
+    <string name="ai_subtitle">Ask me anything about your health</string>
     <string name="ai_can_help">I can help you:</string>
     <string name="ai_help_1">Analyze your appointment history and predict if you are likely to miss your upcoming appointment.</string>
     <string name="ai_help_2">Set an early reminder to reduce the risk of missing your appointment.</string>
+    <string name="ai_help_3">Reschedule or book a new appointment with ease.</string>
     <string name="check_risk">Check Risk</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="contact_doctor">Contact Doctor</string>
     <string name="reschedule_appointment">Reschedule Appointment</string>
     <string name="type_message">Type your message\u2026</string>
     <string name="active_care">Active Care</string>
@@ -134,6 +137,7 @@
     <string name="ai_hello_response">Hello! How can I assist you with your health schedule today?</string>
     <string name="ai_reschedule_response">Sure! Let me take you to the appointment scheduler.</string>
     <string name="ai_reminder_response">I\'ve noted that. Make sure to enable early reminders from your dashboard!</string>
+    <string name="ai_contact_response">I can help you contact your doctor. Please open your profile and use the direct contact options.</string>
     <string name="ai_default_response">I\'m here to help with your appointments and health reminders. Try asking about your appointment risk or type \'reschedule\'.</string>
     <!-- Keywords the AI listens for (keep lowercase) -->
     <string name="ai_kw_risk">risk</string>
