@@ -121,9 +121,22 @@ export default function Login({ onLogin }: LoginProps) {
             </form>
           </div>
           
-          <div className="bg-slate-50 px-10 py-6 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-            <span className="font-medium hover:text-indigo-600 cursor-pointer transition-colors">Need assistance?</span>
-            <span>&copy; 2026 MugangaConnect</span>
+          <div className="bg-slate-50 px-10 py-6 border-t border-slate-100 flex flex-col gap-4 text-xs text-slate-500">
+            <div className="flex justify-between items-center">
+              <span className="font-medium hover:text-indigo-600 cursor-pointer transition-colors">Need assistance?</span>
+              <span>&copy; 2026 MugangaConnect</span>
+            </div>
+            <button 
+              type="button"
+              onClick={async () => {
+                const { seedDatabase } = await import('../services/seed');
+                await seedDatabase();
+                alert('Database seeded successfully!');
+              }}
+              className="text-indigo-600 hover:text-indigo-800 font-bold border border-indigo-200 bg-indigo-50/50 py-2 rounded-xl transition-all"
+            >
+              Developer: Seed Testing Data
+            </button>
           </div>
         </div>
       </motion.div>

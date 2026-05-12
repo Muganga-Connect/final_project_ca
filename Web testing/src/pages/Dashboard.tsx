@@ -4,8 +4,9 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { mockDb } from '../services/mockDb';
-import { Appointment } from '../types';
+import { Appointment, Doctor } from '../types';
 import { 
   Users, 
   Calendar, 
@@ -18,20 +19,21 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
+  const { user } = useOutletContext<{ user: Doctor }>();
   const [stats, setStats] = useState({ total: 0, pending: 0, confirmed: 0, completed: 0 });
   const [recentAppointments, setRecentAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const dbStats = await mockDb.getStats();
-      const allApps = await mockDb.getAppointments();
+      const dbStats = await mockDb.getStats(user.id);
+      const allApps = await mockDb.getAppointments(user.id);
       setStats(dbStats);
       setRecentAppointments(allApps.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5));
       setIsLoading(false);
     }
     loadData();
-  }, []);
+  }, [user.id]);
 
   if (isLoading) {
     return <div className="animate-pulse space-y-8">
@@ -109,12 +111,15 @@ export default function Dashboard() {
               <tbody className="divide-y divide-slate-50">
                 {recentAppointments.map((app) => (
                   <tr key={app.id} className="hover:bg-slate-50/80 transition-colors group">
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs font-bold">
-                          {app.patientName.charAt(0)}
+                        <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                          {(app.patientName || 'A').charAt(0)}
                         </div>
-                        <span className="text-sm font-semibold text-slate-900">{app.patientName}</span>
+                        <div>
+                          <p className="text-sm font-bold text-slate-900 leading-none">{app.patientName || 'Anonymous'}</p>
+                          <p className="text-[11px] text-slate-400 mt-1 font-medium italic">ID: {(app.patientId || 'unknown').toUpperCase()}</p>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">

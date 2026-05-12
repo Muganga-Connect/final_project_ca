@@ -1,100 +1,162 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
+import { collection, getDocs, getDoc, doc, updateDoc, query, where, orderBy, limit } from 'firebase/firestore';
+import { db } from './firebase';
 import { Doctor, Patient, Appointment, AppointmentStatus } from '../types';
 
-const STORAGE_KEY = 'mugangaconnect_db';
-
-interface DB {
-  doctors: Doctor[];
-  patients: Patient[];
-  appointments: Appointment[];
-}
-
-const INITIAL_DB: DB = {
-  doctors: [
-    { id: 'doc1', name: 'Dr. Jean Mukasa', email: 'jean@muganga.com' },
-    { id: 'doc2', name: 'Dr. Sarah Smith', email: 'sarah@muganga.com' }
-  ],
-  patients: [
-    { id: 'p1', name: 'John Doe', email: 'john@example.com', phone: '+250 788 123 456', biometricEnabled: true, age: 34, gender: 'Male', bloodType: 'O+' },
-    { id: 'p2', name: 'Jane Gakuba', email: 'jane@example.com', phone: '+250 789 654 321', biometricEnabled: false, age: 28, gender: 'Female', bloodType: 'A-' },
-    { id: 'p3', name: 'Robert Habimana', email: 'robert@test.com', phone: '+250 782 000 111', biometricEnabled: true, age: 45, gender: 'Male', bloodType: 'B+' },
-    { id: 'p4', name: 'Alice Mutoni', email: 'alice@test.com', phone: '+250 783 222 333', biometricEnabled: true, age: 31, gender: 'Female', bloodType: 'AB+' }
-  ],
-  appointments: [
-    { id: 'a1', patientId: 'p1', patientName: 'John Doe', date: '2026-05-15', time: '10:00', status: 'confirmed', reason: 'Annual physical checkup' },
-    { id: 'a2', patientId: 'p2', patientName: 'Jane Gakuba', date: '2026-05-12', time: '14:30', status: 'pending', reason: 'Flu symptoms' },
-    { id: 'a3', patientId: 'p3', patientName: 'Robert Habimana', date: '2026-05-13', time: '09:00', status: 'pending', reason: 'Follow-up on blood pressure' },
-    { id: 'a4', patientId: 'p1', patientName: 'John Doe', date: '2026-04-20', time: '11:00', status: 'completed', reason: 'Sprained ankle' },
-    { id: 'a5', patientId: 'p4', patientName: 'Alice Mutoni', date: '2026-05-14', time: '16:00', status: 'confirmed', reason: 'Prenatal consult' }
-  ]
-};
-
-class MockDbService {
-  private db: DB;
-
-  constructor() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      this.db = JSON.parse(stored);
-    } else {
-      this.db = INITIAL_DB;
-      this.save();
+class FirebaseDbService {
+  // Hospitals
+  async getHospitals(): Promise<Hospital[]> {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'hospitals'));
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Hospital[];
+    } catch (error) {
+      console.error("Error fetching hospitals:", error);
+      return [];
     }
   }
 
-  private save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.db));
-  }
-
   // Doctor Auth Simulation
-  async login(email: string): Promise<Doctor | null> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const doctor = this.db.doctors.find(d => d.email === email);
-        resolve(doctor || null);
-      }, 500);
-    });
+  async login(email: string, hospitalId: string): Promise<Doctor | null> {
+    try {
+      const q = query(
+        collection(db, 'doctors'), 
+        where('email', '==', email),
+        where('hospitalId', '==', hospitalId),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) return null;
+      
+      const docData = querySnapshot.docs[0].data();
+      return {
+        id: querySnapshot.docs[0].id,
+        ...docData
+      } as Doctor;
+    } catch (error) {
+      console.error("Error logging in:", error);
+      return null;
+    }
   }
 
   // Patients
   async getPatients(): Promise<Patient[]> {
-    return this.db.patients;
+    try {
+      const querySnapshot = await getDocs(collection(db, 'patients'));
+      return querySnapshot.docs.map(d => ({
+        ...d.data(),
+        id: d.id,
+        name: d.data().name || 'Unknown Patient'
+      })) as Patient[];
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+      return [];
+    }
   }
 
   async getPatientById(id: string): Promise<Patient | null> {
-    return this.db.patients.find(p => p.id === id) || null;
+    try {
+      const docRef = doc(db, 'patients', id);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() } as Patient;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching patient:", error);
+      return null;
+    }
   }
 
   // Appointments
-  async getAppointments(): Promise<Appointment[]> {
-    return this.db.appointments;
+  async getAppointments(doctorId?: string): Promise<Appointment[]> {
+    try {
+      console.log("Fetching appointments from Firestore...");
+      // For testing: Fetch ALL appointments to verify connection
+      // Once verified, we can re-enable the: if (doctorId) query
+      const q = query(collection(db, 'appointments'));
+      const querySnapshot = await getDocs(q);
+      
+      console.log(`Found ${querySnapshot.size} appointments`);
+      
+      const apps = querySnapshot.docs.map(d => {
+        const data = d.data();
+        return {
+          ...data,
+          id: d.id, // Ensure Firestore ID is always used
+          patientName: data.patientName || data.patientId || 'Anonymous Patient',
+          date: data.date || 'No Date',
+          time: data.time || 'No Time',
+          status: data.status || 'pending'
+        };
+      }) as Appointment[];
+
+      return apps.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+      return [];
+    }
   }
 
-  async getPatientAppointments(patientId: string): Promise<Appointment[]> {
-    return this.db.appointments.filter(a => a.patientId === patientId);
+  async getPatientAppointments(patientId: string, doctorId?: string): Promise<Appointment[]> {
+    try {
+      let q = query(
+        collection(db, 'appointments'), 
+        where('patientId', '==', patientId)
+      );
+      if (doctorId) {
+        q = query(
+          collection(db, 'appointments'), 
+          where('patientId', '==', patientId),
+          where('doctorId', '==', doctorId)
+        );
+      }
+      const querySnapshot = await getDocs(q);
+      const apps = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Appointment[];
+      
+      // Sort in memory to avoid index requirements
+      return apps.sort((a, b) => b.date.localeCompare(a.date));
+    } catch (error) {
+      console.error("Error fetching patient appointments:", error);
+      return [];
+    }
   }
 
   async updateAppointmentStatus(id: string, status: AppointmentStatus): Promise<void> {
-    const index = this.db.appointments.findIndex(a => a.id === id);
-    if (index !== -1) {
-      this.db.appointments[index].status = status;
-      this.save();
+    try {
+      const docRef = doc(db, 'appointments', id);
+      await updateDoc(docRef, { status });
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      throw error;
     }
   }
 
   // Stats for Dashboard
-  async getStats() {
-    const total = this.db.appointments.length;
-    const pending = this.db.appointments.filter(a => a.status === 'pending').length;
-    const confirmed = this.db.appointments.filter(a => a.status === 'confirmed').length;
-    const completed = this.db.appointments.filter(a => a.status === 'completed').length;
+  async getStats(doctorId?: string) {
+    try {
+      // Fetch ALL for verification
+      const q = query(collection(db, 'appointments'));
+      const querySnapshot = await getDocs(q);
+      const appointments = querySnapshot.docs.map(doc => doc.data() as Appointment);
+      
+      const total = appointments.length;
+      const pending = appointments.filter(a => a.status === 'pending').length;
+      const confirmed = appointments.filter(a => a.status === 'confirmed').length;
+      const completed = appointments.filter(a => a.status === 'completed').length;
 
-    return { total, pending, confirmed, completed };
+      return { total, pending, confirmed, completed };
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      return { total: 0, pending: 0, confirmed: 0, completed: 0 };
+    }
   }
 }
 
-export const mockDb = new MockDbService();
+export const mockDb = new FirebaseDbService();

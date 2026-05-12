@@ -4,8 +4,9 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { mockDb } from '../services/mockDb';
-import { Patient, Appointment } from '../types';
+import { Patient, Appointment, Doctor } from '../types';
 import { 
   Search, 
   User, 
@@ -22,6 +23,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Patients() {
+  const { user } = useOutletContext<{ user: Doctor }>();
   const [patients, setPatients] = useState<Patient[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
@@ -39,7 +41,7 @@ export default function Patients() {
 
   const handlePatientClick = async (patient: Patient) => {
     setSelectedPatient(patient);
-    const appointments = await mockDb.getPatientAppointments(patient.id);
+    const appointments = await mockDb.getPatientAppointments(patient.id, user.id);
     setPatientAppointments(appointments.sort((a,b) => b.date.localeCompare(a.date)));
   };
 

@@ -5,10 +5,19 @@
 
 export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'missed';
 
+export interface Hospital {
+  id: string;
+  name: string;
+  location: string;
+  image?: string;
+}
+
 export interface Doctor {
   id: string;
   name: string;
   email: string;
+  hospitalId: string;
+  specialty?: string;
 }
 
 export interface Patient {
@@ -26,6 +35,7 @@ export interface Appointment {
   id: string;
   patientId: string;
   patientName: string;
+  doctorId: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
   status: AppointmentStatus;

@@ -4,8 +4,9 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { mockDb } from '../services/mockDb';
-import { Appointment, AppointmentStatus } from '../types';
+import { Appointment, AppointmentStatus, Doctor } from '../types';
 import { 
   Search, 
   Filter, 
@@ -19,6 +20,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Appointments() {
+  const { user } = useOutletContext<{ user: Doctor }>();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filterStatus, setFilterStatus] = useState<AppointmentStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,23 +28,23 @@ export default function Appointments() {
 
   useEffect(() => {
     async function loadData() {
-      const allApps = await mockDb.getAppointments();
+      const allApps = await mockDb.getAppointments(user.id);
       setAppointments(allApps);
       setIsLoading(false);
     }
     loadData();
-  }, []);
+  }, [user.id]);
 
   const handleStatusUpdate = async (id: string, status: AppointmentStatus) => {
     await mockDb.updateAppointmentStatus(id, status);
-    const updated = await mockDb.getAppointments();
+    const updated = await mockDb.getAppointments(user.id);
     setAppointments(updated);
   };
 
   const filteredAppointments = appointments.filter(app => {
     const matchesFilter = filterStatus === 'all' || app.status === filterStatus;
-    const matchesSearch = app.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         app.reason?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (app.patientName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (app.reason || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -125,11 +127,11 @@ export default function Appointments() {
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
-                            {app.patientName.charAt(0)}
+                            {(app.patientName || 'A').charAt(0)}
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-slate-900 leading-none">{app.patientName}</p>
-                            <p className="text-[11px] text-slate-400 mt-1 font-medium italic">ID: {app.patientId.toUpperCase()}</p>
+                            <p className="text-sm font-bold text-slate-900 leading-none">{app.patientName || 'Anonymous'}</p>
+                            <p className="text-[11px] text-slate-400 mt-1 font-medium italic">ID: {(app.patientId || 'unknown').toUpperCase()}</p>
                           </div>
                         </div>
                       </td>

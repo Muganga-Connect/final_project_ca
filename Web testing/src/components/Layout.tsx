@@ -144,7 +144,7 @@ export default function Layout({ user, onLogout }: LayoutProps) {
         </header>
 
         <main className="flex-1 overflow-y-auto p-8">
-          <Outlet />
+          <Outlet context={{ user }} />
         </main>
       </div>
     </div>
