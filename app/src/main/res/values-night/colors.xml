@@ -4,33 +4,33 @@
     <color name="splash_accent_orange">#FF8C00</color>
 
     <!-- Semantic Colors for Dark Mode -->
-    <color name="background_main">#121212</color>
-    <color name="auth_background">#121212</color>
+    <color name="background_main">#030B1E</color>
+    <color name="auth_background">#06112A</color>
     <color name="splash_background">#1A5DC8</color>
 
-    <color name="card_background">#1E1E1E</color>
-    <color name="card_background_alt">#242424</color>
-    <color name="field_background">#2C2C2C</color>
+    <color name="card_background">#0A1735</color>
+    <color name="card_background_alt">#0E1E40</color>
+    <color name="field_background">#13264F</color>
     <color name="alert_background">#3D2B1F</color>
-    <color name="divider_color">#333333</color>
+    <color name="divider_color">#1B2E5E</color>
 
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B0BEC5</color>
-    <color name="text_hint">#78909C</color>
+    <color name="text_primary">#F4F8FF</color>
+    <color name="text_secondary">#B6C8EE</color>
+    <color name="text_hint">#7E95C4</color>
     <color name="text_on_primary">#FFFFFF</color>
-    <color name="text_blue">#64B5F6</color>
+    <color name="text_blue">#6DBBFF</color>
 
-    <color name="bottom_nav_bg">#1E1E1E</color>
-    <color name="icon_tint">#90A4AE</color>
+    <color name="bottom_nav_bg">#09162F</color>
+    <color name="icon_tint">#8EA8DA</color>
     <color name="icon_primary">#FFFFFF</color>
     <color name="icon_secondary">#90A4AE</color>
     <color name="icon_on_background">#FFFFFF</color>
     <color name="tab_selected">#2176FF</color>
     <color name="tab_unselected">#B0BEC5</color>
-    <color name="tab_active_bg">#2176FF</color>
+    <color name="tab_active_bg">#1F6BFF</color>
     <color name="tab_active_content">#FFFFFF</color>
-    <color name="tab_inactive_bg">#2C2C2C</color>
-    <color name="tab_inactive_content">#90A4AE</color>
+    <color name="tab_inactive_bg">#13264F</color>
+    <color name="tab_inactive_content">#8EA8DA</color>
 
     <!-- UI State Colors (Night) -->
     <color name="success_color">#81C784</color>
@@ -44,14 +44,31 @@
     <color name="text_on_error">#121212</color>
 
     <color name="step_inactive">#37474F</color>
+    
+    <!-- Dashboard health palette overrides for dark mode -->
+    <color name="health_bg_neutral">#030B1E</color>
+    <color name="health_primary">#4A8DFF</color>
+    <color name="health_muted_navy">#EAF1FF</color>
+    <color name="health_card_white">#0A1735</color>
+    <color name="health_alert_warm">#2C2335</color>
+    <color name="health_optimal_green">#7DD3A7</color>
+    <color name="health_warning_orange">#F8C77B</color>
+    <color name="health_critical_red">#F07C8E</color>
+    <color name="health_text_muted">#8EA8DA</color>
+    <color name="pill_blue_bg">#13264F</color>
+    <color name="tag_success_bg">#1A3340</color>
+    <color name="tag_danger_bg">#3A2231</color>
+    <color name="tag_warning_bg">#3E2F1E</color>
+    <color name="reminder_purple_bg">#2A2245</color>
+    <color name="reminder_purple_icon">#C3A6FF</color>
 
     <!-- Legacy Overrides -->
-    <color name="white">#1E1E1E</color>
+    <color name="white">#0A1735</color>
     <color name="black">#FFFFFF</color>
-    <color name="bg_light">#121212</color>
-    <color name="blue_field_bg">#2C2C2C</color>
-    <color name="tab_selected_bg">#2C2C2C</color>
-    <color name="tab_unselected_bg">#121212</color>
+    <color name="bg_light">#030B1E</color>
+    <color name="blue_field_bg">#13264F</color>
+    <color name="tab_selected_bg">#13264F</color>
+    <color name="tab_unselected_bg">#030B1E</color>
     <color name="text_dark">#FFFFFF</color>
     <color name="success_green">#81C784</color>
     <color name="success_green_light">#1B3320</color>
