@@ -35,6 +35,16 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         Doctor doctor = doctors.get(position);
         holder.txtName.setText(doctor.getName());
         holder.txtSpecialty.setText(doctor.getSpecialty());
+        
+        String availability = doctor.getAvailability();
+        if (availability != null && !availability.isEmpty()) {
+            holder.txtAvailability.setText(availability);
+            holder.txtAvailability.setVisibility(View.VISIBLE);
+        } else {
+            holder.txtAvailability.setText("Available Today");
+            holder.txtAvailability.setVisibility(View.VISIBLE);
+        }
+        
         holder.itemView.setOnClickListener(v -> listener.onDoctorSelected(doctor));
     }
 
@@ -49,12 +59,13 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtName, txtSpecialty;
+        TextView txtName, txtSpecialty, txtAvailability;
 
         ViewHolder(View view) {
             super(view);
             txtName = view.findViewById(R.id.txt_doctor_name);
-            txtSpecialty = view.findViewById(R.id.txt_specialty);
+            txtSpecialty = view.findViewById(R.id.txt_doctor_specialty);
+            txtAvailability = view.findViewById(R.id.txt_doctor_availability);
         }
     }
 }
