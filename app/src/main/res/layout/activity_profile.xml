@@ -572,7 +572,7 @@
         layout="@layout/include_bottom_nav"
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="84dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
