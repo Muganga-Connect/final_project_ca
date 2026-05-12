@@ -99,14 +99,35 @@ public class AppointmentManagementActivity extends AppCompatActivity
             public void onSuccess(List<Appointment> result) {
                 runOnUiThread(() -> {
                     appointmentList.clear();
-                    // Filter by status if needed, or just show all for now
+                    Appointment featured = null;
                     for (Appointment appt : result) {
                         if (status.equals("ALL") || appt.getStatus().equalsIgnoreCase(status)) {
                             appointmentList.add(appt);
                         }
+                        if (appt.getStatus().equalsIgnoreCase("UPCOMING") || appt.getStatus().equalsIgnoreCase("CONFIRMED")) {
+                            if (featured == null) featured = appt;
+                        }
                     }
+                    if (featured != null) updateFeaturedCard(featured);
                     if (appointmentAdapter != null) appointmentAdapter.notifyDataSetChanged();
                 });
+            }
+
+            private void updateFeaturedCard(Appointment appt) {
+                TextView tvTitle = findViewById(R.id.tvFeaturedTitle);
+                TextView tvDoctor = findViewById(R.id.tvFeaturedDoctor);
+                TextView tvTime = findViewById(R.id.tvFeaturedTime);
+                TextView tvDay = findViewById(R.id.tvFeaturedDay);
+                
+                if (tvTitle != null) tvTitle.setText(appt.getDepartment() + " Follow-up");
+                if (tvDoctor != null) tvDoctor.setText(appt.getDoctorName());
+                if (tvTime != null) tvTime.setText(appt.getTime());
+                if (tvDay != null) {
+                    try {
+                        String day = appt.getDate().split("-")[2];
+                        tvDay.setText(day);
+                    } catch (Exception e) {}
+                }
             }
             @Override
             public void onError(String errorMessage) {}
