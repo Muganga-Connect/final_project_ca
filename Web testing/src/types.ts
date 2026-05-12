@@ -19,6 +19,8 @@ export interface Doctor {
   hospitalId: string;
   hospitalName?: string;
   specialty?: string;
+  department?: string;
+  rating?: number;
 }
 
 export interface Patient {

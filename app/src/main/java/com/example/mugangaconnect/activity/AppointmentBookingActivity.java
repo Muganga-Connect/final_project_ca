@@ -139,7 +139,8 @@ public class AppointmentBookingActivity extends AppCompatActivity
                     doctors.clear();
                     // Filter by department if needed
                     for (Doctor d : result) {
-                        if (d.getDepartment().equalsIgnoreCase(department)) {
+                        String docDept = d.getDepartment();
+                        if (docDept != null && docDept.equalsIgnoreCase(department)) {
                             doctors.add(d);
                         }
                     }

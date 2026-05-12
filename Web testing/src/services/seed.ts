@@ -17,8 +17,33 @@ export async function seedDatabase() {
 
   // Seed Doctors
   const doctors = [
-    { id: 'doc1', name: 'Dr. Jean Mukasa', email: 'jean@muganga.com', specialty: 'General Practice', hospitalId: 'hosp_001' },
-    { id: 'doc2', name: 'Dr. Sarah Smith', email: 'sarah@muganga.com', specialty: 'Pediatrics', hospitalId: 'hosp_002' }
+    { 
+      id: 'doc1', 
+      name: 'Dr. Jean Mukasa', 
+      email: 'jean@muganga.com', 
+      specialty: 'General Practice', 
+      department: 'General', 
+      hospitalId: 'hosp_001',
+      rating: 4.8
+    },
+    { 
+      id: 'doc2', 
+      name: 'Dr. Sarah Smith', 
+      email: 'sarah@muganga.com', 
+      specialty: 'Pediatrics', 
+      department: 'Pediatrics', 
+      hospitalId: 'hosp_002',
+      rating: 4.9
+    },
+    { 
+      id: 'doc3', 
+      name: 'Dr. David Kagame', 
+      email: 'david@muganga.com', 
+      specialty: 'Cardiology', 
+      department: 'General', 
+      hospitalId: 'hosp_003',
+      rating: 4.7
+    }
   ];
 
   for (const doctor of doctors) {
