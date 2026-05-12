@@ -177,14 +177,10 @@ class FirebaseDbService {
     }
   }
 
-  // Simulated Image Upload (converts to Base64 for persistence in mock environment)
+  // Upload profile image to Cloudinary (same account as the Android app)
   async uploadProfileImage(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
+    const { uploadToCloudinary } = await import('./cloudinary');
+    return uploadToCloudinary(file, 'profile_images');
   }
 }
 
