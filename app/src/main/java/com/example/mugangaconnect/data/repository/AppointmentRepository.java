@@ -115,8 +115,23 @@ public class AppointmentRepository {
     }
 
     public void getCachedByStatus(String uid, String status, Callback<List<Appointment>> callback) {
-        // Simple implementation that redirects to getForPatient for now
-        getForPatient(uid, callback);
+        getForPatient(uid, new Callback<List<Appointment>>() {
+            @Override
+            public void onSuccess(List<Appointment> result) {
+                List<Appointment> filtered = new ArrayList<>();
+                for (Appointment appt : result) {
+                    if (appt.getStatus().equalsIgnoreCase(status)) {
+                        filtered.add(appt);
+                    }
+                }
+                callback.onSuccess(filtered);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onError(errorMessage);
+            }
+        });
     }
 
     public interface Callback<T> {

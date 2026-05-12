@@ -49,7 +49,17 @@ public class AppointmentManagementActivity extends AppCompatActivity
         setupBookButton();
 
         BottomNavHelper.setup(this, BottomNavHelper.Screen.SCHEDULE);
+        setupViewAll();
         loadAppointments("UPCOMING");
+    }
+
+    private void setupViewAll() {
+        View tvViewAll = findViewById(R.id.tvViewAll);
+        if (tvViewAll != null) {
+            tvViewAll.setOnClickListener(v -> {
+                loadAppointments("ALL");
+            });
+        }
     }
 
     private void setupTabs() {
@@ -91,7 +101,7 @@ public class AppointmentManagementActivity extends AppCompatActivity
                     appointmentList.clear();
                     // Filter by status if needed, or just show all for now
                     for (Appointment appt : result) {
-                        if (appt.getStatus().equalsIgnoreCase(status)) {
+                        if (status.equals("ALL") || appt.getStatus().equalsIgnoreCase(status)) {
                             appointmentList.add(appt);
                         }
                     }
@@ -105,7 +115,11 @@ public class AppointmentManagementActivity extends AppCompatActivity
 
     @Override
     public void onReschedule(Appointment appointment) {
-        Toast.makeText(this, "Reschedule: " + appointment.getDoctorName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AppointmentBookingActivity.class);
+        intent.putExtra("reschedule_id", appointment.getId());
+        intent.putExtra("doctor_name", appointment.getDoctorName());
+        intent.putExtra("department", appointment.getDepartment());
+        startActivity(intent);
     }
 
     @Override

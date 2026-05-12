@@ -102,7 +102,24 @@ public class AppointmentHistoryActivity extends AppCompatActivity
                     @Override public void onSuccess(List<Appointment> data) {
                         runOnUiThread(() -> {
                             appointments.clear();
-                            appointments.addAll(data);
+                            if (status.equalsIgnoreCase(Appointment.Status.CANCELLED.name())) {
+                                // Filter: canceled for 4 days
+                                long fourDaysAgo = System.currentTimeMillis() - (4L * 24 * 60 * 60 * 1000);
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+                                for (Appointment appt : data) {
+                                    try {
+                                        java.util.Date apptDate = sdf.parse(appt.getDate());
+                                        if (apptDate != null && apptDate.getTime() >= fourDaysAgo) {
+                                            appointments.add(appt);
+                                        }
+                                    } catch (Exception e) {
+                                        // If date parsing fails, include it just in case or skip
+                                        appointments.add(appt);
+                                    }
+                                }
+                            } else {
+                                appointments.addAll(data);
+                            }
                             if (adapter != null) adapter.notifyDataSetChanged();
                         });
                     }
@@ -112,8 +129,27 @@ public class AppointmentHistoryActivity extends AppCompatActivity
                 });
     }
 
-    @Override public void onReschedule(Appointment appointment) { /* history is read-only */ }
-    @Override public void onCancel(Appointment appointment)     { /* history is read-only */ }
-    @Override public void onMarkAttended(Appointment appointment) { /* history is read-only */ }
-    @Override public void onMarkMissed(Appointment appointment)   { /* history is read-only */ }
+    @Override
+    public void onReschedule(Appointment appointment) {
+        Intent intent = new Intent(this, AppointmentBookingActivity.class);
+        intent.putExtra("reschedule_id", appointment.getId());
+        intent.putExtra("doctor_name", appointment.getDoctorName());
+        intent.putExtra("department", appointment.getDepartment());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCancel(Appointment appointment) {
+        appointmentRepo.updateStatus(appointment.getId(), session.getUid(), "CANCELLED", new AppointmentRepository.Callback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                runOnUiThread(() -> {
+                    Toast.makeText(AppointmentHistoryActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    loadByStatus(activeStatus);
+                });
+            }
+            @Override
+            public void onError(String errorMessage) {}
+        });
+    }
 }

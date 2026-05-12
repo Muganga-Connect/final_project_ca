@@ -39,6 +39,7 @@ public class AppointmentBookingActivity extends AppCompatActivity
     private Doctor selectedDoctor;
     private String selectedTimeSlot = "10:30 AM";
     private String selectedDate;
+    private String rescheduleId;
     private final List<Doctor> doctors = new ArrayList<>();
 
     private DoctorAdapter doctorAdapter;
@@ -59,6 +60,11 @@ public class AppointmentBookingActivity extends AppCompatActivity
         doctorRepo      = new DoctorRepository();
 
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
+        rescheduleId = getIntent().getStringExtra("reschedule_id");
+        if (rescheduleId != null) {
+            selectedDepartment = getIntent().getStringExtra("department");
+            // Optionally set other fields if provided
+        }
 
         setupHeader();
         setupSpecializationChips();
@@ -119,27 +125,44 @@ public class AppointmentBookingActivity extends AppCompatActivity
     }
 
     private void bookAppointment() {
-        if (selectedDoctor == null)  { Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show(); return; }
+        if (selectedDoctor == null && rescheduleId == null)  { Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show(); return; }
         String uid = session.getUid();
         if (uid == null) { Toast.makeText(this, "Please log in first", Toast.LENGTH_SHORT).show(); return; }
 
-        Appointment appt = new Appointment(uid, selectedDoctor.getId(), selectedDoctor.getName(), selectedDepartment, selectedDate, selectedTimeSlot);
         findViewById(R.id.btnBookNow).setEnabled(false);
 
-        appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
-            @Override public void onSuccess(Appointment result) {
-                runOnUiThread(() -> {
-                    Toast.makeText(AppointmentBookingActivity.this, "Booked Successfully!", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(AppointmentBookingActivity.this, AppointmentHistoryActivity.class));
-                    finish();
-                });
-            }
-            @Override public void onError(String message) {
-                runOnUiThread(() -> { 
-                    Toast.makeText(AppointmentBookingActivity.this, "Booking failed: " + message, Toast.LENGTH_LONG).show();
-                    findViewById(R.id.btnBookNow).setEnabled(true);
-                });
-            }
-        });
+        if (rescheduleId != null) {
+            appointmentRepo.reschedule(rescheduleId, selectedDate, selectedTimeSlot, new AppointmentRepository.Callback<Void>() {
+                @Override public void onSuccess(Void result) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(AppointmentBookingActivity.this, "Rescheduled Successfully!", Toast.LENGTH_LONG).show();
+                        finish();
+                    });
+                }
+                @Override public void onError(String message) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(AppointmentBookingActivity.this, "Reschedule failed: " + message, Toast.LENGTH_LONG).show();
+                        findViewById(R.id.btnBookNow).setEnabled(true);
+                    });
+                }
+            });
+        } else {
+            Appointment appt = new Appointment(uid, selectedDoctor.getId(), selectedDoctor.getName(), selectedDepartment, selectedDate, selectedTimeSlot);
+            appointmentRepo.book(appt, new AppointmentRepository.Callback<Appointment>() {
+                @Override public void onSuccess(Appointment result) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(AppointmentBookingActivity.this, "Booked Successfully!", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(AppointmentBookingActivity.this, AppointmentHistoryActivity.class));
+                        finish();
+                    });
+                }
+                @Override public void onError(String message) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(AppointmentBookingActivity.this, "Booking failed: " + message, Toast.LENGTH_LONG).show();
+                        findViewById(R.id.btnBookNow).setEnabled(true);
+                    });
+                }
+            });
+        }
     }
 }
