@@ -154,4 +154,14 @@ public class AppointmentHistoryActivity extends AppCompatActivity
             public void onError(String errorMessage) {}
         });
     }
+
+    @Override
+    public void onMarkAttended(Appointment appointment) {
+        // Implementation if needed
+    }
+
+    @Override
+    public void onMarkMissed(Appointment appointment) {
+        // Implementation if needed
+    }
 }
