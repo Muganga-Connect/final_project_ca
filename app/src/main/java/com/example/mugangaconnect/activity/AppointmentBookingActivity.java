@@ -159,11 +159,80 @@ public class AppointmentBookingActivity extends AppCompatActivity
     }
 
     private void setupDateTimeSelection() {
-        // rvTimeSlots and calendarView setup
+        calendarView = findViewById(R.id.calendarView);
+        RecyclerView rvTimeSlots = findViewById(R.id.rvTimeSlots);
+        
+        if (rvTimeSlots != null) {
+            rvTimeSlots.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+        }
+
+        if (calendarView != null) {
+            calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                loadAvailableTimeSlots(selectedDate);
+            });
+        }
+    }
+
+    private void loadAvailableTimeSlots(String date) {
+        if (selectedDoctor == null) {
+            Toast.makeText(this, "Please select a doctor first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        appointmentRepo.getBookedSlots(selectedDoctor.getId(), date, new AppointmentRepository.Callback<List<String>>() {
+            @Override
+            public void onSuccess(List<String> bookedSlots) {
+                List<String> allSlots = generateSlotsForDoctor(selectedDoctor);
+                runOnUiThread(() -> {
+                    TimeSlotAdapter adapter = new TimeSlotAdapter(allSlots, bookedSlots, slot -> {
+                        selectedTimeSlot = slot;
+                    });
+                    RecyclerView rvTimeSlots = findViewById(R.id.rvTimeSlots);
+                    if (rvTimeSlots != null) rvTimeSlots.setAdapter(adapter);
+                });
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                runOnUiThread(() -> Toast.makeText(AppointmentBookingActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    private List<String> generateSlotsForDoctor(Doctor doctor) {
+        List<String> slots = new ArrayList<>();
+        Doctor.AvailabilitySchedule schedule = doctor.getAvailabilitySchedule();
+        
+        String start = (schedule != null && schedule.startTime != null) ? schedule.startTime : "08:00";
+        String end = (schedule != null && schedule.endTime != null) ? schedule.endTime : "17:00";
+        int duration = (schedule != null && schedule.slotDuration > 0) ? schedule.slotDuration : 30;
+
+        try {
+            int startHour = Integer.parseInt(start.split(":")[0]);
+            int startMin = Integer.parseInt(start.split(":")[1]);
+            int endHour = Integer.parseInt(end.split(":")[0]);
+            int endMin = Integer.parseInt(end.split(":")[1]);
+
+            int currentTotalMin = startHour * 60 + startMin;
+            int endTotalMin = endHour * 60 + endMin;
+
+            while (currentTotalMin + duration <= endTotalMin) {
+                int h = currentTotalMin / 60;
+                int m = currentTotalMin % 60;
+                slots.add(String.format("%02d:%02d", h, m));
+                currentTotalMin += duration;
+            }
+        } catch (Exception e) {
+            // Default slots if schedule is malformed
+            slots.add("09:00"); slots.add("10:00"); slots.add("11:00");
+            slots.add("14:00"); slots.add("15:00"); slots.add("16:00");
+        }
+        return slots;
     }
 
     private void setupBookButton() {
-        View btnBook = findViewById(R.id.btnBookNow);
+        View btnBook = findViewById(R.id.btnConfirmBooking);
         if (btnBook != null) btnBook.setOnClickListener(v -> bookAppointment());
     }
 

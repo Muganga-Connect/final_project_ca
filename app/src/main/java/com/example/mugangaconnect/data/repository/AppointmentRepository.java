@@ -68,6 +68,25 @@ public class AppointmentRepository {
         return appointment;
     }
     
+    public void getBookedSlots(String doctorId, String date, Callback<List<String>> callback) {
+        db.collection(COLLECTION_NAME)
+            .whereEqualTo("doctorId", doctorId)
+            .whereEqualTo("date", date)
+            .get()
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<String> bookedSlots = new ArrayList<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        String time = document.getString("time");
+                        if (time != null) bookedSlots.add(time);
+                    }
+                    callback.onSuccess(bookedSlots);
+                } else {
+                    callback.onError(task.getException().getMessage());
+                }
+            });
+    }
+
     public void getForPatient(String patientId, Callback<List<Appointment>> callback) {
         db.collection(COLLECTION_NAME)
             .whereEqualTo("patientId", patientId)
