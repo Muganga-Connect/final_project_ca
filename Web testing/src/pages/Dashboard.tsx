@@ -44,23 +44,6 @@ export default function Dashboard() {
     loadData();
   }, [user.id]);
 
-  useEffect(() => {
-    async function loadData() {
-      const dbStats = await mockDb.getStats(user.id);
-      const allApps = await mockDb.getAppointments(user.id);
-      setStats(dbStats);
-      // Sort by date and time
-      const sorted = allApps.sort((a, b) => {
-        const dateCompare = b.date.localeCompare(a.date);
-        if (dateCompare !== 0) return dateCompare;
-        return a.time.localeCompare(b.time);
-      });
-      setRecentAppointments(sorted);
-      setIsLoading(false);
-    }
-    loadData();
-  }, [user.id]);
-
   if (isLoading) {
     // ... loading state ...
   }
