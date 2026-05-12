@@ -42,9 +42,17 @@
         <h4>Dashboard</h4>
         <p id="greeting">Welcome back, Doctor</p>
       </div>
-      <div style="color:#6b6b68;font-size:14px;">
-        <i class="bi bi-calendar3 me-1"></i>
-        <span id="currentDate"></span>
+      <div class="d-flex align-items-center">
+        <select id="hospitalFilter" class="form-select form-select-sm me-3" style="width: 200px; border-radius: 20px;" onchange="onHospitalChange()">
+          <option value="all">All Hospitals</option>
+          <option value="hosp_001">King Faisal Hospital</option>
+          <option value="hosp_002">CHUK Hospital</option>
+          <option value="hosp_003">Legacy Clinics</option>
+        </select>
+        <div style="color:#6b6b68;font-size:14px;">
+          <i class="bi bi-calendar3 me-1"></i>
+          <span id="currentDate"></span>
+        </div>
       </div>
     </div>
 
@@ -117,8 +125,17 @@
       loadRecentAppointments();
     });
 
+    function onHospitalChange() {
+      loadStats();
+      loadRecentAppointments();
+    }
+
     function loadStats() {
-      db.collection('appointments').get().then(snapshot => {
+      const hospId = document.getElementById('hospitalFilter').value;
+      let query = db.collection('appointments');
+      if (hospId !== 'all') query = query.where('hospitalId', '==', hospId);
+
+      query.get().then(snapshot => {
         let total = 0, pending = 0, confirmed = 0, missed = 0;
         snapshot.forEach(doc => {
           const d = doc.data();
@@ -135,7 +152,11 @@
     }
 
     function loadRecentAppointments() {
-      db.collection('appointments').orderBy('date', 'desc').limit(5).get()
+      const hospId = document.getElementById('hospitalFilter').value;
+      let query = db.collection('appointments');
+      if (hospId !== 'all') query = query.where('hospitalId', '==', hospId);
+
+      query.orderBy('date', 'desc').limit(5).get()
         .then(snapshot => {
           if (snapshot.empty) {
             document.getElementById('recentTableBody').innerHTML = `
@@ -152,7 +173,7 @@
           snapshot.forEach(doc => {
             const d = doc.data();
             rows += `<tr>
-              <td><i class="bi bi-person-circle me-2" style="color:#534AB7;"></i>${d.patientName || 'N/A'}</td>
+              <td><i class="bi bi-person-circle me-2" style="color:#534AB7;"></i>${d.patientName || 'Anonymous'}</td>
               <td>${d.date || 'N/A'}</td>
               <td>${d.time || 'N/A'}</td>
               <td><span class="badge-${d.status || 'pending'}">${(d.status || 'pending').toUpperCase()}</span></td>

@@ -40,7 +40,14 @@
     <div class="topbar">
       <div>
         <h4>Appointments</h4>
-        <p>Manage all patient appointments</p>
+      <div class="d-flex align-items-center">
+        <select id="hospitalFilter" class="form-select form-select-sm me-3" style="width: 200px; border-radius: 20px;" onchange="onHospitalChange()">
+          <option value="all">All Hospitals</option>
+          <option value="hosp_001">King Faisal Hospital</option>
+          <option value="hosp_002">CHUK Hospital</option>
+          <option value="hosp_003">Legacy Clinics</option>
+        </select>
+        <p class="mb-0">Manage all patient appointments</p>
       </div>
     </div>
 
@@ -97,8 +104,16 @@
       loadAppointments();
     });
 
+    function onHospitalChange() {
+      loadAppointments();
+    }
+
     function loadAppointments() {
-      db.collection('appointments').orderBy('date', 'desc').onSnapshot(snapshot => {
+      const hospId = document.getElementById('hospitalFilter').value;
+      let query = db.collection('appointments');
+      if (hospId !== 'all') query = query.where('hospitalId', '==', hospId);
+
+      query.orderBy('date', 'desc').onSnapshot(snapshot => {
         allAppointments = [];
         snapshot.forEach(doc => allAppointments.push({ id: doc.id, ...doc.data() }));
         renderTable(allAppointments);

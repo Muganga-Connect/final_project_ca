@@ -8,6 +8,7 @@ public class Doctor {
     private double rating;
     private String imageUrl;
     private String availability;
+    private String hospitalId;
 
     public Doctor() {}
 
@@ -41,4 +42,6 @@ public class Doctor {
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public String getAvailability() { return availability; }
     public void setAvailability(String availability) { this.availability = availability; }
+    public String getHospitalId() { return hospitalId; }
+    public void setHospitalId(String hospitalId) { this.hospitalId = hospitalId; }
 }
