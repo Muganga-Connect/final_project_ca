@@ -235,7 +235,7 @@ public class AppointmentBookingActivity extends AppCompatActivity
     }
 
     private void setupBookButton() {
-        View btnBook = findViewById(R.id.btnConfirmBooking);
+        View btnBook = findViewById(R.id.btnBookNow);
         if (btnBook != null) btnBook.setOnClickListener(v -> bookAppointment());
     }
 

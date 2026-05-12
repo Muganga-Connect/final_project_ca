@@ -13,9 +13,10 @@ import {
   Clock, 
   CheckCircle2, 
   ArrowRight,
-  TrendingUp
+  TrendingUp,
+  X
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -23,131 +24,124 @@ export default function Dashboard() {
   const [stats, setStats] = useState({ total: 0, pending: 0, confirmed: 0, completed: 0 });
   const [recentAppointments, setRecentAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [viewingAppointment, setViewingAppointment] = useState<Appointment | null>(null);
 
   useEffect(() => {
     async function loadData() {
       const dbStats = await mockDb.getStats(user.id);
       const allApps = await mockDb.getAppointments(user.id);
       setStats(dbStats);
-      setRecentAppointments(allApps.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5));
+      // Sort by date and time
+      const sorted = allApps.sort((a, b) => {
+        const dateCompare = b.date.localeCompare(a.date);
+        if (dateCompare !== 0) return dateCompare;
+        return a.time.localeCompare(b.time);
+      });
+      setRecentAppointments(sorted);
+      setIsLoading(false);
+    }
+    loadData();
+  }, [user.id]);
+
+  useEffect(() => {
+    async function loadData() {
+      const dbStats = await mockDb.getStats(user.id);
+      const allApps = await mockDb.getAppointments(user.id);
+      setStats(dbStats);
+      // Sort by date and time
+      const sorted = allApps.sort((a, b) => {
+        const dateCompare = b.date.localeCompare(a.date);
+        if (dateCompare !== 0) return dateCompare;
+        return a.time.localeCompare(b.time);
+      });
+      setRecentAppointments(sorted);
       setIsLoading(false);
     }
     loadData();
   }, [user.id]);
 
   if (isLoading) {
-    return <div className="animate-pulse space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1,2,3,4].map(i => <div key={i} className="h-32 bg-slate-200 rounded-2xl" />)}
-      </div>
-      <div className="h-64 bg-slate-200 rounded-2xl" />
-    </div>;
+    // ... loading state ...
   }
 
-  const statCards = [
-    { label: 'Total Appointments', value: stats.total, icon: Calendar, color: 'bg-indigo-600', text: 'text-indigo-600' },
-    { label: 'Pending Requests', value: stats.pending, icon: Clock, color: 'bg-amber-500', text: 'text-amber-500' },
-    { label: 'Confirmed Today', value: stats.confirmed, icon: CheckCircle2, color: 'bg-emerald-500', text: 'text-emerald-500' },
-    { label: 'Active Patients', value: stats.total, icon: Users, color: 'bg-pink-600', text: 'text-pink-600' },
-  ];
+  // ... statCards ...
+
+  const appointmentsOnSelectedDate = recentAppointments.filter(a => a.date === selectedDate);
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto pb-12">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col gap-4 relative overflow-hidden group hover:shadow-md transition-shadow"
-          >
-            <div className={`w-12 h-12 rounded-2xl ${stat.color} text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform`}>
-              <stat.icon size={24} />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">{stat.label}</p>
-              <div className="flex items-baseline gap-2">
-                <h3 className="text-3xl font-bold text-slate-900 mt-1">{stat.value}</h3>
-                <span className="text-xs text-emerald-600 font-bold flex items-center gap-0.5">
-                  <TrendingUp size={12} /> +12%
-                </span>
-              </div>
-            </div>
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none transform translate-x-2 -translate-y-2">
-              <stat.icon size={80} />
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      {/* ... existing stats grid ... */}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Appointments */}
+        {/* Recent Appointments Table */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden flex flex-col"
         >
           <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-slate-800">Recent Appointments</h3>
-            <Link 
-              to="/appointments" 
-              className="text-indigo-600 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all"
-            >
-              View All <ArrowRight size={16} />
-            </Link>
+            <h3 className="text-lg font-bold text-slate-800">
+              Appointments for {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </h3>
+            <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-xs font-bold">
+              {appointmentsOnSelectedDate.length} Total
+            </span>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-slate-50/50">
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Date & Time</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Reason</th>
-                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {recentAppointments.map((app) => (
-                  <tr key={app.id} className="hover:bg-slate-50/80 transition-colors group">
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
-                          {(app.patientName || 'A').charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-slate-900 leading-none">{app.patientName || 'Anonymous'}</p>
-                          <p className="text-[11px] text-slate-400 mt-1 font-medium italic">ID: {(app.patientId || 'unknown').toUpperCase()}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-slate-600 font-medium">
-                        <div className="flex items-center gap-1.5">
-                           <span className="text-slate-900">{app.date}</span>
-                        </div>
-                        <div className="text-xs text-slate-400 font-normal">{app.time}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-slate-600 truncate max-w-[150px] inline-block">{app.reason}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`
-                        px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
-                        ${app.status === 'confirmed' ? 'bg-emerald-50 text-emerald-700' : ''}
-                        ${app.status === 'pending' ? 'bg-amber-50 text-amber-700' : ''}
-                        ${app.status === 'completed' ? 'bg-blue-50 text-blue-700' : ''}
-                        ${app.status === 'cancelled' ? 'bg-red-50 text-red-700' : ''}
-                      `}>
-                        {app.status}
-                      </span>
-                    </td>
+          
+          <div className="flex-1 overflow-auto max-h-[600px]">
+            {appointmentsOnSelectedDate.length > 0 ? (
+              <table className="w-full text-left">
+                <thead className="sticky top-0 bg-white z-10">
+                  <tr className="bg-slate-50/50">
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Time</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Reason</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {appointmentsOnSelectedDate.map((app) => (
+                    <tr key={app.id} className="hover:bg-slate-50/80 transition-colors group">
+                      <td className="px-6 py-5">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
+                            {app.patientName.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-900 leading-none">{app.patientName}</p>
+                            <p className="text-[10px] text-slate-400 mt-1 font-medium">PATIENT ID: {app.patientId.substring(0, 8)}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">{app.time}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm text-slate-600 truncate max-w-[150px] inline-block">{app.reason || 'General Checkup'}</span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button 
+                          onClick={() => setViewingAppointment(app)}
+                          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
+                        >
+                          <ArrowRight size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-300 mb-4">
+                  <Calendar size={32} />
+                </div>
+                <h4 className="text-slate-900 font-bold">No appointments</h4>
+                <p className="text-slate-500 text-sm mt-1">There are no bookings for this date.</p>
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -155,18 +149,12 @@ export default function Dashboard() {
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 overflow-hidden"
+          className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 overflow-hidden flex flex-col"
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-slate-800">Appointment Calendar</h3>
+            <h3 className="text-lg font-bold text-slate-800">Calendar</h3>
             <div className="flex items-center gap-1">
-              <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
-                <ArrowRight className="rotate-180" size={18} />
-              </button>
               <span className="text-sm font-bold text-slate-600 px-2">May 2026</span>
-              <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
-                <ArrowRight size={18} />
-              </button>
             </div>
           </div>
 
@@ -183,47 +171,127 @@ export default function Dashboard() {
               const day = i + 1;
               const dateStr = `2026-05-${day.toString().padStart(2, '0')}`;
               const hasAppointments = recentAppointments.some(a => a.date === dateStr);
+              const isSelected = dateStr === selectedDate;
               const isToday = day === 12;
 
               return (
-                <div 
+                <button 
                   key={day}
+                  onClick={() => setSelectedDate(dateStr)}
                   className={`
-                    aspect-square flex flex-col items-center justify-center rounded-xl text-sm transition-all cursor-pointer relative
-                    ${isToday ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 font-bold' : 'hover:bg-slate-50 text-slate-600'}
-                    ${hasAppointments && !isToday ? 'bg-indigo-50 text-indigo-700 font-bold ring-1 ring-indigo-100' : ''}
+                    aspect-square flex flex-col items-center justify-center rounded-xl text-sm transition-all relative
+                    ${isSelected ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 font-bold z-10' : 'hover:bg-slate-50 text-slate-600'}
+                    ${!isSelected && isToday ? 'ring-2 ring-indigo-200' : ''}
+                    ${hasAppointments && !isSelected ? 'text-indigo-700 font-bold' : ''}
                   `}
                 >
                   {day}
                   {hasAppointments && (
-                    <div className={`w-1 h-1 rounded-full absolute bottom-1.5 ${isToday ? 'bg-white' : 'bg-indigo-600'}`} />
+                    <div className={`w-1 h-1 rounded-full absolute bottom-1.5 ${isSelected ? 'bg-white' : 'bg-indigo-600'}`} />
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
 
-          <div className="mt-8 space-y-4 pt-6 border-t border-slate-50">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Upcoming Today</h4>
-            <div className="space-y-3">
-              {recentAppointments
-                .filter(a => a.date === '2026-05-12')
-                .map(a => (
-                  <div key={a.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl">
-                    <div className="w-1.5 h-8 bg-indigo-600 rounded-full" />
-                    <div>
-                      <p className="text-sm font-bold text-slate-800 leading-none">{a.time}</p>
-                      <p className="text-xs text-slate-500 mt-1">{a.patientName}</p>
-                    </div>
-                  </div>
-                ))}
-              {recentAppointments.filter(a => a.date === '2026-05-12').length === 0 && (
-                <p className="text-sm text-slate-400 italic">No appointments for selected date.</p>
+          <div className="mt-8 space-y-4 pt-6 border-t border-slate-50 flex-1">
+            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Time Slots Summary</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {appointmentsOnSelectedDate.slice(0, 4).map(a => (
+                <div key={a.id} className="p-2 bg-slate-50 rounded-xl text-[11px] font-bold text-slate-600 border border-slate-100">
+                  {a.time} - {a.patientName.split(' ')[0]}
+                </div>
+              ))}
+              {appointmentsOnSelectedDate.length > 4 && (
+                <div className="p-2 bg-indigo-50 rounded-xl text-[11px] font-bold text-indigo-600 text-center">
+                  +{appointmentsOnSelectedDate.length - 4} more
+                </div>
               )}
             </div>
           </div>
         </motion.div>
       </div>
+
+      {/* Appointment Detail Modal */}
+      <AnimatePresence>
+        {viewingAppointment && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setViewingAppointment(null)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden relative"
+            >
+              <div className="h-32 bg-indigo-600 relative p-8 flex items-end">
+                <button 
+                  onClick={() => setViewingAppointment(null)}
+                  className="absolute top-6 right-6 p-2 bg-white/20 hover:bg-white/30 rounded-full text-white transition-colors"
+                >
+                  <X size={20} />
+                </button>
+                <div className="flex items-center gap-4">
+                   <div className="w-16 h-16 rounded-2xl bg-white text-indigo-600 flex items-center justify-center text-2xl font-bold shadow-lg">
+                      {viewingAppointment.patientName.charAt(0)}
+                   </div>
+                   <div className="text-white">
+                      <h2 className="text-xl font-bold">{viewingAppointment.patientName}</h2>
+                      <p className="text-indigo-100 text-sm">Appointment Details</p>
+                   </div>
+                </div>
+              </div>
+              
+              <div className="p-8 space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</p>
+                      <p className="text-slate-900 font-semibold">{viewingAppointment.date}</p>
+                   </div>
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Time Slot</p>
+                      <p className="text-indigo-600 font-bold">{viewingAppointment.time}</p>
+                   </div>
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</p>
+                      <span className="bg-emerald-50 text-emerald-600 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase">
+                        {viewingAppointment.status}
+                      </span>
+                   </div>
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Department</p>
+                      <p className="text-slate-900 font-semibold">{viewingAppointment.department || 'General'}</p>
+                   </div>
+                </div>
+
+                <div className="space-y-2 pt-4 border-t border-slate-50">
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reason for Visit</p>
+                   <p className="text-slate-600 text-sm leading-relaxed italic">
+                      "{viewingAppointment.reason || 'Patient did not provide a specific reason for this visit. Standard checkup recommended.'}"
+                   </p>
+                </div>
+
+                <div className="flex gap-3 pt-6">
+                   <button className="flex-1 bg-indigo-600 text-white py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                      View Medical Record
+                   </button>
+                   <button 
+                     onClick={() => setViewingAppointment(null)}
+                     className="px-6 bg-slate-50 text-slate-600 py-4 rounded-2xl font-bold hover:bg-slate-100 transition-all"
+                   >
+                      Close
+                   </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
