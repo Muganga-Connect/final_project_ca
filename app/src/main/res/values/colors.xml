@@ -1,5 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Health-Tech Redesign Palette -->
+    <color name="health_bg_neutral">#F5F7FA</color>
+    <color name="health_primary">#4A90E2</color>
+    <color name="health_muted_navy">#34495E</color>
+    <color name="health_card_white">#FFFFFF</color>
+    <color name="health_alert_warm">#FFF4E5</color>
+    <color name="health_optimal_green">#2ECC71</color>
+    <color name="health_warning_orange">#E67E22</color>
+    <color name="health_critical_red">#E74C3C</color>
+    <color name="health_text_muted">#7F8C8D</color>
+
     <!-- Brand Palette (Fixed) -->
     <color name="white_fixed">#FFFFFF</color>
     <color name="black_fixed">#000000</color>

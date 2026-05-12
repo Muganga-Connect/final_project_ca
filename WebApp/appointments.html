@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MugangaConnect+ | Appointments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ── Sidebar ── -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <h5><i class="bi bi-heart-pulse-fill me-2"></i>MugangaConnect+</h5>
+      <p>Doctor Portal</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="bi bi-grid"></i> Dashboard</a>
+      <a href="appointments.html" class="nav-item active"><i class="bi bi-calendar-check"></i> Appointments</a>
+      <a href="patients.html" class="nav-item"><i class="bi bi-people"></i> Patients</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="doctor-info">
+        <div class="doctor-avatar"><i class="bi bi-person-fill"></i></div>
+        <div>
+          <p class="doctor-name" id="doctorName">Doctor</p>
+          <p class="doctor-role">Medical Doctor</p>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">
+        <i class="bi bi-box-arrow-left me-2"></i>Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Main Content ── -->
+  <div class="main-content">
+    <div class="topbar">
+      <div>
+        <h4>Appointments</h4>
+        <p>Manage all patient appointments</p>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+      <button class="btn btn-sm filter-btn active-filter" onclick="filterAppointments('all', this)">All</button>
+      <button class="btn btn-sm filter-btn" onclick="filterAppointments('pending', this)">Pending</button>
+      <button class="btn btn-sm filter-btn" onclick="filterAppointments('confirmed', this)">Confirmed</button>
+      <button class="btn btn-sm filter-btn" onclick="filterAppointments('completed', this)">Completed</button>
+      <button class="btn btn-sm filter-btn" onclick="filterAppointments('cancelled', this)">Cancelled</button>
+      <button class="btn btn-sm filter-btn" onclick="filterAppointments('missed', this)">Missed</button>
+      <input type="text" class="search-bar ms-auto" id="searchInput" placeholder="🔍  Search patient..." oninput="searchAppointments()"/>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div id="appointmentsBody">
+        <div class="empty-state">
+          <i class="bi bi-calendar-x d-block"></i>
+          <p>Loading appointments...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index:999">
+    <div id="toast" class="toast align-items-center text-white border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMsg"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .filter-btn { border-radius: 20px; padding: 6px 18px; font-size: 13px; font-weight: 600; border: 1.5px solid #e0dfd8; color: #6b6b68; background: white; }
+    .filter-btn:hover, .active-filter { background: #534AB7 !important; color: white !important; border-color: #534AB7 !important; }
+  </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    let allAppointments = [];
+    let currentFilter = 'all';
+
+    auth.onAuthStateChanged(user => {
+      if (!user) { window.location.href = 'index.html'; return; }
+      document.getElementById('doctorName').textContent = user.email.split('@')[0];
+      loadAppointments();
+    });
+
+    function loadAppointments() {
+      db.collection('appointments').orderBy('date', 'desc').onSnapshot(snapshot => {
+        allAppointments = [];
+        snapshot.forEach(doc => allAppointments.push({ id: doc.id, ...doc.data() }));
+        renderTable(allAppointments);
+      });
+    }
+
+    function renderTable(data) {
+      if (data.length === 0) {
+        document.getElementById('appointmentsBody').innerHTML = `
+          <div class="empty-state">
+            <i class="bi bi-calendar-x d-block"></i>
+            <p>No appointments found.</p>
+          </div>`;
+        return;
+      }
+
+      let rows = `<table class="table">
+        <thead><tr>
+          <th>Patient</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th>
+        </tr></thead><tbody>`;
+
+      data.forEach(d => {
+        const status = d.status || 'pending';
+        let actions = '';
+        if (status === 'pending') {
+          actions = `
+            <button class="btn-confirm me-1" onclick="updateStatus('${d.id}', 'confirmed')"><i class="bi bi-check-lg me-1"></i>Confirm</button>
+            <button class="btn-reject" onclick="updateStatus('${d.id}', 'cancelled')"><i class="bi bi-x-lg me-1"></i>Reject</button>`;
+        } else if (status === 'confirmed') {
+          actions = `<button class="btn-complete" onclick="updateStatus('${d.id}', 'completed')"><i class="bi bi-check-all me-1"></i>Mark Complete</button>`;
+        } else {
+          actions = `<span class="text-muted" style="font-size:13px;">No actions</span>`;
+        }
+
+        rows += `<tr>
+          <td><i class="bi bi-person-circle me-2" style="color:#534AB7;"></i>${d.patientName || 'N/A'}</td>
+          <td>${d.date || 'N/A'}</td>
+          <td>${d.time || 'N/A'}</td>
+          <td><span class="badge-${status}">${status.toUpperCase()}</span></td>
+          <td>${actions}</td>
+        </tr>`;
+      });
+
+      rows += '</tbody></table>';
+      document.getElementById('appointmentsBody').innerHTML = rows;
+    }
+
+    function filterAppointments(status, btn) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+      btn.classList.add('active-filter');
+      const filtered = status === 'all' ? allAppointments : allAppointments.filter(a => a.status === status);
+      renderTable(filtered);
+    }
+
+    function searchAppointments() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allAppointments.filter(a =>
+        (a.patientName || '').toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    }
+
+    function updateStatus(id, status) {
+      db.collection('appointments').doc(id).update({ status })
+        .then(() => showToast(`Appointment ${status} successfully!`, status === 'cancelled' ? 'danger' : 'success'))
+        .catch(() => showToast('Error updating appointment.', 'danger'));
+    }
+
+    function showToast(msg, type) {
+      const toast = document.getElementById('toast');
+      toast.className = `toast align-items-center text-white border-0 bg-${type}`;
+      document.getElementById('toastMsg').textContent = msg;
+      new bootstrap.Toast(toast).show();
+    }
+
+    function logout() {
+      auth.signOut().then(() => window.location.href = 'index.html');
+    }
+  </script>
+</body>
+</html>
