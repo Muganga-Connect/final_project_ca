@@ -21,6 +21,13 @@ export interface Doctor {
   specialty?: string;
   department?: string;
   rating?: number;
+  profileImage?: string;
+  availability?: {
+    days: string[]; // ['Monday', 'Tuesday', ...]
+    startTime: string; // '08:00'
+    endTime: string; // '17:00'
+    slotDuration: number; // minutes, e.g. 30
+  };
 }
 
 export interface Patient {

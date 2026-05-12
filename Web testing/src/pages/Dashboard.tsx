@@ -151,40 +151,75 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Quick Actions / Activity */}
+        {/* Calendar View */}
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6"
+          className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 overflow-hidden"
         >
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Medical Insights</h3>
-          <div className="space-y-6 text-sm">
-            <div className="flex gap-4">
-              <div className="w-1.5 bg-indigo-600 rounded-full shrink-0" />
-              <div>
-                <p className="font-bold text-slate-900">Weekly Summary</p>
-                <p className="text-slate-500 mt-1 leading-relaxed">You have <span className="text-indigo-600 font-bold">12 confirmed</span> appointments for the upcoming week.</p>
-              </div>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-slate-800">Appointment Calendar</h3>
+            <div className="flex items-center gap-1">
+              <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
+                <ArrowRight className="rotate-180" size={18} />
+              </button>
+              <span className="text-sm font-bold text-slate-600 px-2">May 2026</span>
+              <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
+                <ArrowRight size={18} />
+              </button>
             </div>
-            <div className="flex gap-4">
-              <div className="w-1.5 bg-amber-500 rounded-full shrink-0" />
-              <div>
-                <p className="font-bold text-slate-900">Urgent Request</p>
-                <p className="text-slate-500 mt-1 leading-relaxed">Jane Gakuba sent a request for Flu symptoms. High priority.</p>
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 mb-2">
+            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => (
+              <div key={day} className="text-center text-[10px] font-bold text-slate-400 uppercase py-2">
+                {day}
               </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-1.5 bg-emerald-500 rounded-full shrink-0" />
-              <div>
-                <p className="font-bold text-slate-900">Patient Milestone</p>
-                <p className="text-slate-500 mt-1 leading-relaxed">Alice Mutoni has completed her 3rd prenatal consult successfully.</p>
-              </div>
-            </div>
-            
-            <div className="pt-4 mt-4 border-t border-slate-50">
-               <button className="w-full bg-slate-900 text-white py-3 rounded-2xl font-bold hover:bg-slate-800 transition-colors shadow-lg shadow-slate-100">
-                  Generate Weekly Report
-               </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-7 gap-1">
+            {Array.from({ length: 31 }).map((_, i) => {
+              const day = i + 1;
+              const dateStr = `2026-05-${day.toString().padStart(2, '0')}`;
+              const hasAppointments = recentAppointments.some(a => a.date === dateStr);
+              const isToday = day === 12;
+
+              return (
+                <div 
+                  key={day}
+                  className={`
+                    aspect-square flex flex-col items-center justify-center rounded-xl text-sm transition-all cursor-pointer relative
+                    ${isToday ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 font-bold' : 'hover:bg-slate-50 text-slate-600'}
+                    ${hasAppointments && !isToday ? 'bg-indigo-50 text-indigo-700 font-bold ring-1 ring-indigo-100' : ''}
+                  `}
+                >
+                  {day}
+                  {hasAppointments && (
+                    <div className={`w-1 h-1 rounded-full absolute bottom-1.5 ${isToday ? 'bg-white' : 'bg-indigo-600'}`} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 space-y-4 pt-6 border-t border-slate-50">
+            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Upcoming Today</h4>
+            <div className="space-y-3">
+              {recentAppointments
+                .filter(a => a.date === '2026-05-12')
+                .map(a => (
+                  <div key={a.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl">
+                    <div className="w-1.5 h-8 bg-indigo-600 rounded-full" />
+                    <div>
+                      <p className="text-sm font-bold text-slate-800 leading-none">{a.time}</p>
+                      <p className="text-xs text-slate-500 mt-1">{a.patientName}</p>
+                    </div>
+                  </div>
+                ))}
+              {recentAppointments.filter(a => a.date === '2026-05-12').length === 0 && (
+                <p className="text-sm text-slate-400 italic">No appointments for selected date.</p>
+              )}
             </div>
           </div>
         </motion.div>

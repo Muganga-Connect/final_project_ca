@@ -1,6 +1,6 @@
 import { collection, getDocs, getDoc, doc, updateDoc, query, where, orderBy, limit } from 'firebase/firestore';
 import { db } from './firebase';
-import { Doctor, Patient, Appointment, AppointmentStatus } from '../types';
+import { Doctor, Patient, Appointment, AppointmentStatus, Hospital } from '../types';
 
 class FirebaseDbService {
   // Hospitals
@@ -21,17 +21,17 @@ class FirebaseDbService {
   async login(email: string, hospitalId: string): Promise<Doctor | null> {
     try {
       const q = query(
-        collection(db, 'doctors'), 
+        collection(db, 'doctors'),
         where('email', '==', email),
         where('hospitalId', '==', hospitalId),
         limit(1)
       );
       const querySnapshot = await getDocs(q);
-      
+
       if (querySnapshot.empty) return null;
-      
+
       const docData = querySnapshot.docs[0].data();
-      
+
       // Fetch Hospital details
       const hospRef = doc(db, 'hospitals', hospitalId);
       const hospSnap = await getDoc(hospRef);
@@ -67,7 +67,7 @@ class FirebaseDbService {
     try {
       const docRef = doc(db, 'patients', id);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         return { id: docSnap.id, ...docSnap.data() } as Patient;
       }
@@ -86,9 +86,9 @@ class FirebaseDbService {
       // Once verified, we can re-enable the: if (doctorId) query
       const q = query(collection(db, 'appointments'));
       const querySnapshot = await getDocs(q);
-      
+
       console.log(`Found ${querySnapshot.size} appointments`);
-      
+
       const apps = querySnapshot.docs.map(d => {
         const data = d.data();
         return {
@@ -111,12 +111,12 @@ class FirebaseDbService {
   async getPatientAppointments(patientId: string, doctorId?: string): Promise<Appointment[]> {
     try {
       let q = query(
-        collection(db, 'appointments'), 
+        collection(db, 'appointments'),
         where('patientId', '==', patientId)
       );
       if (doctorId) {
         q = query(
-          collection(db, 'appointments'), 
+          collection(db, 'appointments'),
           where('patientId', '==', patientId),
           where('doctorId', '==', doctorId)
         );
@@ -126,7 +126,7 @@ class FirebaseDbService {
         id: doc.id,
         ...doc.data()
       })) as Appointment[];
-      
+
       // Sort in memory to avoid index requirements
       return apps.sort((a, b) => b.date.localeCompare(a.date));
     } catch (error) {
@@ -152,7 +152,7 @@ class FirebaseDbService {
       const q = query(collection(db, 'appointments'));
       const querySnapshot = await getDocs(q);
       const appointments = querySnapshot.docs.map(doc => doc.data() as Appointment);
-      
+
       const total = appointments.length;
       const pending = appointments.filter(a => a.status === 'pending').length;
       const confirmed = appointments.filter(a => a.status === 'confirmed').length;

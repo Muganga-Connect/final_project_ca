@@ -17,6 +17,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Appointments from './pages/Appointments';
 import Patients from './pages/Patients';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
 // Components
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/patients" element={<Patients />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/404" element={<NotFound />} />

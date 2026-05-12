@@ -9,6 +9,7 @@ import {
   LayoutDashboard, 
   CalendarDays, 
   Users, 
+  User,
   LogOut, 
   Stethoscope,
   Menu,
@@ -30,6 +31,7 @@ export default function Layout({ user, onLogout }: LayoutProps) {
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Appointments', path: '/appointments', icon: CalendarDays },
     { name: 'Patients', path: '/patients', icon: Users },
+    { name: 'Profile', path: '/profile', icon: User },
   ];
 
   return (
@@ -138,9 +140,13 @@ export default function Layout({ user, onLogout }: LayoutProps) {
               <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">{user.hospitalName || 'General Hospital'}</p>
               <p className="text-xs text-slate-500">{user.email}</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-md">
-              {user.name.charAt(0)}
-            </div>
+            <Link to="/profile" className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold shadow-md overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all">
+              {user.profileImage ? (
+                <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                user.name.charAt(0)
+              )}
+            </Link>
           </div>
         </header>
 
