@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import android.widget.CalendarView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.example.mugangaconnect.data.repository.AppointmentRepository;
 import com.example.mugangaconnect.data.repository.DoctorRepository;
 import com.example.mugangaconnect.ui.adapter.DoctorAdapter;
 import com.example.mugangaconnect.ui.adapter.HospitalAdapter;
+import com.example.mugangaconnect.ui.adapter.TimeSlotAdapter;
 import com.example.mugangaconnect.data.model.Hospital;
 import com.example.mugangaconnect.data.repository.HospitalRepository;
 import com.example.mugangaconnect.utils.LocaleHelper;
@@ -52,6 +54,7 @@ public class AppointmentBookingActivity extends AppCompatActivity
     private RecyclerView  rvDoctors;
     private RecyclerView  rvHospitals;
     private final List<Hospital> hospitals = new ArrayList<>();
+    private CalendarView calendarView;
 
     @Override
     protected void attachBaseContext(Context base) {

@@ -21,7 +21,21 @@ public class Doctor {
 
     public Doctor() {}
 
-    // ... existing constructors ...
+    public Doctor(String id, String name, String specialty, String department, double rating) {
+        this.id = id;
+        this.name = name;
+        this.specialty = specialty;
+        this.department = department;
+        this.rating = rating;
+    }
+
+    public Doctor(String id, String name, String specialty, String department, String availability) {
+        this.id = id;
+        this.name = name;
+        this.specialty = specialty;
+        this.department = department;
+        this.availability = availability;
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

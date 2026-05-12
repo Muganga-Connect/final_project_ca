@@ -24,7 +24,14 @@ export async function seedDatabase() {
       specialty: 'General Practice', 
       department: 'General', 
       hospitalId: 'hosp_001',
-      rating: 4.8
+      rating: 4.8,
+      profileImage: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=256&h=256',
+      availability: {
+        days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        startTime: '08:00',
+        endTime: '17:00',
+        slotDuration: 30
+      }
     },
     { 
       id: 'doc2', 
@@ -33,7 +40,14 @@ export async function seedDatabase() {
       specialty: 'Pediatrics', 
       department: 'Pediatrics', 
       hospitalId: 'hosp_002',
-      rating: 4.9
+      rating: 4.9,
+      profileImage: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=256&h=256',
+      availability: {
+        days: ['Monday', 'Wednesday', 'Friday'],
+        startTime: '09:00',
+        endTime: '16:00',
+        slotDuration: 60
+      }
     },
     { 
       id: 'doc3', 
@@ -42,7 +56,14 @@ export async function seedDatabase() {
       specialty: 'Cardiology', 
       department: 'General', 
       hospitalId: 'hosp_003',
-      rating: 4.7
+      rating: 4.7,
+      profileImage: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=256&h=256',
+      availability: {
+        days: ['Tuesday', 'Thursday', 'Saturday'],
+        startTime: '10:00',
+        endTime: '18:00',
+        slotDuration: 45
+      }
     }
   ];
 
