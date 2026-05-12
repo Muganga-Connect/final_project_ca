@@ -44,6 +44,23 @@
     <color name="text_on_error">#121212</color>
 
     <color name="step_inactive">#37474F</color>
+    
+    <!-- Dashboard health palette overrides for dark mode -->
+    <color name="health_bg_neutral">#030B1E</color>
+    <color name="health_primary">#4A8DFF</color>
+    <color name="health_muted_navy">#EAF1FF</color>
+    <color name="health_card_white">#0A1735</color>
+    <color name="health_alert_warm">#2C2335</color>
+    <color name="health_optimal_green">#7DD3A7</color>
+    <color name="health_warning_orange">#F8C77B</color>
+    <color name="health_critical_red">#F07C8E</color>
+    <color name="health_text_muted">#8EA8DA</color>
+    <color name="pill_blue_bg">#13264F</color>
+    <color name="tag_success_bg">#1A3340</color>
+    <color name="tag_danger_bg">#3A2231</color>
+    <color name="tag_warning_bg">#3E2F1E</color>
+    <color name="reminder_purple_bg">#2A2245</color>
+    <color name="reminder_purple_icon">#C3A6FF</color>
 
     <!-- Legacy Overrides -->
     <color name="white">#0A1735</color>

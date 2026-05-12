@@ -244,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_pill_blue"
-                        android:backgroundTint="#F0F7FF"
+                        android:backgroundTint="@color/pill_blue_bg"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="4dp"
                         android:text="Upcoming Appointment"
@@ -296,7 +296,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/bg_tag_green"
-                                android:backgroundTint="#E8F8F0"
+                                android:backgroundTint="@color/tag_success_bg"
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="4dp"
                                 android:text="Confirmed"
@@ -338,7 +338,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#F0F7FF"
+                                android:backgroundTint="@color/pill_blue_bg"
                                 android:text="Reschedule"
                                 android:textColor="@color/health_primary"
                                 android:textAllCaps="false"
@@ -351,7 +351,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="44dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#FFF1F0"
+                                android:backgroundTint="@color/tag_danger_bg"
                                 android:text="Cancel"
                                 android:textColor="@color/health_critical_red"
                                 android:textAllCaps="false"
@@ -430,13 +430,13 @@
                             android:layout_height="40dp"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="0dp"
-                            app:cardBackgroundColor="#F8F0FF">
+                            app:cardBackgroundColor="@color/reminder_purple_bg">
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_medication"
-                                app:tint="#A259FF"/>
+                                app:tint="@color/reminder_purple_icon"/>
                         </com.google.android.material.card.MaterialCardView>
                         <LinearLayout
                             android:layout_width="0dp"
@@ -474,7 +474,7 @@
                             android:layout_height="40dp"
                             app:cardCornerRadius="12dp"
                             app:cardElevation="0dp"
-                            app:cardBackgroundColor="#E8F8F0">
+                            app:cardBackgroundColor="@color/tag_success_bg">
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
@@ -564,7 +564,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_tag_green"
-                            android:backgroundTint="#E8F8F0"
+                            android:backgroundTint="@color/tag_success_bg"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="2dp"
                             android:text="OPTIMAL"
@@ -604,7 +604,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_tag_green"
-                            android:backgroundTint="#FFF8E8"
+                            android:backgroundTint="@color/tag_warning_bg"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="2dp"
                             android:text="ELEVATED"
@@ -639,7 +639,7 @@
         layout="@layout/include_bottom_nav"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="84dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
